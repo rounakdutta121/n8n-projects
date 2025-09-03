@@ -1,0 +1,167 @@
+{
+  "name": "med devices export",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "/chatbot",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "ba80e86b-e4b0-4959-9abe-a7f50a838ef8",
+      "name": "Webhook",
+      "webhookId": "370f99a0-2eb2-4806-82f0-593f9cc17368"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.body.text }}",
+        "options": {
+          "systemMessage": "You are a chat assistant for Eurocert. You Are Incharge of the eurocert environmental campaign. your duty is to respond to the users requirements doubts and questions. urge them to fill up the form present in the landing page. \nscrape data for your reply from \ndamnart.com/eurocert-environmental-cerification\n\nIMPORTANT NOT : YOU WILL ONLY RESPOND TO TWO QUESTIONS AFTER WHICH YOU WILL ONLY ANSWER QUESTIONS AFTER TAKING THEIR NAME, EMAIL AND PHONE NUMBER. WHICH U WILL SHARE USING THE GMAIL TOOL PROVIDED TO YOU. U WILL PUT THE SUBJECT AS \"NEW LEAD\" AND ENTER THE INFORMATION. DO IT AS SOON AS YOU GET THE NAME EMAIL AND PHONE NUMBER. IT IS VERY IMPORTANT AND DO THAT AT PRIORITY. NEVER FORGET THIS"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        208,
+        0
+      ],
+      "id": "4d8c0a7b-f686-42af-9570-51783dc57c30",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-1.5-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        112,
+        208
+      ],
+      "id": "3cf4cea9-ef8c-4889-afbe-89f4a057d036",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "rIeu0rltBDK7Xvoi",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "send the name email and phone number using this tool \nput subject as new lead",
+        "sendTo": "damnart.seo@gmail.com",
+        "subject": "eurocert lead(env)",
+        "emailType": "text",
+        "message": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message', ``, 'string') }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.1,
+      "position": [
+        368,
+        208
+      ],
+      "id": "9e59e877-dfd5-44ac-8b68-6960d3893122",
+      "name": "Send a message in Gmail",
+      "webhookId": "d01a207c-b6f2-406f-8108-6d49fee70f01",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "1YygfsfagdB0rylS",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "allIncomingItems",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        560,
+        32
+      ],
+      "id": "bd57f661-0b1a-4bf9-ad4c-00fd2bc3eb73",
+      "name": "Respond to Webhook"
+    }
+  ],
+  "pinData": {
+    "AI Agent": [
+      {
+        "json": {
+          "output": "Hello! Welcome to the Eurocert environmental campaign.  How can I assist you today?\n"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message in Gmail": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "eb911004-5944-423b-aed1-9d10b501d494",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "5d137d0d5029dd9b85ab300d7ac8c0fdc3ce0ceaf56a8665966a27a9e1668323"
+  },
+  "id": "daTUnagUxguKNPSe",
+  "tags": []
+}
