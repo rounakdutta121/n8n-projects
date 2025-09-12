@@ -1,0 +1,981 @@
+{
+  "name": "VAM2.O",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -320,
+        -32
+      ],
+      "id": "4911e952-2a7a-491b-b074-03a25abae651",
+      "name": "When chat message received",
+      "webhookId": "5d96bc05-5372-49dc-94b2-454eb385b38f"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -176,
+        160
+      ],
+      "id": "356bd8af-ae26-4958-89bb-ef40a3ffe1f0",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "uzMkmT4lwbtW8syc",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -1616,
+        400
+      ],
+      "id": "05d9c66d-a8c4-43cf-9731-a8738d6ac8be",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "uzMkmT4lwbtW8syc",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "When to Use:\nUse this tool whenever you need to add a new lead or update an existing lead.\n\nRequired Information to Collect from the User:\n\nName of the Lead\n\nEmail Address\n\nCompany Name\n\nLead Status\n\nNotes:\n\nAlways confirm these details with the user before sending them to the tool.\n\nIf updating an existing lead, Lead Status may be optional (if only updating contact details).",
+        "resource": "lead",
+        "operation": "upsert",
+        "Company": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Company', `name of the company of the lead.`, 'string') }}",
+        "lastName": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Last_Name', `name of the lead(full name)`, 'string') }}",
+        "additionalFields": {
+          "Email": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Email', `add the email of the lead `, 'string') }}",
+          "Lead_Status": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Lead_Status', `Lead Status Rules:\n\nFor Creating a Lead: Always ask the user to provide a lead status (e.g., New, Contacted, Qualified, Won, Lost).\n\nFor Updating a Lead: Do not change the lead status. Leave it blank unless the user specifically asks to update it.\n\nNotes:\n\nAlways confirm the collected details with the user before sending them to the tool.\"new_lead\"`, 'string') }}",
+          "Phone": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Phone', `add the phone number of the lead`, 'string') }}"
+        }
+      },
+      "type": "n8n-nodes-base.zohoCrmTool",
+      "typeVersion": 1,
+      "position": [
+        -1104,
+        400
+      ],
+      "id": "b238ca7d-8a29-4e36-bd67-a9fe013df381",
+      "name": "Create or update a lead in Zoho CRM",
+      "credentials": {
+        "zohoOAuth2Api": {
+          "id": "y5DyYRnRc0pauE0I",
+          "name": "Zoho account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "contextWindowLength": 50
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -64,
+        224
+      ],
+      "id": "3a4feae9-674d-4894-a1c4-66b83d2326ed",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "toolDescription": "Call This Tool Only When A Lead Is Needed To Be created",
+        "text": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Prompt__User_Message_', ``, 'string') }}",
+        "options": {
+          "systemMessage": "Role:\nYou are a Lead Creation and Updation Agent.\nYour task is to collect the required details from the user and then call the correct tool (CreateOrUpdateLead) to either create a new lead or update an existing one.\n\nRequired Inputs for Lead Creation:\n\nName\n\nEmail\n\nCompany Name\n\nPhone Number\n\nLead Status\n\nRequired Inputs for Lead Update:\n\nName OR Email OR Company Name (to identify the lead)\n\nLead Status (optional if not updating status)\n\nWorkflow:\n\nAsk the user for the necessary details.\n\nIf a lead exists → update it.\n\nIf not found → create a new lead.\n\nAlways confirm changes back to the user.\n\nCreateOrUpdateLead Tool\n\n\n\nInputs:\n\nName\n\nEmail\n\nCompany Name\n\nPhone Number\n\nLead Status (optional if updating only contact details)\n\nOutput:\n\nConfirmation message with lead details (created/updated)."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agentTool",
+      "typeVersion": 2.2,
+      "position": [
+        -1408,
+        208
+      ],
+      "id": "025f7d7f-6a7f-4b55-8032-80a5f65003bd",
+      "name": "Lead Creation/updation Agent"
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Use this tool to fetch multiple lead records from Zoho CRM, including their details.",
+        "resource": "lead",
+        "operation": "getAll",
+        "returnAll": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_All', `depends on users request`, 'boolean') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.zohoCrmTool",
+      "typeVersion": 1,
+      "position": [
+        -432,
+        656
+      ],
+      "id": "5233eb6f-589c-4370-acd8-516affdeafe1",
+      "name": "Get many leads in Zoho CRM",
+      "credentials": {
+        "zohoOAuth2Api": {
+          "id": "y5DyYRnRc0pauE0I",
+          "name": "Zoho account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "contextWindowLength": 24
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -1360,
+        432
+      ],
+      "id": "c251a664-90b5-4c39-b764-5f1bc13a7799",
+      "name": "Simple Memory1"
+    },
+    {
+      "parameters": {
+        "text": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Prompt__User_Message_', ``, 'string') }}",
+        "options": {
+          "systemMessage": "You are an AI assistant connected to Zoho CRM. \nYour role is to help the user understand and explore lead information.\n\nTools you can use:\n1. Get many leads in Zoho CRM → fetch lead records (name, company, email, phone, lead status, source, etc.).\n2. Get lead fields in Zoho CRM → fetch available lead fields and their definitions.\n\nGuidelines:\n- If the user asks about leads, use \"Get many leads\" to fetch records.\n- If the user asks what fields are available or what details can be stored for a lead, use \"Get lead fields\".\n- Present results in a clear format (bullet points or a table).\n- If multiple leads are returned, summarize and highlight key details (most recent, lead status, etc.).\n- Handle follow-up requests like filters (company name, status, etc.).\n- Always confirm before doing sensitive actions (like update/delete).\n- If the query is outside CRM/lead scope, politely redirect.\nKeep answers conversational, structured, and easy to understand.\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agentTool",
+      "typeVersion": 2.2,
+      "position": [
+        -752,
+        464
+      ],
+      "id": "7bdd3791-7083-4163-9e4d-78fba407f994",
+      "name": "lead information"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -976,
+        672
+      ],
+      "id": "6a7679e7-4e48-4b11-8b18-57952a1c3eb0",
+      "name": "Google Gemini Chat Model2",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "uzMkmT4lwbtW8syc",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "contextWindowLength": 24
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -736,
+        688
+      ],
+      "id": "ab505f10-e677-4a26-859d-ff7fa6acfd42",
+      "name": "Simple Memory2"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "=You are VAM – Virtual Agency Manager, a friendly and intelligent assistant designed to make business workflows simple.\nYour role is to understand the user’s request, choose the right tool, and pass the required information to it—without the user needing to worry about the details. Always confirm key inputs clearly and guide the user step by step.\n\nPersonality:\n\nHelpful, approachable, and proactive.\n\nYou explain what you can do in simple terms.\n\nYou make users feel supported while keeping tasks efficient.\n\nCapabilities (Tools):\n1. Lead Creation/Updation Agent\n\nPurpose: Create or update leads.\nAsk for: Name, Email, Company Name, Phone Number, Lead Status.\nBehavior:\n\nSearch existing leads → update if found → or create a new one if not.\n\nIf updating, Lead Status can be skipped.\n\n2. Lead Information Agent\n\nPurpose: Fetch and summarize existing leads from Zoho CRM.\nBehavior:\n\nRetrieve details like Name, Company, Email, Phone, Lead Status, and Source.\n\nIf multiple leads are returned, summarize clearly.\n\nHandle follow-ups (filter by company, get most recent, show only emails).\n\nPresent results in a simple, conversational way.\n\n3. Lead Nurturing Tool\n\nFlow:\n\nAsk the user for the lead’s name.\n\nUse the Lead Information Agent to retrieve the lead’s details.\n\nExtract: Name, Email, Company, Phone, Lead Status.\n\nPass details into this tool for nurturing.\n\n4. Proposal Agent\n\nPurpose: Handle all proposal-related queries.\n\nResponsibilities:\n\nFetch existing proposals from Google Sheets.\n\nFilter by: Name, Email, Phone, Company, Project Summary, Timeline.\n\nSummarize results with Gemini.\n\nCreate new proposals:\n\n✅ Check the sheet first (Name + Company + Project Summary, Timeline, Budget).\n\nIf found → Offer update instead of duplicate creation.\n\nIf not found → Draft with Gemini → Append row in sheet → Create Google Doc → Confirm creation.\n\n\nEscalation Rules:\n\nIf proposal not found → “I couldn’t find a proposal for [Client]. Would you like me to create one?”\n\nIf duplicate detected → “⚠️ A proposal already exists for [Client/Company]. Do you want me to update it instead?”\n\nIf details incomplete → politely ask for missing info.\n\nIf unrelated → hand back to VAM.\n\nTone:\n\nFor clients/leads → Polite, persuasive, professional.\n\nFor internal teams → Factual, concise.\n\nCore Role:\n\nAct as the central bot that delegates work to the right tool.\n\nCollect, validate, and send correct details.\n\nKeep interactions conversational but structured.\n\n📌 The current date is always {{ $now }}."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -112,
+        -32
+      ],
+      "id": "0451d13d-b81e-441f-9a23-5d4ed0f8f661",
+      "name": "VAM"
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Use this tool to list all available lead fields in Zoho CRM (e.g., name, email, phone, lead status, custom fields).",
+        "resource": "lead",
+        "operation": "getFields"
+      },
+      "type": "n8n-nodes-base.zohoCrmTool",
+      "typeVersion": 1,
+      "position": [
+        -576,
+        672
+      ],
+      "id": "467c06f7-c11f-47eb-bcfe-2566289e2a33",
+      "name": "Get lead fields in Zoho CRM",
+      "credentials": {
+        "zohoOAuth2Api": {
+          "id": "y5DyYRnRc0pauE0I",
+          "name": "Zoho account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "toolDescription": "Use this tool when the user asks to nurture a lead.\n\nRequired Inputs:\n- Name\n- Email\n- Company\n- Phone\n- Lead Status\n\nBehavior:\n- Look up the lead with the Lead Information Agent.\n- Confirm the lead details with the user (if needed).\n- Depending on Lead Status, perform actions: send email, create follow-up task in Zoho, notify sales, or add to re-engagement.\n",
+        "text": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Prompt__User_Message_', `You are a Lead Nurturing Agent. Receive lead details (Name, Email, Company, Phone, Lead_Status). Decide and perform appropriate nurturing action:\n\n- New → send welcome email + create follow-up task in Zoho (due in 2 days).\n- Contacted → create follow-up task (due in 3 days).\n- Qualified → notify sales (Slack/email) and create high-priority task.\n- Lost → create task to add to re-engagement campaign.\n\nReturn a short confirmation message describing the actions taken.\n`, 'string') }}",
+        "options": {
+          "systemMessage": "You are a Lead Nurturing Agent. Receive lead details (Name, Email, Company, Phone, Lead_Status). Decide and perform appropriate nurturing action:\n\n- New → send welcome email + create follow-up task in Zoho (due in 2 days).\n- Contacted → create follow-up task (due in 3 days).\n- Qualified → notify sales (Slack/email) and create high-priority task.\n- Lost → create task to add to re-engagement campaign.\n\nReturn a short confirmation message describing the actions taken.\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agentTool",
+      "typeVersion": 2.2,
+      "position": [
+        -64,
+        544
+      ],
+      "id": "217c0345-e29a-4659-a61f-433d7fa6e2c9",
+      "name": "Lead Nurturing Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -256,
+        800
+      ],
+      "id": "6ecf026d-3bbc-45be-9014-3103bef84c8b",
+      "name": "Google Gemini Chat Model3",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "uzMkmT4lwbtW8syc",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "based on your analysis use this email tool to send the desired email.",
+        "sendTo": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('To', `the email address of the lead`, 'string') }}",
+        "subject": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Subject', `the subject for the lead depwnding upon your anlaysis`, 'string') }}",
+        "emailType": "text",
+        "message": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message', `body of the message properly formated with headings and names `, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.1,
+      "position": [
+        208,
+        720
+      ],
+      "id": "448c31ec-29dd-488a-9bf2-cae7eb335117",
+      "name": "Send a message in Gmail",
+      "webhookId": "4678a7fb-649f-4909-b9e7-d693449914d0",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "0bTor8ZI7qbldBCg",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "contextWindowLength": 24
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -64,
+        752
+      ],
+      "id": "17cee24f-ddc4-49f3-accd-76df9761bec4",
+      "name": "Simple Memory3"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        464,
+        608
+      ],
+      "id": "61c56fb5-debe-4c42-8abe-bb4f76c9f405",
+      "name": "Google Gemini Chat Model4",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "uzMkmT4lwbtW8syc",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "toolDescription": "🔹 Proposal Agent – Tool Description\n\nHandles all proposal-related queries inside VAM.\n\nFetches proposals from Google Sheets by client name, company name,budget, timeline or project summary\n\nCreates new proposals by collecting required details, drafting a summary with Gemini, and appending a row to the proposal sheet.\n\nSummarizes results into professional, client-friendly or team-focused answers.\n\nIf no proposal is found, offers to create one.",
+        "text": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Prompt__User_Message_', ``, 'string') }}",
+        "options": {
+          "systemMessage": "Role:\nYou are the Proposal Agent inside the Virtual Agency Manager (VAM).\nYou handle all proposal-related tasks by using the connected tools:\n- Google Sheets (Get rows / Append rows)\n- Google Docs (Create document)\n- Gemini LLM (Summarization & Drafting)\n\nResponsibilities:\n\n1. Fetch Proposals\n- Use the Google Sheets \"Get row(s)\" tool.\n- Match by Name, Company, Email, Project Summary, Budget, or Timeline.\n- If found → Summarize with Gemini in clear, client-ready language.\n\n2. Create Proposals\n- Always check with Google Sheets first (Name + Company + Project Summary).\n- If a match exists → Do not append. Reply:\n  \"⚠️ A proposal already exists for [Client/Company]. Would you like me to update it instead?\"\n- If no match:\n  • Collect missing details (Name, Email, Company, Project Summary, Budget, Timeline).\n  • Draft summary with Gemini.\n  • Use Google Sheets \"Append row\" tool to log the proposal.\n  • Use Google Docs \"Create document\" tool to generate a formatted proposal.\n  • Reply with: \"✅ Proposal created for [Client].\"\n\n3. Update Proposals\n- If user confirms update → Modify or append new info in the existing row in Google Sheets.\n- Re-generate Google Doc if needed.\n\n4. Escalation Rules\n- Not found → Offer to create.\n- Duplicate found → Offer update instead.\n- Missing details → Ask politely before proceeding.\n- Unrelated requests → Reply: \"This is outside the Proposal Agent’s scope. Handing back to VAM.\"\n\nTone & Context\n- For clients/leads → Polite, persuasive, professional.\n- For internal team → Clear, concise, factual.\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agentTool",
+      "typeVersion": 2.2,
+      "position": [
+        608,
+        448
+      ],
+      "id": "2ef28906-e7c2-42ed-a3d0-f67093066eab",
+      "name": "Proposal Agent"
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "when sending or creating anew proposal. log them in the sheet using this tool",
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1SKUAXf90YJHz8YB7AER9hu3CwUb9XdfjQ7HIUYtJ6AE",
+          "mode": "list",
+          "cachedResultName": "VAM",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1SKUAXf90YJHz8YB7AER9hu3CwUb9XdfjQ7HIUYtJ6AE/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1SKUAXf90YJHz8YB7AER9hu3CwUb9XdfjQ7HIUYtJ6AE/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "name": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('name', `name of the lead whose proposal we are creating`, 'string') }}",
+            "email": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('email', `email of the lead, whose proposal we are creating`, 'string') }}",
+            "company": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('company', `name of the lead's company whose proposal we are creating`, 'string') }}",
+            "project_summary": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('project_summary', `summary of the project we are providing the client with.`, 'string') }}",
+            "budget": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('budget', `the budget we are charging for the project of the lead `, 'string') }}",
+            "timeline": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('timeline', `time required for creation and delivery of the prooject to the lead `, 'string') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "company",
+              "displayName": "company",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "project_summary",
+              "displayName": "project_summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "budget",
+              "displayName": "budget",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "timeline",
+              "displayName": "timeline",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        752,
+        816
+      ],
+      "id": "d3c1a705-d07d-4491-9189-ec8539cb8d7a",
+      "name": "Append row in sheet in Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "9IHvHdPAN2j98iJV",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "get the proposals sheet ",
+        "documentId": {
+          "__rl": true,
+          "value": "1SKUAXf90YJHz8YB7AER9hu3CwUb9XdfjQ7HIUYtJ6AE",
+          "mode": "list",
+          "cachedResultName": "VAM",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1SKUAXf90YJHz8YB7AER9hu3CwUb9XdfjQ7HIUYtJ6AE/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1SKUAXf90YJHz8YB7AER9hu3CwUb9XdfjQ7HIUYtJ6AE/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        976,
+        800
+      ],
+      "id": "70b6a169-b42f-449a-bad8-c8f986419079",
+      "name": "Get row(s) in sheet in Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "9IHvHdPAN2j98iJV",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Create the proposal using this tool",
+        "folderId": "1CIcuoe4YcyWWUnp7voNpE8Ex-t_LX-nk",
+        "title": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Title', `proposal for <<name>>(<<company of the lead>>)`, 'string') }}"
+      },
+      "type": "n8n-nodes-base.googleDocsTool",
+      "typeVersion": 2,
+      "position": [
+        560,
+        800
+      ],
+      "id": "be8c8369-3811-4da2-b96d-bb437c7a4c55",
+      "name": "Create a document in Google Docs",
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "ljfuxLX1Yu7WmT7f",
+          "name": "Google Docs account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "triggerOn": "specificFolder",
+        "folderToWatch": {
+          "__rl": true,
+          "value": "1wRinr6KXXVbEYcRwXTOpVMS4w_JXbz4u",
+          "mode": "list",
+          "cachedResultName": "final proposal",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1wRinr6KXXVbEYcRwXTOpVMS4w_JXbz4u"
+        },
+        "event": "fileCreated",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDriveTrigger",
+      "typeVersion": 1,
+      "position": [
+        -640,
+        1600
+      ],
+      "id": "5a63ae6e-b832-427c-af21-a18f495d8d7f",
+      "name": "Google Drive Trigger",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "kExZ2dFK2lGA8jpt",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Sending Proposal\n",
+        "height": 80,
+        "width": 256
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -576,
+        1488
+      ],
+      "typeVersion": 1,
+      "id": "291912e2-0feb-40ef-ba9d-7bf557dc4cfe",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.email }}",
+        "subject": "={{ $json.name }}",
+        "message": "=<a href=\"{{ $('Download file').item.json.exportLinks[\"application/pdf\"] }}\">Download here</a>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        256,
+        1456
+      ],
+      "id": "8f02b78e-3703-46c4-9747-547db17bdf6c",
+      "name": "Send a message2",
+      "webhookId": "605a68c9-1cfa-4bcf-bd52-e66f2f7e3571",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "0bTor8ZI7qbldBCg",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1SKUAXf90YJHz8YB7AER9hu3CwUb9XdfjQ7HIUYtJ6AE",
+          "mode": "list",
+          "cachedResultName": "VAM",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1SKUAXf90YJHz8YB7AER9hu3CwUb9XdfjQ7HIUYtJ6AE/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1SKUAXf90YJHz8YB7AER9hu3CwUb9XdfjQ7HIUYtJ6AE/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -160,
+        1600
+      ],
+      "id": "94556bea-820b-4f33-ba68-21da8192a055",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "9IHvHdPAN2j98iJV",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "12adf38a-da5c-4fc0-b82a-cba4a6157560",
+              "leftValue": "={{ $('Google Drive Trigger').item.json.name }}",
+              "rightValue": "={{ $json.name }}",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "19c63116-1445-4853-9cda-e21b55e93437",
+              "leftValue": "={{ $('Google Drive Trigger').item.json.name }}",
+              "rightValue": "={{ $json.company }}",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        48,
+        1600
+      ],
+      "id": "c75d2aa0-e95b-48a7-9c3b-ac477f70d8df",
+      "name": "If2"
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -416,
+        1600
+      ],
+      "id": "73fe23de-081c-4e8d-9568-ae447559e370",
+      "name": "Download file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "kExZ2dFK2lGA8jpt",
+          "name": "Google Drive account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "VAM",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "VAM",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Lead Creation/updation Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create or update a lead in Zoho CRM": {
+      "ai_tool": [
+        [
+          {
+            "node": "Lead Creation/updation Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "VAM",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Lead Creation/updation Agent": {
+      "ai_tool": [
+        [
+          {
+            "node": "VAM",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many leads in Zoho CRM": {
+      "ai_tool": [
+        [
+          {
+            "node": "lead information",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory1": {
+      "ai_memory": [
+        [
+          {
+            "node": "Lead Creation/updation Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "lead information": {
+      "ai_tool": [
+        [
+          {
+            "node": "VAM",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "lead information",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory2": {
+      "ai_memory": [
+        [
+          {
+            "node": "lead information",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get lead fields in Zoho CRM": {
+      "ai_tool": [
+        [
+          {
+            "node": "lead information",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Lead Nurturing Agent": {
+      "ai_tool": [
+        [
+          {
+            "node": "VAM",
+            "type": "ai_tool",
+            "index": 0
+          },
+          {
+            "node": "lead information",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model3": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Lead Nurturing Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message in Gmail": {
+      "ai_tool": [
+        [
+          {
+            "node": "Lead Nurturing Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory3": {
+      "ai_memory": [
+        [
+          {
+            "node": "Lead Nurturing Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model4": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Proposal Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Proposal Agent": {
+      "ai_tool": [
+        [
+          {
+            "node": "VAM",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet in Google Sheets": {
+      "ai_tool": [
+        [
+          {
+            "node": "Proposal Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet in Google Sheets": {
+      "ai_tool": [
+        [
+          {
+            "node": "Proposal Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a document in Google Docs": {
+      "ai_tool": [
+        [
+          {
+            "node": "Proposal Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Drive Trigger": {
+      "main": [
+        [
+          {
+            "node": "Download file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "Send a message2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download file": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Kolkata",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "versionId": "f02b93c3-2d90-401d-8a00-f77aa3c50720",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "30e8840a5d55d1e1b6af4c778e833f7fe652325f38939676863a8cb542d69c34"
+  },
+  "id": "pP4HYPOc2pa5VXdV",
+  "tags": []
+}
