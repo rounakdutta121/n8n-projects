@@ -1,0 +1,371 @@
+{
+  "name": "newsletter",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -16,
+        -32
+      ],
+      "id": "e5178801-b9ec-44ee-9271-faf1340e62e3",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "r3fQGaFophrn9p6u",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "description": "Use the tool to think about the news. make sure u understand the news and give the best eye catchyness to the news"
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolThink",
+      "typeVersion": 1.1,
+      "position": [
+        48,
+        384
+      ],
+      "id": "8e2f8354-5d0c-426a-bfa4-19a0f326f98b",
+      "name": "Think"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 12
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -464,
+        192
+      ],
+      "id": "cd0626b3-13ea-4f27-9f97-b6f3b944cfb0",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "use this tool to know the topics and get an idea about the topics by the examples proived ",
+        "documentId": {
+          "__rl": true,
+          "value": "1rF8uu2Tyip8lO2QsZMTuRJrHG6wYlF66hzPcQnbkJGA",
+          "mode": "list",
+          "cachedResultName": "newsletter topics",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1rF8uu2Tyip8lO2QsZMTuRJrHG6wYlF66hzPcQnbkJGA/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1rF8uu2Tyip8lO2QsZMTuRJrHG6wYlF66hzPcQnbkJGA/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        -144,
+        400
+      ],
+      "id": "a4e4069e-ca2c-4e1f-ba87-95129ad47703",
+      "name": "Get row(s) in sheet in Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "GQF3Pni8cOkbr6MH",
+          "name": "Google Sheets account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json['Readable date'] }}",
+        "options": {
+          "systemMessage": "=You are a News Finder Bot.\n\nDATA SOURCE:\n\nYou will receive rows from a Google Sheets tool. Choose any two rows randomly and generate exactly 2 news articles in total (row1 + row2 = 2 news). Make sure to choose a different combination each time.\n\nEach row contains exactly:\n\nTopic (the subject you must find news about)\n\nExample (a sample idea to guide your search. Do not include or copy the example at any point)\n\nYOUR TASK:\n\nFor the Topics you choose (guided by the Examples), find two distinct, trustworthy news articles across both topics combined.\n\nNews must be as recent as possible:\n\nPrefer articles from last day or today.\n\nIf two are not available, expand to the past few weeks, but always return two.\n\nOnly include articles from reputable global sources (Reuters, AP, BBC, Bloomberg, The Guardian, WHO, major newspapers, science journals, etc.).\n\nNever repeat the same news.\n\nOUTPUT FORMAT:\n\nAlways return exactly two news objects in a JSON array.\n\nEach object MUST include:\n- \"headline\": Title of the article\n- \"image_url\": Direct link to the most relevant, high-quality image from the same source (absolutely required, no placeholders, no null, no \"N/A\")\n- \"detailed_summary\": A structured summary with 10–15 lines total, in the format below:\n\n[\n  {\n    \"headline\": \"...\",\n    \"detailed_summary\": \"Problem Statement\" (3 lines)\\n\\nMain Report (8 lines)\\n\\n\"Your Take\" (2–4 lines)\"\n  },\n  {\n    \"headline\": \"...\",\n    \"detailed_summary\": \"Problem Statement\" (3 lines)\\n\\nMain Report (8 lines)\\n\\n\"Your Take\" (2–4 lines)\"\n  }\n]\nuse the think tool to under stand the news.\n\nRULES:\n\nIf no exact matches are available, broaden to closely related themes based on the Topics and Examples.\n\nEach detailed_summary must contain 10–15 lines total with clear structure.\n\nKeep tone factual, unbiased, and professional.\n\nDo not add commentary, opinions, or any extra text outside the JSON.\n\nTools:\nUse the sheets tool to read the subscribers sheet and find the email addresses to send the email using the email tool.\n\nGOAL:\nGiven two chosen Topics and Examples, output exactly 2 recent, trustworthy, and relevant news items in JSON format, each with a headline, structured summary, and relevant image."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -224,
+        176
+      ],
+      "id": "a1485c3b-cb00-418e-bb52-3105e998e7a4",
+      "name": "news finder"
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "read the names email and status using this tool and emails to the respective email addresses and include names to personalize the newsletter.",
+        "documentId": {
+          "__rl": true,
+          "value": "1n1uzgtYwdBflwp4htiE7aAqV-_F7lWivI57BIK0buzU",
+          "mode": "list",
+          "cachedResultName": "newsletter",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1n1uzgtYwdBflwp4htiE7aAqV-_F7lWivI57BIK0buzU/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1n1uzgtYwdBflwp4htiE7aAqV-_F7lWivI57BIK0buzU/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        320,
+        416
+      ],
+      "id": "a323956c-1177-4a6d-8061-b66a62ea86d9",
+      "name": "Get row(s) in sheet in Google Sheets1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "GQF3Pni8cOkbr6MH",
+          "name": "Google Sheets account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.output }}",
+        "options": {
+          "systemMessage": "ROLE: Jallas Pharmacy Email Composer\n\nGOAL:\n1. Fetch subscriber details (name, email, status) from the Google Sheets tool connected in the workflow.\n2. Filter the rows so only subscribers with status = \"connected\" are selected.\n3. For each subscriber:\n   - Generate a valid, standalone HTML email (responsive, email-safe) that exactly follows the newsletter spec.\n   - Personalize the greeting using the subscriber’s name.\n   - Insert news items into placeholders.\n   - Send the HTML email using the Gmail tool node to the subscriber’s email address.\n\nWORKFLOW RULES:\n- Use the Google Sheets tool to fetch subscriber rows.\n- Only process rows where `status == \"connected\"`.\n- For each subscriber, personalize the greeting with {{subscriber_name}}, and send the final HTML using the Gmail tool.\n- Gmail tool: use subscriber’s email as `to` field, set subject = \"Healthy Living With Jallas (Newsletter)\".\n- Output nothing except sending the HTML email for each subscriber.\n- convert it into a format where the gmail tool wont give invalid syntax error"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        192,
+        176
+      ],
+      "id": "32151392-0b11-428b-85d0-6a4f2a8feccd",
+      "name": "email sender"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "output",
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -336,
+        368
+      ],
+      "id": "f9d9fedc-f10d-4dd7-8c7e-78fddfc0930d",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "content": "## Newsletter Automation\n\n***All I do is choose 2 topics from the Topics Sheet and search for the latest news articles. Once i hv found them i send it to the other AI friend who then makes it email suitable and add the company logos and personalization for the respective company.*** \n",
+        "height": 240,
+        "width": 288
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -432,
+        -96
+      ],
+      "typeVersion": 1,
+      "id": "6af65adb-ae0d-4402-b961-b46d2e243f9a",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## Topics sheet",
+        "height": 80,
+        "width": 182
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -208,
+        544
+      ],
+      "typeVersion": 1,
+      "id": "693d5d2c-1c8e-4016-9043-7d82933817dd",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## Subscribers Sheet",
+        "height": 80,
+        "width": 246
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        176,
+        560
+      ],
+      "typeVersion": 1,
+      "id": "e3fb338e-527f-46a3-b0b0-2aba67a6011f",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "## Set monthly, weekly,daily",
+        "height": 96,
+        "width": 176
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -720,
+        192
+      ],
+      "typeVersion": 1,
+      "id": "68f2adcb-35c1-4569-b565-4f330cc2432b",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Send your output using this to all the subcribers of this newsletter usage of this tool is priority",
+        "sendTo": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('To', `use the email from the sheet provided as input to fetcth the email address and send put them here one by one to send the newsletter to all the subscribers`, 'string') }}",
+        "subject": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Subject', `Healthy Living With Jallas (Newsletter) 311-313, Horn Lane, London`, 'string') }}",
+        "message": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message', `create a stylish html figure of the news. the problem statement, Main Report and your takeaway should look prominent and clear. each news should be presented in different cards. the header should have jallaspharmacy logo(\"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrVpXsDZOG1X3cEsS_Q2XWzcBRkf5St9p_hQ&s\") followed by heading jallas pharmacy newsletter followed by their address and contact number. next comes greeting the subscriber and a few lines. then the news start. after the news comes the footer which containes a button with an interesting text making the subscriber wanna click it and go to the jallaspharmacy.com. followed by the contact number and copyright segment containing the year 2010-2025. make it oustsanding with vibrant colors on a dark theme . remove all the images except logo.make sure all the texts are visible(usually by giving contrast to text color against the background.)`, 'string') }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.1,
+      "position": [
+        496,
+        336
+      ],
+      "id": "0d0a6c9e-2acd-466f-a1ec-a6ed0e11a7db",
+      "name": "Send a message in Gmail",
+      "webhookId": "8fe813bf-be49-4994-8cb7-dbf1a16b70fd",
+      "notesInFlow": false,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "QRizXRpevbS4ecyC",
+          "name": "Gmail account 2"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "news finder",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "email sender",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Think": {
+      "ai_tool": [
+        [
+          {
+            "node": "news finder",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "news finder",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet in Google Sheets": {
+      "ai_tool": [
+        [
+          {
+            "node": "news finder",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "news finder": {
+      "main": [
+        [
+          {
+            "node": "email sender",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet in Google Sheets1": {
+      "ai_tool": [
+        [
+          {
+            "node": "email sender",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        []
+      ]
+    },
+    "email sender": {
+      "main": [
+        []
+      ]
+    },
+    "Send a message in Gmail": {
+      "ai_tool": [
+        [
+          {
+            "node": "email sender",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Kolkata",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "versionId": "71b475e2-1bd9-48eb-8185-98df90f8a244",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "30e8840a5d55d1e1b6af4c778e833f7fe652325f38939676863a8cb542d69c34"
+  },
+  "id": "hCKGK2ZhQ54q0lxv",
+  "tags": []
+}
