@@ -1,0 +1,1204 @@
+{
+  "name": "high tech newsletter",
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Write A Story of Durga Ma\n\n",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -128,
+        -32
+      ],
+      "id": "65b2c1c2-f2ed-4514-9271-eb89527df5c1",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        96,
+        224
+      ],
+      "id": "2ee34875-0d55-404c-bdff-269602c396f0",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "uzMkmT4lwbtW8syc",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n\t\"heading1\": \"heading1\",\n\t\"report1\": \"report1\",\n    \"heading2\":\"heading2\",\n    \"report2\":\"report2\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        448,
+        192
+      ],
+      "id": "dd7a6093-977d-4637-a73c-2992f0accd10",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=extract the exact headlines and report of the news(after reasarch on the news)\nNEWS=\n {{ $json.output }}",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        16,
+        -448
+      ],
+      "id": "3f80e902-9a8d-47a7-94f3-02b87cbc10c5",
+      "name": "AI Agent1"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.output }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "divide into 10 scenes.explain the comic visuals and what text to write(limited texts so that generate an image node does not do any spelling mistakes)\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        496,
+        -272
+      ],
+      "id": "b4a37004-1dca-49db-ab4a-970e50b52ece",
+      "name": "AI Agent2"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n\t\"scene1\": \"scene1\",\n\t\"scene2\": \"scene2\",\n    \"scene3\": \"scene3\",\n    \"scene4\": \"scene4\",\n    \"scene5\": \"scene5\",\n  \"scene6\": \"scene6\",\n  \"scene7\": \"scene7\",\n  \"scene8\":\"scene8\",\n  \"scene9\": \"scene9\",\n  \"scene10\": \"scene10\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        800,
+        -64
+      ],
+      "id": "5e3b3905-d6b9-43b8-86bc-e0cd712d7f2c",
+      "name": "Structured Output Parser1"
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.0-flash-exp-image-generation",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.0-flash-exp-image-generation"
+        },
+        "prompt": "={{ $json.output }}\n//Instructions(dont include these as text in the images)\nmake sure all the art are same(indian).\nStyle= Modern Cartoon Graphics(include texts but correctly(no spelling mistakes)(limited too))\n",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        1008,
+        -288
+      ],
+      "id": "60b764e2-aec8-48d3-bcfb-22d65d30fafb",
+      "name": "Generate an image2",
+      "executeOnce": false,
+      "retryOnFail": true,
+      "maxTries": 2,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "uzMkmT4lwbtW8syc",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "name": "=Scene={{ $('Split Out').item.json.output }}",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "1WyaRSNeWKXjwz4LuX7SWm0cQYvnNUqZD",
+          "mode": "list",
+          "cachedResultName": "comic_news",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1WyaRSNeWKXjwz4LuX7SWm0cQYvnNUqZD"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1360,
+        -288
+      ],
+      "id": "09eaba17-088a-4523-b2a1-d0a6b7663034",
+      "name": "Upload file2",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "CiHyPJWsxJHlKfyv",
+          "name": "Google Drive account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "share",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "permissionsUi": {
+          "permissionsValues": {
+            "role": "reader",
+            "type": "anyone",
+            "allowFileDiscovery": true
+          }
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1840,
+        -288
+      ],
+      "id": "bd69aec7-f773-4bf0-8a6f-b6585168935c",
+      "name": "Share file2",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "CiHyPJWsxJHlKfyv",
+          "name": "Google Drive account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "output",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        816,
+        -272
+      ],
+      "id": "b25c6686-53d3-4352-bfed-bfdbbea3d1e5",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2192,
+        176
+      ],
+      "id": "404d9ef3-180a-41d7-984a-7d2812a7cbb7",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "path": "/comic",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -704,
+        112
+      ],
+      "id": "bc8b27b9-dadb-4e10-af10-97add617d3e1",
+      "name": "Webhook",
+      "webhookId": "34ffc98e-9f1e-418c-954e-5e5c6ace3e59"
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "=<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>📰 Daily Comic Flipbook</title>\n  <style>\n    body {\n      margin: 0;\n      font-family: 'Comic Sans MS', cursive, sans-serif;\n      color: #fff;\n      background: #0d0d0d;\n      overflow: hidden;\n      height: 100vh;\n      display: flex;\n      flex-direction: column;\n      align-items: center;\n      justify-content: center;\n    }\n\n    h1 {\n      margin: 20px 0;\n      font-size: 2em;\n      color: #ffde59;\n      text-shadow: 0 0 10px rgba(255, 222, 89, 0.8);\n      z-index: 10;\n    }\n\n    /* Dynamic animated background */\n    body::before {\n      content: \"\";\n      position: fixed;\n      top: 0;\n      left: 0;\n      width: 200%;\n      height: 200%;\n      background: radial-gradient(circle, rgba(255,255,255,0.05) 1%, transparent 1%) repeat;\n      background-size: 50px 50px;\n      animation: moveBackground 20s linear infinite;\n      z-index: -1;\n    }\n\n    @keyframes moveBackground {\n      from { transform: translate(0, 0); }\n      to { transform: translate(-50px, -50px); }\n    }\n\n    .flipbook {\n      width: 700px;\n      height: 500px;\n      perspective: 2000px;\n      position: relative;\n    }\n\n    .book {\n      width: 100%;\n      height: 100%;\n      position: relative;\n    }\n\n    .page {\n      width: 100%;\n      height: 100%;\n      background: #111;\n      position: absolute;\n      top: 0;\n      left: 0;\n      transform-origin: left center;\n      transform-style: preserve-3d;\n      transition: transform 1s;\n      box-shadow: 0 4px 12px rgba(0,0,0,0.6);\n      border-radius: 8px;\n      overflow: hidden;\n    }\n\n    .page img {\n      width: 100%;\n      height: 100%;\n      object-fit: contain;\n      display: block;\n      border-radius: 8px;\n    }\n\n    .page.flipped {\n      transform: rotateY(-180deg);\n      z-index: 0 !important;\n    }\n\n    .controls {\n      margin-top: 20px;\n      display: flex;\n      gap: 20px;\n    }\n\n    button {\n      background: #ffde59;\n      border: none;\n      padding: 12px 24px;\n      font-size: 1em;\n      border-radius: 8px;\n      cursor: pointer;\n      transition: all 0.3s ease;\n      color: #111;\n      font-weight: bold;\n    }\n\n    button:hover {\n      background: #ffc107;\n      transform: scale(1.05);\n    }\n  </style>\n</head>\n<body>\n  <h1>📰 Daily Comic Flipbook</h1>\n  <div class=\"flipbook\">\n    <div class=\"book\" id=\"book\"></div>\n  </div>\n  <div class=\"controls\">\n    <button id=\"prev\">⬅ Prev</button>\n    <button id=\"next\">Next ➡</button>\n  </div>\n\n  <script>\n    // Replace with dynamic variable in n8n (or keep static for now)\n    const imageUrls = {{ JSON.stringify($json[\"imageUrls\"]) }};\n\n    const book = document.getElementById(\"book\");\n    let currentPage = 0;\n\n    // Build pages dynamically\n    imageUrls.forEach((url, index) => {\n      const page = document.createElement(\"div\");\n      page.className = \"page\";\n      page.style.zIndex = imageUrls.length - index;\n\n      const img = document.createElement(\"img\");\n      img.src = url;\n      img.alt = \"Comic Page \" + (index + 1);\n      img.onerror = () => img.src = \"https://via.placeholder.com/700x500?text=Image+not+available\";\n\n      page.appendChild(img);\n      book.appendChild(page);\n    });\n\n    const pages = document.querySelectorAll(\".page\");\n\n    document.getElementById(\"next\").addEventListener(\"click\", () => {\n      if (currentPage < pages.length) {\n        pages[currentPage].classList.add(\"flipped\");\n        currentPage++;\n      } else {\n        // Restart (reset book)\n        pages.forEach(p => p.classList.remove(\"flipped\"));\n        currentPage = 0;\n      }\n    });\n\n    document.getElementById(\"prev\").addEventListener(\"click\", () => {\n      if (currentPage > 0) {\n        currentPage--;\n        pages[currentPage].classList.remove(\"flipped\");\n      }\n    });\n  </script>\n</body>\n</html>\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        2912,
+        -608
+      ],
+      "id": "7dc02eda-7ace-4171-8dd2-d54ad468a3cc",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1072,
+        -368
+      ],
+      "id": "b8ffb20b-a8be-4dd2-b70f-fc1f794a3406",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get all items output by the HTTP Request1 node\nconst uploadedImages = $items(\"HTTP Request1\");\n\n// Initialize array to store URLs\nconst imageUrls = [];\n\n// Loop through each uploaded image\nfor (const item of uploadedImages) {\n    // Each item.json.image.url contains the direct image link\n    if(item.json.image && item.json.image.url) {\n        imageUrls.push(item.json.image.url);\n    }\n}\n\n// Return a single JSON object with all URLs\nreturn [\n    {\n        json: {\n            imageUrls\n        }\n    }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1728,
+        -608
+      ],
+      "id": "fc05ac15-2803-4f35-b655-e0976fec48e6",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://freeimage.host/api/1/upload",
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "key",
+              "value": "6d207e02198a847aa98d0a2a901485a5"
+            },
+            {
+              "name": "action",
+              "value": "upload"
+            },
+            {
+              "parameterType": "formBinaryData",
+              "name": "source",
+              "inputDataFieldName": "=data"
+            },
+            {
+              "name": "format",
+              "value": "json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1440,
+        -608
+      ],
+      "id": "fcd5a637-0ef7-4f67-8383-9c9bd47425d7",
+      "name": "HTTP Request1"
+    },
+    {
+      "parameters": {
+        "sendTo": "rounak153d@gmail.com",
+        "subject": "comic",
+        "message": "={{ $json.html }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        2240,
+        -1088
+      ],
+      "id": "08ccd600-119a-44e2-853c-9ef529230e62",
+      "name": "Send a message",
+      "webhookId": "73132323-e0f9-4df3-9893-e9848ed59e12",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "IBVE5hr63zpO6LxM",
+          "name": "Gmail account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "return [\n  {\n    json: {\n      html: `<!DOCTYPE html>\n<html>\n  <body style=\"font-family: 'Noto Serif', serif; background:#1a1a1a; padding:20px; margin:0; color:#f5f5f5;\">\n\n    <h2 style=\"text-align:center; color:#ff6f00; margin-bottom:20px; font-size:28px;\">\n      Durga Puja Special Comic Book\n    </h2>\n\n    <div style=\"max-width:600px; margin:0 auto; background:#2c2c2c; padding:20px; border-radius:15px; box-shadow:0 8px 20px rgba(0,0,0,0.5); border:2px solid #ff8f00;\">\n\n      ${($json.imageUrls || []).map(url => `\n        <div style=\"margin-bottom:25px; text-align:center; border:2px dashed #ff8f00; padding:15px; border-radius:15px; background:#3d3d3d;\">\n          <img src=\"${url}\" alt=\"Durga Puja Comic Page\" \n            style=\"max-width:100%; height:auto; border-radius:12px; display:block; margin:0 auto; box-shadow:0 6px 15px rgba(0,0,0,0.7);\" />\n        </div>\n      `).join(\"\")}\n\n    </div>\n\n    <p style=\"text-align:center; font-size:13px; color:#ffa000; margin-top:20px;\">\n      Sent automatically by your Durga Puja Comic Workflow\n    </p>\n\n  </body>\n</html>`\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1936,
+        -608
+      ],
+      "id": "240824b6-5ea9-44b8-aca0-72e941c38bb2",
+      "name": "Code1"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {}
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        2224,
+        -160
+      ],
+      "id": "b5d11cd4-d315-4463-9aff-f7ce7c86a9f0",
+      "name": "Schedule Trigger"
+    }
+  ],
+  "pinData": {
+    "Upload file2": [
+      {
+        "json": {
+          "kind": "drive#file",
+          "id": "1TaHYv7HNdU4zRPVOPAS9Ly1-7Alan8oc",
+          "name": "Scene=Israeli forces are continuing their operations in Rafah, southern Gaza, with reports of increased ground incursions and airstrikes.",
+          "mimeType": "image/png",
+          "starred": false,
+          "trashed": false,
+          "explicitlyTrashed": false,
+          "parents": [
+            "1WyaRSNeWKXjwz4LuX7SWm0cQYvnNUqZD"
+          ],
+          "spaces": [
+            "drive"
+          ],
+          "version": "2",
+          "webContentLink": "https://drive.google.com/uc?id=1TaHYv7HNdU4zRPVOPAS9Ly1-7Alan8oc&export=download",
+          "webViewLink": "https://drive.google.com/file/d/1TaHYv7HNdU4zRPVOPAS9Ly1-7Alan8oc/view?usp=drivesdk",
+          "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/image/png",
+          "hasThumbnail": true,
+          "thumbnailLink": "https://lh3.googleusercontent.com/drive-storage/AJQWtBO1G7Ii14qMJZrTRg-KtIy3zi8ofFTcd5ZVJcIaSmbm-anWYxwJiC2Yeh0JztKujVNR1JGC7kkr_kbINDbnGPF29NUiTpa230w14EohQK6CYTU=s220",
+          "thumbnailVersion": "2",
+          "viewedByMe": false,
+          "createdTime": "2025-09-25T06:23:00.683Z",
+          "modifiedTime": "2025-09-25T06:23:02.139Z",
+          "modifiedByMeTime": "2025-09-25T06:23:02.139Z",
+          "modifiedByMe": true,
+          "owners": [
+            {
+              "kind": "drive#user",
+              "displayName": "Rounak Dutta",
+              "photoLink": "https://lh3.googleusercontent.com/a/ACg8ocI-lz5elWpwhgkyuVLypRVtrKXOWRcbVuUQs4sS4xOrf766_5U=s64",
+              "me": true,
+              "permissionId": "07453703320583141147",
+              "emailAddress": "rounak153d@gmail.com"
+            }
+          ],
+          "lastModifyingUser": {
+            "kind": "drive#user",
+            "displayName": "Rounak Dutta",
+            "photoLink": "https://lh3.googleusercontent.com/a/ACg8ocI-lz5elWpwhgkyuVLypRVtrKXOWRcbVuUQs4sS4xOrf766_5U=s64",
+            "me": true,
+            "permissionId": "07453703320583141147",
+            "emailAddress": "rounak153d@gmail.com"
+          },
+          "shared": false,
+          "ownedByMe": true,
+          "downloadRestrictions": {
+            "itemDownloadRestriction": {
+              "restrictedForReaders": false,
+              "restrictedForWriters": false
+            },
+            "effectiveDownloadRestrictionWithContext": {
+              "restrictedForReaders": false,
+              "restrictedForWriters": false
+            }
+          },
+          "capabilities": {
+            "canAcceptOwnership": false,
+            "canAddChildren": false,
+            "canAddMyDriveParent": false,
+            "canChangeCopyRequiresWriterPermission": true,
+            "canChangeItemDownloadRestriction": true,
+            "canChangeSecurityUpdateEnabled": false,
+            "canChangeViewersCanCopyContent": true,
+            "canComment": true,
+            "canCopy": true,
+            "canDelete": true,
+            "canDisableInheritedPermissions": false,
+            "canDownload": true,
+            "canEdit": true,
+            "canEnableInheritedPermissions": true,
+            "canListChildren": false,
+            "canModifyContent": true,
+            "canModifyContentRestriction": true,
+            "canModifyEditorContentRestriction": true,
+            "canModifyOwnerContentRestriction": true,
+            "canModifyLabels": false,
+            "canMoveChildrenWithinDrive": false,
+            "canMoveItemIntoTeamDrive": true,
+            "canMoveItemOutOfDrive": true,
+            "canMoveItemWithinDrive": true,
+            "canReadLabels": false,
+            "canReadRevisions": true,
+            "canRemoveChildren": false,
+            "canRemoveContentRestriction": false,
+            "canRemoveMyDriveParent": true,
+            "canRename": true,
+            "canShare": true,
+            "canTrash": true,
+            "canUntrash": true
+          },
+          "viewersCanCopyContent": true,
+          "copyRequiresWriterPermission": false,
+          "writersCanShare": true,
+          "permissions": [
+            {
+              "kind": "drive#permission",
+              "id": "07453703320583141147",
+              "type": "user",
+              "emailAddress": "rounak153d@gmail.com",
+              "role": "owner",
+              "displayName": "rounak153d",
+              "deleted": false,
+              "pendingOwner": false
+            }
+          ],
+          "permissionIds": [
+            "07453703320583141147"
+          ],
+          "originalFilename": "Untitled",
+          "fullFileExtension": "",
+          "fileExtension": "",
+          "md5Checksum": "a02682a7a1e69a7b51dfc8fe5f5fe6f2",
+          "sha1Checksum": "b6fab233ae2a8badf71da8bec1473bb07e873c87",
+          "sha256Checksum": "ddc3e61db87d729e57f0be7a23546bdde180d83f3a02882067d42fe8f11be4d5",
+          "size": "817215",
+          "quotaBytesUsed": "817215",
+          "headRevisionId": "0B4B_noqMeirtbHBLenFGelQ5SlFkckNycFo2MC93d0QrSWhBPQ",
+          "imageMediaMetadata": {
+            "width": 1024,
+            "height": 508,
+            "rotation": 0
+          },
+          "isAppAuthorized": true,
+          "linkShareMetadata": {
+            "securityUpdateEligible": false,
+            "securityUpdateEnabled": true
+          },
+          "inheritedPermissionsDisabled": false
+        }
+      },
+      {
+        "json": {
+          "kind": "drive#file",
+          "id": "1AwKlmYa59w8q5FPvO2gqaOqU6yepg1RB",
+          "name": "Scene=This comes despite international warnings, including from the United States, about the humanitarian impact on the hundreds of thousands of displaced Palestinians sheltering there.",
+          "mimeType": "image/png",
+          "starred": false,
+          "trashed": false,
+          "explicitlyTrashed": false,
+          "parents": [
+            "1WyaRSNeWKXjwz4LuX7SWm0cQYvnNUqZD"
+          ],
+          "spaces": [
+            "drive"
+          ],
+          "version": "2",
+          "webContentLink": "https://drive.google.com/uc?id=1AwKlmYa59w8q5FPvO2gqaOqU6yepg1RB&export=download",
+          "webViewLink": "https://drive.google.com/file/d/1AwKlmYa59w8q5FPvO2gqaOqU6yepg1RB/view?usp=drivesdk",
+          "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/image/png",
+          "hasThumbnail": true,
+          "thumbnailLink": "https://lh3.googleusercontent.com/drive-storage/AJQWtBPDFkSoWuFQgnNEVEiMadJ2zruSIHDrkLFnW6KcgKa6X8GvJ8AeHFsPJan1VuVACbyot_zx3ORr8OAVCIYL25tDKKBCA-QX0t-uwFig8gbQBzk=s220",
+          "thumbnailVersion": "2",
+          "viewedByMe": false,
+          "createdTime": "2025-09-25T06:23:03.990Z",
+          "modifiedTime": "2025-09-25T06:23:05.591Z",
+          "modifiedByMeTime": "2025-09-25T06:23:05.591Z",
+          "modifiedByMe": true,
+          "owners": [
+            {
+              "kind": "drive#user",
+              "displayName": "Rounak Dutta",
+              "photoLink": "https://lh3.googleusercontent.com/a/ACg8ocI-lz5elWpwhgkyuVLypRVtrKXOWRcbVuUQs4sS4xOrf766_5U=s64",
+              "me": true,
+              "permissionId": "07453703320583141147",
+              "emailAddress": "rounak153d@gmail.com"
+            }
+          ],
+          "lastModifyingUser": {
+            "kind": "drive#user",
+            "displayName": "Rounak Dutta",
+            "photoLink": "https://lh3.googleusercontent.com/a/ACg8ocI-lz5elWpwhgkyuVLypRVtrKXOWRcbVuUQs4sS4xOrf766_5U=s64",
+            "me": true,
+            "permissionId": "07453703320583141147",
+            "emailAddress": "rounak153d@gmail.com"
+          },
+          "shared": false,
+          "ownedByMe": true,
+          "downloadRestrictions": {
+            "itemDownloadRestriction": {
+              "restrictedForReaders": false,
+              "restrictedForWriters": false
+            },
+            "effectiveDownloadRestrictionWithContext": {
+              "restrictedForReaders": false,
+              "restrictedForWriters": false
+            }
+          },
+          "capabilities": {
+            "canAcceptOwnership": false,
+            "canAddChildren": false,
+            "canAddMyDriveParent": false,
+            "canChangeCopyRequiresWriterPermission": true,
+            "canChangeItemDownloadRestriction": true,
+            "canChangeSecurityUpdateEnabled": false,
+            "canChangeViewersCanCopyContent": true,
+            "canComment": true,
+            "canCopy": true,
+            "canDelete": true,
+            "canDisableInheritedPermissions": false,
+            "canDownload": true,
+            "canEdit": true,
+            "canEnableInheritedPermissions": true,
+            "canListChildren": false,
+            "canModifyContent": true,
+            "canModifyContentRestriction": true,
+            "canModifyEditorContentRestriction": true,
+            "canModifyOwnerContentRestriction": true,
+            "canModifyLabels": false,
+            "canMoveChildrenWithinDrive": false,
+            "canMoveItemIntoTeamDrive": true,
+            "canMoveItemOutOfDrive": true,
+            "canMoveItemWithinDrive": true,
+            "canReadLabels": false,
+            "canReadRevisions": true,
+            "canRemoveChildren": false,
+            "canRemoveContentRestriction": false,
+            "canRemoveMyDriveParent": true,
+            "canRename": true,
+            "canShare": true,
+            "canTrash": true,
+            "canUntrash": true
+          },
+          "viewersCanCopyContent": true,
+          "copyRequiresWriterPermission": false,
+          "writersCanShare": true,
+          "permissions": [
+            {
+              "kind": "drive#permission",
+              "id": "07453703320583141147",
+              "type": "user",
+              "emailAddress": "rounak153d@gmail.com",
+              "role": "owner",
+              "displayName": "rounak153d",
+              "deleted": false,
+              "pendingOwner": false
+            }
+          ],
+          "permissionIds": [
+            "07453703320583141147"
+          ],
+          "originalFilename": "Untitled",
+          "fullFileExtension": "",
+          "fileExtension": "",
+          "md5Checksum": "a9cc131a0a6c40a6e6032a232aacd5b6",
+          "sha1Checksum": "feb82a2704446d43e51c24981a81e5952ad3c5d5",
+          "sha256Checksum": "0817406dbf1c807843c1d5992b35764c9a9e5f67be4ecaa3c3bb6efb8c420571",
+          "size": "1786495",
+          "quotaBytesUsed": "1786495",
+          "headRevisionId": "0B4B_noqMeirtYmRrbmFmY09mMU1TTkJZR1FWR2F3OHFUSytrPQ",
+          "imageMediaMetadata": {
+            "width": 1024,
+            "height": 1024,
+            "rotation": 0
+          },
+          "isAppAuthorized": true,
+          "linkShareMetadata": {
+            "securityUpdateEligible": false,
+            "securityUpdateEnabled": true
+          },
+          "inheritedPermissionsDisabled": false
+        }
+      },
+      {
+        "json": {
+          "kind": "drive#file",
+          "id": "1XYznUoDRXsdssKpqR4F138G8zeNTrVDs",
+          "name": "Scene=Negotiations for a ceasefire and hostage release remain stalled.",
+          "mimeType": "image/png",
+          "starred": false,
+          "trashed": false,
+          "explicitlyTrashed": false,
+          "parents": [
+            "1WyaRSNeWKXjwz4LuX7SWm0cQYvnNUqZD"
+          ],
+          "spaces": [
+            "drive"
+          ],
+          "version": "2",
+          "webContentLink": "https://drive.google.com/uc?id=1XYznUoDRXsdssKpqR4F138G8zeNTrVDs&export=download",
+          "webViewLink": "https://drive.google.com/file/d/1XYznUoDRXsdssKpqR4F138G8zeNTrVDs/view?usp=drivesdk",
+          "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/image/png",
+          "hasThumbnail": true,
+          "thumbnailLink": "https://lh3.googleusercontent.com/drive-storage/AJQWtBOgYpQZwVzX7QGrKqIa7-XVT9vb8MtKYocwr4Gxk0aBll35oj-N9lnKwq_qISwIRM8CK6bvnwa6_8IK_emJga_TNOr6fnUVGSwUF57SOnIqbQ=s220",
+          "thumbnailVersion": "2",
+          "viewedByMe": false,
+          "createdTime": "2025-09-25T06:23:07.437Z",
+          "modifiedTime": "2025-09-25T06:23:08.847Z",
+          "modifiedByMeTime": "2025-09-25T06:23:08.847Z",
+          "modifiedByMe": true,
+          "owners": [
+            {
+              "kind": "drive#user",
+              "displayName": "Rounak Dutta",
+              "photoLink": "https://lh3.googleusercontent.com/a/ACg8ocI-lz5elWpwhgkyuVLypRVtrKXOWRcbVuUQs4sS4xOrf766_5U=s64",
+              "me": true,
+              "permissionId": "07453703320583141147",
+              "emailAddress": "rounak153d@gmail.com"
+            }
+          ],
+          "lastModifyingUser": {
+            "kind": "drive#user",
+            "displayName": "Rounak Dutta",
+            "photoLink": "https://lh3.googleusercontent.com/a/ACg8ocI-lz5elWpwhgkyuVLypRVtrKXOWRcbVuUQs4sS4xOrf766_5U=s64",
+            "me": true,
+            "permissionId": "07453703320583141147",
+            "emailAddress": "rounak153d@gmail.com"
+          },
+          "shared": false,
+          "ownedByMe": true,
+          "downloadRestrictions": {
+            "itemDownloadRestriction": {
+              "restrictedForReaders": false,
+              "restrictedForWriters": false
+            },
+            "effectiveDownloadRestrictionWithContext": {
+              "restrictedForReaders": false,
+              "restrictedForWriters": false
+            }
+          },
+          "capabilities": {
+            "canAcceptOwnership": false,
+            "canAddChildren": false,
+            "canAddMyDriveParent": false,
+            "canChangeCopyRequiresWriterPermission": true,
+            "canChangeItemDownloadRestriction": true,
+            "canChangeSecurityUpdateEnabled": false,
+            "canChangeViewersCanCopyContent": true,
+            "canComment": true,
+            "canCopy": true,
+            "canDelete": true,
+            "canDisableInheritedPermissions": false,
+            "canDownload": true,
+            "canEdit": true,
+            "canEnableInheritedPermissions": true,
+            "canListChildren": false,
+            "canModifyContent": true,
+            "canModifyContentRestriction": true,
+            "canModifyEditorContentRestriction": true,
+            "canModifyOwnerContentRestriction": true,
+            "canModifyLabels": false,
+            "canMoveChildrenWithinDrive": false,
+            "canMoveItemIntoTeamDrive": true,
+            "canMoveItemOutOfDrive": true,
+            "canMoveItemWithinDrive": true,
+            "canReadLabels": false,
+            "canReadRevisions": true,
+            "canRemoveChildren": false,
+            "canRemoveContentRestriction": false,
+            "canRemoveMyDriveParent": true,
+            "canRename": true,
+            "canShare": true,
+            "canTrash": true,
+            "canUntrash": true
+          },
+          "viewersCanCopyContent": true,
+          "copyRequiresWriterPermission": false,
+          "writersCanShare": true,
+          "permissions": [
+            {
+              "kind": "drive#permission",
+              "id": "07453703320583141147",
+              "type": "user",
+              "emailAddress": "rounak153d@gmail.com",
+              "role": "owner",
+              "displayName": "rounak153d",
+              "deleted": false,
+              "pendingOwner": false
+            }
+          ],
+          "permissionIds": [
+            "07453703320583141147"
+          ],
+          "originalFilename": "Untitled",
+          "fullFileExtension": "",
+          "fileExtension": "",
+          "md5Checksum": "732ba1127c68d3eafeac120ec0e75ff4",
+          "sha1Checksum": "b42dcc3552f9cdf2f0d51dc5415e2d4e8515a6c6",
+          "sha256Checksum": "cd75d525ed0ae368f1dfe6329d96e5a3511a3455ac07763ec2078e1269e14181",
+          "size": "982070",
+          "quotaBytesUsed": "982070",
+          "headRevisionId": "0B4B_noqMeirtY05XVVhvc0k2MXpWRVZUKzhXV0NMYjViaSt3PQ",
+          "imageMediaMetadata": {
+            "width": 1024,
+            "height": 1024,
+            "rotation": 0
+          },
+          "isAppAuthorized": true,
+          "linkShareMetadata": {
+            "securityUpdateEligible": false,
+            "securityUpdateEnabled": true
+          },
+          "inheritedPermissionsDisabled": false
+        }
+      },
+      {
+        "json": {
+          "kind": "drive#file",
+          "id": "1R2oU01NH88vrcZidFQgK-9zt1emi0zPR",
+          "name": "Scene=While humanitarian agencies warn of a worsening crisis due to the closure of key aid crossings.",
+          "mimeType": "image/png",
+          "starred": false,
+          "trashed": false,
+          "explicitlyTrashed": false,
+          "parents": [
+            "1WyaRSNeWKXjwz4LuX7SWm0cQYvnNUqZD"
+          ],
+          "spaces": [
+            "drive"
+          ],
+          "version": "2",
+          "webContentLink": "https://drive.google.com/uc?id=1R2oU01NH88vrcZidFQgK-9zt1emi0zPR&export=download",
+          "webViewLink": "https://drive.google.com/file/d/1R2oU01NH88vrcZidFQgK-9zt1emi0zPR/view?usp=drivesdk",
+          "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/image/png",
+          "hasThumbnail": true,
+          "thumbnailLink": "https://lh3.googleusercontent.com/drive-storage/AJQWtBPKhbdNYOvXIlrQgqof49VMYAtRL86ZlDeHQhiVMro9CLMeThdy4FtWS-ecdSm6xeSUkTr8x245mkBHuXvaQoekQfni1KvvDMFxEbTWrID0TGI=s220",
+          "thumbnailVersion": "2",
+          "viewedByMe": false,
+          "createdTime": "2025-09-25T06:23:10.652Z",
+          "modifiedTime": "2025-09-25T06:23:12.220Z",
+          "modifiedByMeTime": "2025-09-25T06:23:12.220Z",
+          "modifiedByMe": true,
+          "owners": [
+            {
+              "kind": "drive#user",
+              "displayName": "Rounak Dutta",
+              "photoLink": "https://lh3.googleusercontent.com/a/ACg8ocI-lz5elWpwhgkyuVLypRVtrKXOWRcbVuUQs4sS4xOrf766_5U=s64",
+              "me": true,
+              "permissionId": "07453703320583141147",
+              "emailAddress": "rounak153d@gmail.com"
+            }
+          ],
+          "lastModifyingUser": {
+            "kind": "drive#user",
+            "displayName": "Rounak Dutta",
+            "photoLink": "https://lh3.googleusercontent.com/a/ACg8ocI-lz5elWpwhgkyuVLypRVtrKXOWRcbVuUQs4sS4xOrf766_5U=s64",
+            "me": true,
+            "permissionId": "07453703320583141147",
+            "emailAddress": "rounak153d@gmail.com"
+          },
+          "shared": false,
+          "ownedByMe": true,
+          "downloadRestrictions": {
+            "itemDownloadRestriction": {
+              "restrictedForReaders": false,
+              "restrictedForWriters": false
+            },
+            "effectiveDownloadRestrictionWithContext": {
+              "restrictedForReaders": false,
+              "restrictedForWriters": false
+            }
+          },
+          "capabilities": {
+            "canAcceptOwnership": false,
+            "canAddChildren": false,
+            "canAddMyDriveParent": false,
+            "canChangeCopyRequiresWriterPermission": true,
+            "canChangeItemDownloadRestriction": true,
+            "canChangeSecurityUpdateEnabled": false,
+            "canChangeViewersCanCopyContent": true,
+            "canComment": true,
+            "canCopy": true,
+            "canDelete": true,
+            "canDisableInheritedPermissions": false,
+            "canDownload": true,
+            "canEdit": true,
+            "canEnableInheritedPermissions": true,
+            "canListChildren": false,
+            "canModifyContent": true,
+            "canModifyContentRestriction": true,
+            "canModifyEditorContentRestriction": true,
+            "canModifyOwnerContentRestriction": true,
+            "canModifyLabels": false,
+            "canMoveChildrenWithinDrive": false,
+            "canMoveItemIntoTeamDrive": true,
+            "canMoveItemOutOfDrive": true,
+            "canMoveItemWithinDrive": true,
+            "canReadLabels": false,
+            "canReadRevisions": true,
+            "canRemoveChildren": false,
+            "canRemoveContentRestriction": false,
+            "canRemoveMyDriveParent": true,
+            "canRename": true,
+            "canShare": true,
+            "canTrash": true,
+            "canUntrash": true
+          },
+          "viewersCanCopyContent": true,
+          "copyRequiresWriterPermission": false,
+          "writersCanShare": true,
+          "permissions": [
+            {
+              "kind": "drive#permission",
+              "id": "07453703320583141147",
+              "type": "user",
+              "emailAddress": "rounak153d@gmail.com",
+              "role": "owner",
+              "displayName": "rounak153d",
+              "deleted": false,
+              "pendingOwner": false
+            }
+          ],
+          "permissionIds": [
+            "07453703320583141147"
+          ],
+          "originalFilename": "Untitled",
+          "fullFileExtension": "",
+          "fileExtension": "",
+          "md5Checksum": "19a24ddbeaf3d235de0b70c3315b4bfe",
+          "sha1Checksum": "b2a8f66db509093ad6361664078f33507de1e5bb",
+          "sha256Checksum": "c5af13878445537fcf2acb0255e05d6180fef57113d27772d96be0ee03304566",
+          "size": "1374056",
+          "quotaBytesUsed": "1374056",
+          "headRevisionId": "0B4B_noqMeirtYTRBRWc1YmgydUtxNGwxejMwUDNnRjhEbGlvPQ",
+          "imageMediaMetadata": {
+            "width": 1024,
+            "height": 1024,
+            "rotation": 0
+          },
+          "isAppAuthorized": true,
+          "linkShareMetadata": {
+            "securityUpdateEligible": false,
+            "securityUpdateEnabled": true
+          },
+          "inheritedPermissionsDisabled": false
+        }
+      },
+      {
+        "json": {
+          "kind": "drive#file",
+          "id": "1Kx8ehdgVJP_kSfnhR0xSZ4MwrKmGLTdh",
+          "name": "Scene=Gaza Conflict Intensifies; Rafah Offensive Continues Amid Aid Concerns.",
+          "mimeType": "image/png",
+          "starred": false,
+          "trashed": false,
+          "explicitlyTrashed": false,
+          "parents": [
+            "1WyaRSNeWKXjwz4LuX7SWm0cQYvnNUqZD"
+          ],
+          "spaces": [
+            "drive"
+          ],
+          "version": "2",
+          "webContentLink": "https://drive.google.com/uc?id=1Kx8ehdgVJP_kSfnhR0xSZ4MwrKmGLTdh&export=download",
+          "webViewLink": "https://drive.google.com/file/d/1Kx8ehdgVJP_kSfnhR0xSZ4MwrKmGLTdh/view?usp=drivesdk",
+          "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/image/png",
+          "hasThumbnail": true,
+          "thumbnailLink": "https://lh3.googleusercontent.com/drive-storage/AJQWtBOrDxLQ8bA-pv_JwegFfN7UAOmkZtW6gVmjvZBTBEBvxZohbhhDh4qQbGJramsfJOl9051YUmxMcq5FkEEEDrTwrTSBq3VcUR6YKvjdcDKdgw=s220",
+          "thumbnailVersion": "2",
+          "viewedByMe": false,
+          "createdTime": "2025-09-25T06:23:13.969Z",
+          "modifiedTime": "2025-09-25T06:23:15.687Z",
+          "modifiedByMeTime": "2025-09-25T06:23:15.687Z",
+          "modifiedByMe": true,
+          "owners": [
+            {
+              "kind": "drive#user",
+              "displayName": "Rounak Dutta",
+              "photoLink": "https://lh3.googleusercontent.com/a/ACg8ocI-lz5elWpwhgkyuVLypRVtrKXOWRcbVuUQs4sS4xOrf766_5U=s64",
+              "me": true,
+              "permissionId": "07453703320583141147",
+              "emailAddress": "rounak153d@gmail.com"
+            }
+          ],
+          "lastModifyingUser": {
+            "kind": "drive#user",
+            "displayName": "Rounak Dutta",
+            "photoLink": "https://lh3.googleusercontent.com/a/ACg8ocI-lz5elWpwhgkyuVLypRVtrKXOWRcbVuUQs4sS4xOrf766_5U=s64",
+            "me": true,
+            "permissionId": "07453703320583141147",
+            "emailAddress": "rounak153d@gmail.com"
+          },
+          "shared": false,
+          "ownedByMe": true,
+          "downloadRestrictions": {
+            "itemDownloadRestriction": {
+              "restrictedForReaders": false,
+              "restrictedForWriters": false
+            },
+            "effectiveDownloadRestrictionWithContext": {
+              "restrictedForReaders": false,
+              "restrictedForWriters": false
+            }
+          },
+          "capabilities": {
+            "canAcceptOwnership": false,
+            "canAddChildren": false,
+            "canAddMyDriveParent": false,
+            "canChangeCopyRequiresWriterPermission": true,
+            "canChangeItemDownloadRestriction": true,
+            "canChangeSecurityUpdateEnabled": false,
+            "canChangeViewersCanCopyContent": true,
+            "canComment": true,
+            "canCopy": true,
+            "canDelete": true,
+            "canDisableInheritedPermissions": false,
+            "canDownload": true,
+            "canEdit": true,
+            "canEnableInheritedPermissions": true,
+            "canListChildren": false,
+            "canModifyContent": true,
+            "canModifyContentRestriction": true,
+            "canModifyEditorContentRestriction": true,
+            "canModifyOwnerContentRestriction": true,
+            "canModifyLabels": false,
+            "canMoveChildrenWithinDrive": false,
+            "canMoveItemIntoTeamDrive": true,
+            "canMoveItemOutOfDrive": true,
+            "canMoveItemWithinDrive": true,
+            "canReadLabels": false,
+            "canReadRevisions": true,
+            "canRemoveChildren": false,
+            "canRemoveContentRestriction": false,
+            "canRemoveMyDriveParent": true,
+            "canRename": true,
+            "canShare": true,
+            "canTrash": true,
+            "canUntrash": true
+          },
+          "viewersCanCopyContent": true,
+          "copyRequiresWriterPermission": false,
+          "writersCanShare": true,
+          "permissions": [
+            {
+              "kind": "drive#permission",
+              "id": "07453703320583141147",
+              "type": "user",
+              "emailAddress": "rounak153d@gmail.com",
+              "role": "owner",
+              "displayName": "rounak153d",
+              "deleted": false,
+              "pendingOwner": false
+            }
+          ],
+          "permissionIds": [
+            "07453703320583141147"
+          ],
+          "originalFilename": "Untitled",
+          "fullFileExtension": "",
+          "fileExtension": "",
+          "md5Checksum": "5a9ad8c4ef29cea552a589ee36c533fa",
+          "sha1Checksum": "7377758e6b82467790c8386b889ff5a72147012f",
+          "sha256Checksum": "e4d494fb7eebb9db0f5112db5b0dd982a320c58233fc9c8f6db5dd105a4953f3",
+          "size": "1266547",
+          "quotaBytesUsed": "1266547",
+          "headRevisionId": "0B4B_noqMeirteERXK3JiK0EzNVRDZm12V1pXVWo3RVYvWDdjPQ",
+          "imageMediaMetadata": {
+            "width": 1024,
+            "height": 1024,
+            "rotation": 0
+          },
+          "isAppAuthorized": true,
+          "linkShareMetadata": {
+            "securityUpdateEligible": false,
+            "securityUpdateEnabled": true
+          },
+          "inheritedPermissionsDisabled": false
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "AI Agent2",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        []
+      ]
+    },
+    "Structured Output Parser1": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent2": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate an image2": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload file2": {
+      "main": [
+        [
+          {
+            "node": "Share file2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Share file2": {
+      "main": [
+        []
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Generate an image2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        []
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Code1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code1": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Kolkata",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "versionId": "1591e7e8-ec20-447b-a014-aa1aa5b7c7b6",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "30e8840a5d55d1e1b6af4c778e833f7fe652325f38939676863a8cb542d69c34"
+  },
+  "id": "G9JaukECqJEzUh5F",
+  "tags": []
+}
