@@ -1,0 +1,2240 @@
+{
+  "name": "high tech newsletter",
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=headline = {{ $json.title }}\ndescription = {{ $json.description }}\n",
+        "options": {
+          "systemMessage": "Analyse These News And Pass Them Forward In A More Crisp And Sharp Manner"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        704,
+        -32
+      ],
+      "id": "65b2c1c2-f2ed-4514-9271-eb89527df5c1",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1216,
+        320
+      ],
+      "id": "2ee34875-0d55-404c-bdff-269602c396f0",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "uzMkmT4lwbtW8syc",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n\t\"heading1\": \"heading1\",\n\t\"report1\": \"report1\",\n    \"heading2\":\"heading2\",\n    \"report2\":\"report2\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        6768,
+        256
+      ],
+      "id": "dd7a6093-977d-4637-a73c-2992f0accd10",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=extract the exact headlines and report of the news(after reasarch on the news)\nNEWS=\n {{ $json.output }}",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        6512,
+        16
+      ],
+      "id": "3f80e902-9a8d-47a7-94f3-02b87cbc10c5",
+      "name": "AI Agent1"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.output }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "you are a news image director. your work is to go through the news that you are getting and you need to describe each news as a scene with an explanatory text line(seperately)(not more than 5 words)\nOutput = Visuals= \n         Captions= \n\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        1328,
+        -272
+      ],
+      "id": "b4a37004-1dca-49db-ab4a-970e50b52ece",
+      "name": "AI Agent2",
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n\t\"scene1\": \"scene1\",\n\t\"scene2\": \"scene2\",\n    \"scene3\": \"scene3\",\n    \"scene4\": \"scene4\",\n    \"scene5\": \"scene5\",\n  \"scene6\": \"scene6\",\n  \"scene7\": \"scene7\",\n  \"scene8\":\"scene8\",\n  \"scene9\": \"scene9\",\n  \"scene10\": \"scene10\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        1616,
+        208
+      ],
+      "id": "5e3b3905-d6b9-43b8-86bc-e0cd712d7f2c",
+      "name": "Structured Output Parser1"
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.0-flash-preview-image-generation",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.0-flash-preview-image-generation"
+        },
+        "prompt": "={{ $json.output }}\n\n//Instructions(dont include these as text in the images)\n\n1)Style=**Bold, Clean Outlines:** Every object, character, and UI element is clearly defined by prominent, thick dark lines.\\n*   **Flat Color Palette with Limited Shading:** Colors are applied in solid blocks. Where shading is present (e.g., on the man's arm, the monitor stand, the desk), it's done with distinct, hard-edged shapes rather than smooth gradients, contributing to a 2D, graphic feel.\\n*   **Simplified Forms and Details:** Characters and objects are distilled to their essential shapes, lacking intricate textures or highly realistic anatomical details. The skull is an iconic representation rather than a detailed anatomical drawing.\\n*   **Crisp and Clear Aesthetic:** The lines are sharp, and colors are uniform, suggesting a digital origin and a focus on clarity.\\n*   **Functional and Illustrative:** This style is commonly used for infographics, explainer videos, web comics, and editorial illustrations because of its readability and effectiveness in conveying concepts without excessive visual clutter.\\n\\nIt's distinct from more traditional animation styles, highly detailed comic book art, or realistic painterly illustrations.(include only the provided text.No invention or modification of the text lines. )\n\n2)make sure all the art are same.\n\n3)Caption must appear in a clean banner at the bottom(copy and paste them no spelling mistakes or any other texts).\n\n4)Use bold sans-serif font, high contrast.\n\n5)Background = relevant illustration, not cluttered.\n\n",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        2112,
+        -624
+      ],
+      "id": "60b764e2-aec8-48d3-bcfb-22d65d30fafb",
+      "name": "Generate an image2",
+      "executeOnce": false,
+      "retryOnFail": true,
+      "maxTries": 2,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "6ddgcVkIDrwcw2PU",
+          "name": "Google Gemini(PaLM) Api account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "name": "=Scene={{ $('Split Out').item.json.output }}",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "1WyaRSNeWKXjwz4LuX7SWm0cQYvnNUqZD",
+          "mode": "list",
+          "cachedResultName": "comic_news",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1WyaRSNeWKXjwz4LuX7SWm0cQYvnNUqZD"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        6784,
+        -320
+      ],
+      "id": "09eaba17-088a-4523-b2a1-d0a6b7663034",
+      "name": "Upload file2",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "CiHyPJWsxJHlKfyv",
+          "name": "Google Drive account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "share",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "permissionsUi": {
+          "permissionsValues": {
+            "role": "reader",
+            "type": "anyone",
+            "allowFileDiscovery": true
+          }
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        7264,
+        -320
+      ],
+      "id": "bd69aec7-f773-4bf0-8a6f-b6585168935c",
+      "name": "Share file2",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "CiHyPJWsxJHlKfyv",
+          "name": "Google Drive account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "output",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        2000,
+        -288
+      ],
+      "id": "b25c6686-53d3-4352-bfed-bfdbbea3d1e5",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        6640,
+        576
+      ],
+      "id": "404d9ef3-180a-41d7-984a-7d2812a7cbb7",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "path": "/comic",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        7152,
+        -16
+      ],
+      "id": "bc8b27b9-dadb-4e10-af10-97add617d3e1",
+      "name": "Webhook",
+      "webhookId": "34ffc98e-9f1e-418c-954e-5e5c6ace3e59"
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "=<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>📰 Daily Comic Flipbook</title>\n  <style>\n    body {\n      margin: 0;\n      font-family: 'Comic Sans MS', cursive, sans-serif;\n      color: #fff;\n      background: #0d0d0d;\n      overflow: hidden;\n      height: 100vh;\n      display: flex;\n      flex-direction: column;\n      align-items: center;\n      justify-content: center;\n    }\n\n    h1 {\n      margin: 20px 0;\n      font-size: 2em;\n      color: #ffde59;\n      text-shadow: 0 0 10px rgba(255, 222, 89, 0.8);\n      z-index: 10;\n    }\n\n    /* Dynamic animated background */\n    body::before {\n      content: \"\";\n      position: fixed;\n      top: 0;\n      left: 0;\n      width: 200%;\n      height: 200%;\n      background: radial-gradient(circle, rgba(255,255,255,0.05) 1%, transparent 1%) repeat;\n      background-size: 50px 50px;\n      animation: moveBackground 20s linear infinite;\n      z-index: -1;\n    }\n\n    @keyframes moveBackground {\n      from { transform: translate(0, 0); }\n      to { transform: translate(-50px, -50px); }\n    }\n\n    .flipbook {\n      width: 700px;\n      height: 500px;\n      perspective: 2000px;\n      position: relative;\n    }\n\n    .book {\n      width: 100%;\n      height: 100%;\n      position: relative;\n    }\n\n    .page {\n      width: 100%;\n      height: 100%;\n      background: #111;\n      position: absolute;\n      top: 0;\n      left: 0;\n      transform-origin: left center;\n      transform-style: preserve-3d;\n      transition: transform 1s;\n      box-shadow: 0 4px 12px rgba(0,0,0,0.6);\n      border-radius: 8px;\n      overflow: hidden;\n    }\n\n    .page img {\n      width: 100%;\n      height: 100%;\n      object-fit: contain;\n      display: block;\n      border-radius: 8px;\n    }\n\n    .page.flipped {\n      transform: rotateY(-180deg);\n      z-index: 0 !important;\n    }\n\n    .controls {\n      margin-top: 20px;\n      display: flex;\n      gap: 20px;\n    }\n\n    button {\n      background: #ffde59;\n      border: none;\n      padding: 12px 24px;\n      font-size: 1em;\n      border-radius: 8px;\n      cursor: pointer;\n      transition: all 0.3s ease;\n      color: #111;\n      font-weight: bold;\n    }\n\n    button:hover {\n      background: #ffc107;\n      transform: scale(1.05);\n    }\n  </style>\n</head>\n<body>\n  <h1>📰 Daily Comic Flipbook</h1>\n  <div class=\"flipbook\">\n    <div class=\"book\" id=\"book\"></div>\n  </div>\n  <div class=\"controls\">\n    <button id=\"prev\">⬅ Prev</button>\n    <button id=\"next\">Next ➡</button>\n  </div>\n\n  <script>\n    // Replace with dynamic variable in n8n (or keep static for now)\n    const imageUrls = {{ JSON.stringify($json[\"imageUrls\"]) }};\n\n    const book = document.getElementById(\"book\");\n    let currentPage = 0;\n\n    // Build pages dynamically\n    imageUrls.forEach((url, index) => {\n      const page = document.createElement(\"div\");\n      page.className = \"page\";\n      page.style.zIndex = imageUrls.length - index;\n\n      const img = document.createElement(\"img\");\n      img.src = url;\n      img.alt = \"Comic Page \" + (index + 1);\n      img.onerror = () => img.src = \"https://via.placeholder.com/700x500?text=Image+not+available\";\n\n      page.appendChild(img);\n      book.appendChild(page);\n    });\n\n    const pages = document.querySelectorAll(\".page\");\n\n    document.getElementById(\"next\").addEventListener(\"click\", () => {\n      if (currentPage < pages.length) {\n        pages[currentPage].classList.add(\"flipped\");\n        currentPage++;\n      } else {\n        // Restart (reset book)\n        pages.forEach(p => p.classList.remove(\"flipped\"));\n        currentPage = 0;\n      }\n    });\n\n    document.getElementById(\"prev\").addEventListener(\"click\", () => {\n      if (currentPage > 0) {\n        currentPage--;\n        pages[currentPage].classList.remove(\"flipped\");\n      }\n    });\n  </script>\n</body>\n</html>\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        6912,
+        -624
+      ],
+      "id": "7dc02eda-7ace-4171-8dd2-d54ad468a3cc",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1072,
+        -368
+      ],
+      "id": "b8ffb20b-a8be-4dd2-b70f-fc1f794a3406",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get all items output by the HTTP Request1 node\nconst uploadedImages = $items(\"HTTP Request1\");\n\n// Initialize array to store URLs\nconst imageUrls = [];\n\n// Loop through each uploaded image\nfor (const item of uploadedImages) {\n    // Each item.json.image.url contains the direct image link\n    if(item.json.image && item.json.image.url) {\n        imageUrls.push(item.json.image.url);\n    }\n}\n\n// Return a single JSON object with all URLs\nreturn [\n    {\n        json: {\n            imageUrls\n        }\n    }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2640,
+        -640
+      ],
+      "id": "fc05ac15-2803-4f35-b655-e0976fec48e6",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://freeimage.host/api/1/upload",
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "key",
+              "value": "6d207e02198a847aa98d0a2a901485a5"
+            },
+            {
+              "name": "action",
+              "value": "upload"
+            },
+            {
+              "parameterType": "formBinaryData",
+              "name": "source",
+              "inputDataFieldName": "=data"
+            },
+            {
+              "name": "format",
+              "value": "json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2384,
+        -624
+      ],
+      "id": "fcd5a637-0ef7-4f67-8383-9c9bd47425d7",
+      "name": "HTTP Request1",
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "sendTo": "rounak153d@gmail.com",
+        "subject": "comic",
+        "message": "={{ $json.html }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        2656,
+        -1088
+      ],
+      "id": "08ccd600-119a-44e2-853c-9ef529230e62",
+      "name": "Send a message",
+      "webhookId": "73132323-e0f9-4df3-9893-e9848ed59e12",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "IBVE5hr63zpO6LxM",
+          "name": "Gmail account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "return [\n  {\n    json: {\n      html: `<!DOCTYPE html>\n<html>\n  <body style=\"font-family: 'Noto Serif', serif; background:#1a1a1a; padding:20px; margin:0; color:#f5f5f5;\">\n\n    <h2 style=\"text-align:center; color:#ff6f00; margin-bottom:20px; font-size:28px;\">\n      Durga Puja Special Comic Book\n    </h2>\n\n    <div style=\"max-width:600px; margin:0 auto; background:#2c2c2c; padding:20px; border-radius:15px; box-shadow:0 8px 20px rgba(0,0,0,0.5); border:2px solid #ff8f00;\">\n\n      ${($json.imageUrls || []).map(url => `\n        <div style=\"margin-bottom:25px; text-align:center; border:2px dashed #ff8f00; padding:15px; border-radius:15px; background:#3d3d3d;\">\n          <img src=\"${url}\" alt=\"Durga Puja Comic Page\" \n            style=\"max-width:100%; height:auto; border-radius:12px; display:block; margin:0 auto; box-shadow:0 6px 15px rgba(0,0,0,0.7);\" />\n        </div>\n      `).join(\"\")}\n\n    </div>\n\n    <p style=\"text-align:center; font-size:13px; color:#ffa000; margin-top:20px;\">\n      Sent automatically by your Durga Puja Comic Workflow\n    </p>\n\n  </body>\n</html>`\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2880,
+        -1072
+      ],
+      "id": "240824b6-5ea9-44b8-aca0-72e941c38bb2",
+      "name": "Code1"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {}
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -1264,
+        1376
+      ],
+      "id": "b5d11cd4-d315-4463-9aff-f7ce7c86a9f0",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "url": "https://timesofindia.indiatimes.com/rssfeedstopstories.cms",
+        "options": {
+          "customFields": "",
+          "ignoreSSL": false
+        }
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        -592,
+        -80
+      ],
+      "id": "d1801b2a-7749-4f99-8960-be3dea74374e",
+      "name": "RSS Read"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get all incoming RSS items\nconst items = $input.all();\n\n// Limit to top 5 only\nconst topItems = items.slice(0, 10);\n\n// Map them to a cleaner format\nreturn topItems.map((item, i) => {\n  const news = item.json;\n  return {\n    json: {\n      index: i + 1,\n      title: news.title,\n      link: news.link,\n      date: news.pubDate,\n      description: news.contentSnippet || news.content || \"\",\n      image: news.enclosure?.url || null,\n      formatted: `📰 ${i + 1}. ${news.title}\\n${news.link}`\n    }\n  };\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -32,
+        -48
+      ],
+      "id": "51001d7f-0d6f-4d05-815f-457002868e91",
+      "name": "Code2"
+    },
+    {
+      "parameters": {
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {
+              "fieldToAggregate": "title"
+            },
+            {
+              "fieldToAggregate": "description"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        464,
+        -48
+      ],
+      "id": "78d7fd49-be35-421c-aec3-8fd9ed17775e",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {
+              "fieldToAggregate": "title"
+            },
+            {
+              "fieldToAggregate": "description"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        6208,
+        -400
+      ],
+      "id": "8f56e7b5-5e99-4caf-bc91-ae7177d389a0",
+      "name": "Aggregate1"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1h189t786a0wLMGHAKYkTyMELjQ2mUCAGV4ljZNv0wVc",
+          "mode": "list",
+          "cachedResultName": "NewsPaper",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1h189t786a0wLMGHAKYkTyMELjQ2mUCAGV4ljZNv0wVc/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1h189t786a0wLMGHAKYkTyMELjQ2mUCAGV4ljZNv0wVc/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -1024,
+        1280
+      ],
+      "id": "c2f03b07-e97b-40fc-8dab-3b04d08574b9",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "ZpyGoS1Noq5m57yE",
+          "name": "Google Sheets account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1wVorYeheSGu_5q4kECOGUs8CqL8aF0Mj9KEe3gffiwk",
+          "mode": "list",
+          "cachedResultName": "images",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1wVorYeheSGu_5q4kECOGUs8CqL8aF0Mj9KEe3gffiwk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1wVorYeheSGu_5q4kECOGUs8CqL8aF0Mj9KEe3gffiwk/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -1024,
+        1488
+      ],
+      "id": "3806a234-1a9b-41bf-b0ae-c0c5ff5fab26",
+      "name": "Get row(s) in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "ZpyGoS1Noq5m57yE",
+          "name": "Google Sheets account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "html": "<!DOCTYPE html>\n<html>\n<head>\n  <meta charset=\"UTF-8\">\n  <title>Vintage Newspaper</title>\n  <style>\n    /* Global styles */\n    body {\n      font-family: 'Times New Roman', serif !important;\n      background-color: #f5f2e7 !important;\n      color: #000 !important;\n      margin: 0;\n      padding: 0;\n    }\n\n    /* Wrapper for centering and width */\n    .wrapper {\n      max-width: 700px;\n      margin: 0 auto;\n      padding: 20px;\n      background-color: #f5f2e7;\n      line-height: 1.6;\n    }\n\n    /* Header styles */\n    .newspaper-header {\n      display: flex;\n      justify-content: space-between;\n      align-items: center;\n      border-bottom: 2px solid #000;\n      padding-bottom: 10px;\n      margin-bottom: 30px;\n    }\n\n    .newspaper-title {\n      font-size: 32px;\n      font-weight: bold;\n      text-transform: uppercase;\n      letter-spacing: 2px;\n    }\n\n    .newspaper-date {\n      font-size: 14px;\n      font-style: italic;\n      text-align: right;\n    }\n\n    /* Article styles */\n    .article {\n      margin-bottom: 40px;\n      border-bottom: 1px dashed #999;\n      padding-bottom: 20px;\n    }\n\n    .article h2 {\n      font-size: 20px;\n      margin-bottom: 10px;\n      text-transform: uppercase;\n    }\n\n    .article-date {\n      font-size: 14px;\n      font-style: italic;\n      margin-bottom: 10px;\n      color: #000;\n    }\n\n    .article img {\n      max-width: 100%;\n      height: auto;\n      margin: 10px 0;\n      display: block;\n    }\n\n    .article p {\n      font-size: 16px;\n      color: #000;\n      margin-bottom: 12px;\n      text-align: justify;\n    }\n\n    /* Drop-cap for first paragraph of each article */\n    .article p:first-of-type::first-letter {\n      font-size: 36px;\n      float: left;\n      line-height: 1;\n      padding-right: 8px;\n      font-weight: bold;\n    }\n\n    /* Responsive adjustments */\n    @media screen and (max-width: 768px) {\n      .wrapper { padding: 10px; }\n      .newspaper-title { font-size: 28px; }\n      .article h2 { font-size: 18px; }\n    }\n  </style>\n</head>\n<body>\n  <div class=\"wrapper\">\n    <div class=\"newspaper-header\">\n      <div class=\"newspaper-title\">The Daily Chronicle</div>\n      <div class=\"newspaper-date\">{{ new Date($now).toLocaleDateString('en-GB') }}</div>\n    </div>\n\n    <!-- Articles -->\n    {{\n      [].concat(...$('Code3').all().map(item => item.json.articles)).map(article => `\n        <div class=\"article\">\n          <h2>${article.headline}</h2>\n          <div class=\"article-date\">${new Date(article.date).toLocaleString()}</div>\n          ${article.link ? `<img src=\"${article.link}\" alt=\"${article.headline}\">` : ''}\n\n          ${\n            article.description\n              .split(/\\r?\\n|\\r/)  // Split by line breaks\n              .map(p => p.trim())\n              .filter(p => p.length > 0)\n              .map(p => `<p>${p}</p>`)\n              .join('')\n          }\n        </div>\n      `).join('')\n    }}\n\n  </div>\n</body>\n</html>\n"
+      },
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1.2,
+      "position": [
+        320,
+        1408
+      ],
+      "id": "903420db-2280-49b6-b484-24ecd63fefd3",
+      "name": "HTML"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1️⃣ Get all articles from the first sheet\nlet articles = $items(\"Get row(s) in sheet\").map(item => item.json);\n\n// 2️⃣ Get the links field (all links in one cell) from the second sheet\nlet linksRaw = $items(\"Get row(s) in sheet1\")[0].json.links || \"[]\";\n\n// 3️⃣ Parse the links string into an array\nlet links;\ntry {\n  links = JSON.parse(linksRaw);\n} catch(e) {\n  links = [];\n}\n\n// 4️⃣ Assign each article its corresponding image URL\narticles.forEach((article, i) => {\n  article.link = links[i] || null;\n});\n\n// 5️⃣ Return as a single item\nreturn [\n  {\n    json: {\n      articles: articles\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -416,
+        1408
+      ],
+      "id": "e40be56e-31b0-4ac2-80ef-215a5619325d",
+      "name": "Code3"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "fieldsToMatchString": "links",
+        "joinMode": "keepNonMatches",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -624,
+        1408
+      ],
+      "id": "51e1352a-2390-4d57-ade4-26bf0fc94255",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "sendTo": "rounak153d@gmail.com",
+        "subject": "The Daily Chronicles",
+        "message": "={{ $json.html }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        832,
+        1408
+      ],
+      "id": "a7825f08-628d-4d4c-9be6-cbbb0223fcab",
+      "name": "Send a message1",
+      "webhookId": "6ea2a3e9-e03a-461b-bc8f-2b17e0586627",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "IBVE5hr63zpO6LxM",
+          "name": "Gmail account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "e3deeae3-4421-408a-bcf7-2296c40e81a7",
+              "leftValue": "={{ $json.content }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "c23b8e7e-4eff-4171-8c3b-c6dd0b3426f8",
+              "leftValue": "={{ $json.contentSnippet }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -384,
+        -80
+      ],
+      "id": "33e3e28a-2fa7-4157-8c70-a932b3b269d7",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.link }}=link of news\ngive me detailes about each news.(only have details in your output no irrelevant texts)(15-20 lines)(dont include an date)",
+        "hasOutputParser": true,
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        800,
+        -592
+      ],
+      "id": "4b24d91a-07c0-4a98-a497-ae6ea9784db0",
+      "name": "Basic LLM Chain",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        640,
+        -288
+      ],
+      "id": "1e12bec7-6710-4081-9679-1b3104b683de",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "6ddgcVkIDrwcw2PU",
+          "name": "Google Gemini(PaLM) Api account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n\t\"news\": \"description\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        1056,
+        -336
+      ],
+      "id": "38a13213-f45e-4ca2-945e-0821920794d3",
+      "name": "Structured Output Parser2"
+    },
+    {
+      "parameters": {
+        "operation": "clear",
+        "documentId": {
+          "__rl": true,
+          "value": "1h189t786a0wLMGHAKYkTyMELjQ2mUCAGV4ljZNv0wVc",
+          "mode": "list",
+          "cachedResultName": "NewsPaper",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1h189t786a0wLMGHAKYkTyMELjQ2mUCAGV4ljZNv0wVc/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1h189t786a0wLMGHAKYkTyMELjQ2mUCAGV4ljZNv0wVc/edit#gid=0"
+        },
+        "clear": "specificRows",
+        "startIndex": 2,
+        "rowsToDelete": 12
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1200,
+        -592
+      ],
+      "id": "534b8069-dacb-4919-9294-710a10e7e3e6",
+      "name": "Clear sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "ZpyGoS1Noq5m57yE",
+          "name": "Google Sheets account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1h189t786a0wLMGHAKYkTyMELjQ2mUCAGV4ljZNv0wVc",
+          "mode": "list",
+          "cachedResultName": "NewsPaper",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1h189t786a0wLMGHAKYkTyMELjQ2mUCAGV4ljZNv0wVc/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1h189t786a0wLMGHAKYkTyMELjQ2mUCAGV4ljZNv0wVc/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "headline": "={{ $('Code2').item.json.title }}",
+            "date": "={{ $('Code2').item.json.date }}",
+            "description": "={{ $('Basic LLM Chain').item.json.output.news }}"
+          },
+          "matchingColumns": [
+            "headline"
+          ],
+          "schema": [
+            {
+              "id": "headline",
+              "displayName": "headline",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "description",
+              "displayName": "description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "date",
+              "displayName": "date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1392,
+        -592
+      ],
+      "id": "227c6a5f-0e99-4ccf-9cfc-31c0e0ce1504",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "ZpyGoS1Noq5m57yE",
+          "name": "Google Sheets account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1wVorYeheSGu_5q4kECOGUs8CqL8aF0Mj9KEe3gffiwk",
+          "mode": "list",
+          "cachedResultName": "images",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1wVorYeheSGu_5q4kECOGUs8CqL8aF0Mj9KEe3gffiwk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1wVorYeheSGu_5q4kECOGUs8CqL8aF0Mj9KEe3gffiwk/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "links": "={{ $('Code').item.json.imageUrls }}"
+          },
+          "matchingColumns": [
+            "links"
+          ],
+          "schema": [
+            {
+              "id": "links",
+              "displayName": "links",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        3280,
+        -640
+      ],
+      "id": "c9f0f84a-70e3-4b7a-864f-b774c71ec8c2",
+      "name": "Append row in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "ZpyGoS1Noq5m57yE",
+          "name": "Google Sheets account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "clear",
+        "documentId": {
+          "__rl": true,
+          "value": "1wVorYeheSGu_5q4kECOGUs8CqL8aF0Mj9KEe3gffiwk",
+          "mode": "list",
+          "cachedResultName": "images",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1wVorYeheSGu_5q4kECOGUs8CqL8aF0Mj9KEe3gffiwk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1wVorYeheSGu_5q4kECOGUs8CqL8aF0Mj9KEe3gffiwk/edit#gid=0"
+        },
+        "clear": "specificRows",
+        "startIndex": 2
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2928,
+        -640
+      ],
+      "id": "5ae65015-fe56-4457-9bd7-014a8a4991f3",
+      "name": "Clear sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "ZpyGoS1Noq5m57yE",
+          "name": "Google Sheets account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n  item.json.myNewField = 1;\n}\n\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        5872,
+        -144
+      ],
+      "id": "c4a4b9c3-cc87-4c9e-a1ca-e1b6aa2cc322",
+      "name": "Code4"
+    }
+  ],
+  "pinData": {
+    "Upload file2": [
+      {
+        "json": {
+          "kind": "drive#file",
+          "id": "1TaHYv7HNdU4zRPVOPAS9Ly1-7Alan8oc",
+          "name": "Scene=Israeli forces are continuing their operations in Rafah, southern Gaza, with reports of increased ground incursions and airstrikes.",
+          "mimeType": "image/png",
+          "starred": false,
+          "trashed": false,
+          "explicitlyTrashed": false,
+          "parents": [
+            "1WyaRSNeWKXjwz4LuX7SWm0cQYvnNUqZD"
+          ],
+          "spaces": [
+            "drive"
+          ],
+          "version": "2",
+          "webContentLink": "https://drive.google.com/uc?id=1TaHYv7HNdU4zRPVOPAS9Ly1-7Alan8oc&export=download",
+          "webViewLink": "https://drive.google.com/file/d/1TaHYv7HNdU4zRPVOPAS9Ly1-7Alan8oc/view?usp=drivesdk",
+          "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/image/png",
+          "hasThumbnail": true,
+          "thumbnailLink": "https://lh3.googleusercontent.com/drive-storage/AJQWtBO1G7Ii14qMJZrTRg-KtIy3zi8ofFTcd5ZVJcIaSmbm-anWYxwJiC2Yeh0JztKujVNR1JGC7kkr_kbINDbnGPF29NUiTpa230w14EohQK6CYTU=s220",
+          "thumbnailVersion": "2",
+          "viewedByMe": false,
+          "createdTime": "2025-09-25T06:23:00.683Z",
+          "modifiedTime": "2025-09-25T06:23:02.139Z",
+          "modifiedByMeTime": "2025-09-25T06:23:02.139Z",
+          "modifiedByMe": true,
+          "owners": [
+            {
+              "kind": "drive#user",
+              "displayName": "Rounak Dutta",
+              "photoLink": "https://lh3.googleusercontent.com/a/ACg8ocI-lz5elWpwhgkyuVLypRVtrKXOWRcbVuUQs4sS4xOrf766_5U=s64",
+              "me": true,
+              "permissionId": "07453703320583141147",
+              "emailAddress": "rounak153d@gmail.com"
+            }
+          ],
+          "lastModifyingUser": {
+            "kind": "drive#user",
+            "displayName": "Rounak Dutta",
+            "photoLink": "https://lh3.googleusercontent.com/a/ACg8ocI-lz5elWpwhgkyuVLypRVtrKXOWRcbVuUQs4sS4xOrf766_5U=s64",
+            "me": true,
+            "permissionId": "07453703320583141147",
+            "emailAddress": "rounak153d@gmail.com"
+          },
+          "shared": false,
+          "ownedByMe": true,
+          "downloadRestrictions": {
+            "itemDownloadRestriction": {
+              "restrictedForReaders": false,
+              "restrictedForWriters": false
+            },
+            "effectiveDownloadRestrictionWithContext": {
+              "restrictedForReaders": false,
+              "restrictedForWriters": false
+            }
+          },
+          "capabilities": {
+            "canAcceptOwnership": false,
+            "canAddChildren": false,
+            "canAddMyDriveParent": false,
+            "canChangeCopyRequiresWriterPermission": true,
+            "canChangeItemDownloadRestriction": true,
+            "canChangeSecurityUpdateEnabled": false,
+            "canChangeViewersCanCopyContent": true,
+            "canComment": true,
+            "canCopy": true,
+            "canDelete": true,
+            "canDisableInheritedPermissions": false,
+            "canDownload": true,
+            "canEdit": true,
+            "canEnableInheritedPermissions": true,
+            "canListChildren": false,
+            "canModifyContent": true,
+            "canModifyContentRestriction": true,
+            "canModifyEditorContentRestriction": true,
+            "canModifyOwnerContentRestriction": true,
+            "canModifyLabels": false,
+            "canMoveChildrenWithinDrive": false,
+            "canMoveItemIntoTeamDrive": true,
+            "canMoveItemOutOfDrive": true,
+            "canMoveItemWithinDrive": true,
+            "canReadLabels": false,
+            "canReadRevisions": true,
+            "canRemoveChildren": false,
+            "canRemoveContentRestriction": false,
+            "canRemoveMyDriveParent": true,
+            "canRename": true,
+            "canShare": true,
+            "canTrash": true,
+            "canUntrash": true
+          },
+          "viewersCanCopyContent": true,
+          "copyRequiresWriterPermission": false,
+          "writersCanShare": true,
+          "permissions": [
+            {
+              "kind": "drive#permission",
+              "id": "07453703320583141147",
+              "type": "user",
+              "emailAddress": "rounak153d@gmail.com",
+              "role": "owner",
+              "displayName": "rounak153d",
+              "deleted": false,
+              "pendingOwner": false
+            }
+          ],
+          "permissionIds": [
+            "07453703320583141147"
+          ],
+          "originalFilename": "Untitled",
+          "fullFileExtension": "",
+          "fileExtension": "",
+          "md5Checksum": "a02682a7a1e69a7b51dfc8fe5f5fe6f2",
+          "sha1Checksum": "b6fab233ae2a8badf71da8bec1473bb07e873c87",
+          "sha256Checksum": "ddc3e61db87d729e57f0be7a23546bdde180d83f3a02882067d42fe8f11be4d5",
+          "size": "817215",
+          "quotaBytesUsed": "817215",
+          "headRevisionId": "0B4B_noqMeirtbHBLenFGelQ5SlFkckNycFo2MC93d0QrSWhBPQ",
+          "imageMediaMetadata": {
+            "width": 1024,
+            "height": 508,
+            "rotation": 0
+          },
+          "isAppAuthorized": true,
+          "linkShareMetadata": {
+            "securityUpdateEligible": false,
+            "securityUpdateEnabled": true
+          },
+          "inheritedPermissionsDisabled": false
+        }
+      },
+      {
+        "json": {
+          "kind": "drive#file",
+          "id": "1AwKlmYa59w8q5FPvO2gqaOqU6yepg1RB",
+          "name": "Scene=This comes despite international warnings, including from the United States, about the humanitarian impact on the hundreds of thousands of displaced Palestinians sheltering there.",
+          "mimeType": "image/png",
+          "starred": false,
+          "trashed": false,
+          "explicitlyTrashed": false,
+          "parents": [
+            "1WyaRSNeWKXjwz4LuX7SWm0cQYvnNUqZD"
+          ],
+          "spaces": [
+            "drive"
+          ],
+          "version": "2",
+          "webContentLink": "https://drive.google.com/uc?id=1AwKlmYa59w8q5FPvO2gqaOqU6yepg1RB&export=download",
+          "webViewLink": "https://drive.google.com/file/d/1AwKlmYa59w8q5FPvO2gqaOqU6yepg1RB/view?usp=drivesdk",
+          "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/image/png",
+          "hasThumbnail": true,
+          "thumbnailLink": "https://lh3.googleusercontent.com/drive-storage/AJQWtBPDFkSoWuFQgnNEVEiMadJ2zruSIHDrkLFnW6KcgKa6X8GvJ8AeHFsPJan1VuVACbyot_zx3ORr8OAVCIYL25tDKKBCA-QX0t-uwFig8gbQBzk=s220",
+          "thumbnailVersion": "2",
+          "viewedByMe": false,
+          "createdTime": "2025-09-25T06:23:03.990Z",
+          "modifiedTime": "2025-09-25T06:23:05.591Z",
+          "modifiedByMeTime": "2025-09-25T06:23:05.591Z",
+          "modifiedByMe": true,
+          "owners": [
+            {
+              "kind": "drive#user",
+              "displayName": "Rounak Dutta",
+              "photoLink": "https://lh3.googleusercontent.com/a/ACg8ocI-lz5elWpwhgkyuVLypRVtrKXOWRcbVuUQs4sS4xOrf766_5U=s64",
+              "me": true,
+              "permissionId": "07453703320583141147",
+              "emailAddress": "rounak153d@gmail.com"
+            }
+          ],
+          "lastModifyingUser": {
+            "kind": "drive#user",
+            "displayName": "Rounak Dutta",
+            "photoLink": "https://lh3.googleusercontent.com/a/ACg8ocI-lz5elWpwhgkyuVLypRVtrKXOWRcbVuUQs4sS4xOrf766_5U=s64",
+            "me": true,
+            "permissionId": "07453703320583141147",
+            "emailAddress": "rounak153d@gmail.com"
+          },
+          "shared": false,
+          "ownedByMe": true,
+          "downloadRestrictions": {
+            "itemDownloadRestriction": {
+              "restrictedForReaders": false,
+              "restrictedForWriters": false
+            },
+            "effectiveDownloadRestrictionWithContext": {
+              "restrictedForReaders": false,
+              "restrictedForWriters": false
+            }
+          },
+          "capabilities": {
+            "canAcceptOwnership": false,
+            "canAddChildren": false,
+            "canAddMyDriveParent": false,
+            "canChangeCopyRequiresWriterPermission": true,
+            "canChangeItemDownloadRestriction": true,
+            "canChangeSecurityUpdateEnabled": false,
+            "canChangeViewersCanCopyContent": true,
+            "canComment": true,
+            "canCopy": true,
+            "canDelete": true,
+            "canDisableInheritedPermissions": false,
+            "canDownload": true,
+            "canEdit": true,
+            "canEnableInheritedPermissions": true,
+            "canListChildren": false,
+            "canModifyContent": true,
+            "canModifyContentRestriction": true,
+            "canModifyEditorContentRestriction": true,
+            "canModifyOwnerContentRestriction": true,
+            "canModifyLabels": false,
+            "canMoveChildrenWithinDrive": false,
+            "canMoveItemIntoTeamDrive": true,
+            "canMoveItemOutOfDrive": true,
+            "canMoveItemWithinDrive": true,
+            "canReadLabels": false,
+            "canReadRevisions": true,
+            "canRemoveChildren": false,
+            "canRemoveContentRestriction": false,
+            "canRemoveMyDriveParent": true,
+            "canRename": true,
+            "canShare": true,
+            "canTrash": true,
+            "canUntrash": true
+          },
+          "viewersCanCopyContent": true,
+          "copyRequiresWriterPermission": false,
+          "writersCanShare": true,
+          "permissions": [
+            {
+              "kind": "drive#permission",
+              "id": "07453703320583141147",
+              "type": "user",
+              "emailAddress": "rounak153d@gmail.com",
+              "role": "owner",
+              "displayName": "rounak153d",
+              "deleted": false,
+              "pendingOwner": false
+            }
+          ],
+          "permissionIds": [
+            "07453703320583141147"
+          ],
+          "originalFilename": "Untitled",
+          "fullFileExtension": "",
+          "fileExtension": "",
+          "md5Checksum": "a9cc131a0a6c40a6e6032a232aacd5b6",
+          "sha1Checksum": "feb82a2704446d43e51c24981a81e5952ad3c5d5",
+          "sha256Checksum": "0817406dbf1c807843c1d5992b35764c9a9e5f67be4ecaa3c3bb6efb8c420571",
+          "size": "1786495",
+          "quotaBytesUsed": "1786495",
+          "headRevisionId": "0B4B_noqMeirtYmRrbmFmY09mMU1TTkJZR1FWR2F3OHFUSytrPQ",
+          "imageMediaMetadata": {
+            "width": 1024,
+            "height": 1024,
+            "rotation": 0
+          },
+          "isAppAuthorized": true,
+          "linkShareMetadata": {
+            "securityUpdateEligible": false,
+            "securityUpdateEnabled": true
+          },
+          "inheritedPermissionsDisabled": false
+        }
+      },
+      {
+        "json": {
+          "kind": "drive#file",
+          "id": "1XYznUoDRXsdssKpqR4F138G8zeNTrVDs",
+          "name": "Scene=Negotiations for a ceasefire and hostage release remain stalled.",
+          "mimeType": "image/png",
+          "starred": false,
+          "trashed": false,
+          "explicitlyTrashed": false,
+          "parents": [
+            "1WyaRSNeWKXjwz4LuX7SWm0cQYvnNUqZD"
+          ],
+          "spaces": [
+            "drive"
+          ],
+          "version": "2",
+          "webContentLink": "https://drive.google.com/uc?id=1XYznUoDRXsdssKpqR4F138G8zeNTrVDs&export=download",
+          "webViewLink": "https://drive.google.com/file/d/1XYznUoDRXsdssKpqR4F138G8zeNTrVDs/view?usp=drivesdk",
+          "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/image/png",
+          "hasThumbnail": true,
+          "thumbnailLink": "https://lh3.googleusercontent.com/drive-storage/AJQWtBOgYpQZwVzX7QGrKqIa7-XVT9vb8MtKYocwr4Gxk0aBll35oj-N9lnKwq_qISwIRM8CK6bvnwa6_8IK_emJga_TNOr6fnUVGSwUF57SOnIqbQ=s220",
+          "thumbnailVersion": "2",
+          "viewedByMe": false,
+          "createdTime": "2025-09-25T06:23:07.437Z",
+          "modifiedTime": "2025-09-25T06:23:08.847Z",
+          "modifiedByMeTime": "2025-09-25T06:23:08.847Z",
+          "modifiedByMe": true,
+          "owners": [
+            {
+              "kind": "drive#user",
+              "displayName": "Rounak Dutta",
+              "photoLink": "https://lh3.googleusercontent.com/a/ACg8ocI-lz5elWpwhgkyuVLypRVtrKXOWRcbVuUQs4sS4xOrf766_5U=s64",
+              "me": true,
+              "permissionId": "07453703320583141147",
+              "emailAddress": "rounak153d@gmail.com"
+            }
+          ],
+          "lastModifyingUser": {
+            "kind": "drive#user",
+            "displayName": "Rounak Dutta",
+            "photoLink": "https://lh3.googleusercontent.com/a/ACg8ocI-lz5elWpwhgkyuVLypRVtrKXOWRcbVuUQs4sS4xOrf766_5U=s64",
+            "me": true,
+            "permissionId": "07453703320583141147",
+            "emailAddress": "rounak153d@gmail.com"
+          },
+          "shared": false,
+          "ownedByMe": true,
+          "downloadRestrictions": {
+            "itemDownloadRestriction": {
+              "restrictedForReaders": false,
+              "restrictedForWriters": false
+            },
+            "effectiveDownloadRestrictionWithContext": {
+              "restrictedForReaders": false,
+              "restrictedForWriters": false
+            }
+          },
+          "capabilities": {
+            "canAcceptOwnership": false,
+            "canAddChildren": false,
+            "canAddMyDriveParent": false,
+            "canChangeCopyRequiresWriterPermission": true,
+            "canChangeItemDownloadRestriction": true,
+            "canChangeSecurityUpdateEnabled": false,
+            "canChangeViewersCanCopyContent": true,
+            "canComment": true,
+            "canCopy": true,
+            "canDelete": true,
+            "canDisableInheritedPermissions": false,
+            "canDownload": true,
+            "canEdit": true,
+            "canEnableInheritedPermissions": true,
+            "canListChildren": false,
+            "canModifyContent": true,
+            "canModifyContentRestriction": true,
+            "canModifyEditorContentRestriction": true,
+            "canModifyOwnerContentRestriction": true,
+            "canModifyLabels": false,
+            "canMoveChildrenWithinDrive": false,
+            "canMoveItemIntoTeamDrive": true,
+            "canMoveItemOutOfDrive": true,
+            "canMoveItemWithinDrive": true,
+            "canReadLabels": false,
+            "canReadRevisions": true,
+            "canRemoveChildren": false,
+            "canRemoveContentRestriction": false,
+            "canRemoveMyDriveParent": true,
+            "canRename": true,
+            "canShare": true,
+            "canTrash": true,
+            "canUntrash": true
+          },
+          "viewersCanCopyContent": true,
+          "copyRequiresWriterPermission": false,
+          "writersCanShare": true,
+          "permissions": [
+            {
+              "kind": "drive#permission",
+              "id": "07453703320583141147",
+              "type": "user",
+              "emailAddress": "rounak153d@gmail.com",
+              "role": "owner",
+              "displayName": "rounak153d",
+              "deleted": false,
+              "pendingOwner": false
+            }
+          ],
+          "permissionIds": [
+            "07453703320583141147"
+          ],
+          "originalFilename": "Untitled",
+          "fullFileExtension": "",
+          "fileExtension": "",
+          "md5Checksum": "732ba1127c68d3eafeac120ec0e75ff4",
+          "sha1Checksum": "b42dcc3552f9cdf2f0d51dc5415e2d4e8515a6c6",
+          "sha256Checksum": "cd75d525ed0ae368f1dfe6329d96e5a3511a3455ac07763ec2078e1269e14181",
+          "size": "982070",
+          "quotaBytesUsed": "982070",
+          "headRevisionId": "0B4B_noqMeirtY05XVVhvc0k2MXpWRVZUKzhXV0NMYjViaSt3PQ",
+          "imageMediaMetadata": {
+            "width": 1024,
+            "height": 1024,
+            "rotation": 0
+          },
+          "isAppAuthorized": true,
+          "linkShareMetadata": {
+            "securityUpdateEligible": false,
+            "securityUpdateEnabled": true
+          },
+          "inheritedPermissionsDisabled": false
+        }
+      },
+      {
+        "json": {
+          "kind": "drive#file",
+          "id": "1R2oU01NH88vrcZidFQgK-9zt1emi0zPR",
+          "name": "Scene=While humanitarian agencies warn of a worsening crisis due to the closure of key aid crossings.",
+          "mimeType": "image/png",
+          "starred": false,
+          "trashed": false,
+          "explicitlyTrashed": false,
+          "parents": [
+            "1WyaRSNeWKXjwz4LuX7SWm0cQYvnNUqZD"
+          ],
+          "spaces": [
+            "drive"
+          ],
+          "version": "2",
+          "webContentLink": "https://drive.google.com/uc?id=1R2oU01NH88vrcZidFQgK-9zt1emi0zPR&export=download",
+          "webViewLink": "https://drive.google.com/file/d/1R2oU01NH88vrcZidFQgK-9zt1emi0zPR/view?usp=drivesdk",
+          "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/image/png",
+          "hasThumbnail": true,
+          "thumbnailLink": "https://lh3.googleusercontent.com/drive-storage/AJQWtBPKhbdNYOvXIlrQgqof49VMYAtRL86ZlDeHQhiVMro9CLMeThdy4FtWS-ecdSm6xeSUkTr8x245mkBHuXvaQoekQfni1KvvDMFxEbTWrID0TGI=s220",
+          "thumbnailVersion": "2",
+          "viewedByMe": false,
+          "createdTime": "2025-09-25T06:23:10.652Z",
+          "modifiedTime": "2025-09-25T06:23:12.220Z",
+          "modifiedByMeTime": "2025-09-25T06:23:12.220Z",
+          "modifiedByMe": true,
+          "owners": [
+            {
+              "kind": "drive#user",
+              "displayName": "Rounak Dutta",
+              "photoLink": "https://lh3.googleusercontent.com/a/ACg8ocI-lz5elWpwhgkyuVLypRVtrKXOWRcbVuUQs4sS4xOrf766_5U=s64",
+              "me": true,
+              "permissionId": "07453703320583141147",
+              "emailAddress": "rounak153d@gmail.com"
+            }
+          ],
+          "lastModifyingUser": {
+            "kind": "drive#user",
+            "displayName": "Rounak Dutta",
+            "photoLink": "https://lh3.googleusercontent.com/a/ACg8ocI-lz5elWpwhgkyuVLypRVtrKXOWRcbVuUQs4sS4xOrf766_5U=s64",
+            "me": true,
+            "permissionId": "07453703320583141147",
+            "emailAddress": "rounak153d@gmail.com"
+          },
+          "shared": false,
+          "ownedByMe": true,
+          "downloadRestrictions": {
+            "itemDownloadRestriction": {
+              "restrictedForReaders": false,
+              "restrictedForWriters": false
+            },
+            "effectiveDownloadRestrictionWithContext": {
+              "restrictedForReaders": false,
+              "restrictedForWriters": false
+            }
+          },
+          "capabilities": {
+            "canAcceptOwnership": false,
+            "canAddChildren": false,
+            "canAddMyDriveParent": false,
+            "canChangeCopyRequiresWriterPermission": true,
+            "canChangeItemDownloadRestriction": true,
+            "canChangeSecurityUpdateEnabled": false,
+            "canChangeViewersCanCopyContent": true,
+            "canComment": true,
+            "canCopy": true,
+            "canDelete": true,
+            "canDisableInheritedPermissions": false,
+            "canDownload": true,
+            "canEdit": true,
+            "canEnableInheritedPermissions": true,
+            "canListChildren": false,
+            "canModifyContent": true,
+            "canModifyContentRestriction": true,
+            "canModifyEditorContentRestriction": true,
+            "canModifyOwnerContentRestriction": true,
+            "canModifyLabels": false,
+            "canMoveChildrenWithinDrive": false,
+            "canMoveItemIntoTeamDrive": true,
+            "canMoveItemOutOfDrive": true,
+            "canMoveItemWithinDrive": true,
+            "canReadLabels": false,
+            "canReadRevisions": true,
+            "canRemoveChildren": false,
+            "canRemoveContentRestriction": false,
+            "canRemoveMyDriveParent": true,
+            "canRename": true,
+            "canShare": true,
+            "canTrash": true,
+            "canUntrash": true
+          },
+          "viewersCanCopyContent": true,
+          "copyRequiresWriterPermission": false,
+          "writersCanShare": true,
+          "permissions": [
+            {
+              "kind": "drive#permission",
+              "id": "07453703320583141147",
+              "type": "user",
+              "emailAddress": "rounak153d@gmail.com",
+              "role": "owner",
+              "displayName": "rounak153d",
+              "deleted": false,
+              "pendingOwner": false
+            }
+          ],
+          "permissionIds": [
+            "07453703320583141147"
+          ],
+          "originalFilename": "Untitled",
+          "fullFileExtension": "",
+          "fileExtension": "",
+          "md5Checksum": "19a24ddbeaf3d235de0b70c3315b4bfe",
+          "sha1Checksum": "b2a8f66db509093ad6361664078f33507de1e5bb",
+          "sha256Checksum": "c5af13878445537fcf2acb0255e05d6180fef57113d27772d96be0ee03304566",
+          "size": "1374056",
+          "quotaBytesUsed": "1374056",
+          "headRevisionId": "0B4B_noqMeirtYTRBRWc1YmgydUtxNGwxejMwUDNnRjhEbGlvPQ",
+          "imageMediaMetadata": {
+            "width": 1024,
+            "height": 1024,
+            "rotation": 0
+          },
+          "isAppAuthorized": true,
+          "linkShareMetadata": {
+            "securityUpdateEligible": false,
+            "securityUpdateEnabled": true
+          },
+          "inheritedPermissionsDisabled": false
+        }
+      },
+      {
+        "json": {
+          "kind": "drive#file",
+          "id": "1Kx8ehdgVJP_kSfnhR0xSZ4MwrKmGLTdh",
+          "name": "Scene=Gaza Conflict Intensifies; Rafah Offensive Continues Amid Aid Concerns.",
+          "mimeType": "image/png",
+          "starred": false,
+          "trashed": false,
+          "explicitlyTrashed": false,
+          "parents": [
+            "1WyaRSNeWKXjwz4LuX7SWm0cQYvnNUqZD"
+          ],
+          "spaces": [
+            "drive"
+          ],
+          "version": "2",
+          "webContentLink": "https://drive.google.com/uc?id=1Kx8ehdgVJP_kSfnhR0xSZ4MwrKmGLTdh&export=download",
+          "webViewLink": "https://drive.google.com/file/d/1Kx8ehdgVJP_kSfnhR0xSZ4MwrKmGLTdh/view?usp=drivesdk",
+          "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/image/png",
+          "hasThumbnail": true,
+          "thumbnailLink": "https://lh3.googleusercontent.com/drive-storage/AJQWtBOrDxLQ8bA-pv_JwegFfN7UAOmkZtW6gVmjvZBTBEBvxZohbhhDh4qQbGJramsfJOl9051YUmxMcq5FkEEEDrTwrTSBq3VcUR6YKvjdcDKdgw=s220",
+          "thumbnailVersion": "2",
+          "viewedByMe": false,
+          "createdTime": "2025-09-25T06:23:13.969Z",
+          "modifiedTime": "2025-09-25T06:23:15.687Z",
+          "modifiedByMeTime": "2025-09-25T06:23:15.687Z",
+          "modifiedByMe": true,
+          "owners": [
+            {
+              "kind": "drive#user",
+              "displayName": "Rounak Dutta",
+              "photoLink": "https://lh3.googleusercontent.com/a/ACg8ocI-lz5elWpwhgkyuVLypRVtrKXOWRcbVuUQs4sS4xOrf766_5U=s64",
+              "me": true,
+              "permissionId": "07453703320583141147",
+              "emailAddress": "rounak153d@gmail.com"
+            }
+          ],
+          "lastModifyingUser": {
+            "kind": "drive#user",
+            "displayName": "Rounak Dutta",
+            "photoLink": "https://lh3.googleusercontent.com/a/ACg8ocI-lz5elWpwhgkyuVLypRVtrKXOWRcbVuUQs4sS4xOrf766_5U=s64",
+            "me": true,
+            "permissionId": "07453703320583141147",
+            "emailAddress": "rounak153d@gmail.com"
+          },
+          "shared": false,
+          "ownedByMe": true,
+          "downloadRestrictions": {
+            "itemDownloadRestriction": {
+              "restrictedForReaders": false,
+              "restrictedForWriters": false
+            },
+            "effectiveDownloadRestrictionWithContext": {
+              "restrictedForReaders": false,
+              "restrictedForWriters": false
+            }
+          },
+          "capabilities": {
+            "canAcceptOwnership": false,
+            "canAddChildren": false,
+            "canAddMyDriveParent": false,
+            "canChangeCopyRequiresWriterPermission": true,
+            "canChangeItemDownloadRestriction": true,
+            "canChangeSecurityUpdateEnabled": false,
+            "canChangeViewersCanCopyContent": true,
+            "canComment": true,
+            "canCopy": true,
+            "canDelete": true,
+            "canDisableInheritedPermissions": false,
+            "canDownload": true,
+            "canEdit": true,
+            "canEnableInheritedPermissions": true,
+            "canListChildren": false,
+            "canModifyContent": true,
+            "canModifyContentRestriction": true,
+            "canModifyEditorContentRestriction": true,
+            "canModifyOwnerContentRestriction": true,
+            "canModifyLabels": false,
+            "canMoveChildrenWithinDrive": false,
+            "canMoveItemIntoTeamDrive": true,
+            "canMoveItemOutOfDrive": true,
+            "canMoveItemWithinDrive": true,
+            "canReadLabels": false,
+            "canReadRevisions": true,
+            "canRemoveChildren": false,
+            "canRemoveContentRestriction": false,
+            "canRemoveMyDriveParent": true,
+            "canRename": true,
+            "canShare": true,
+            "canTrash": true,
+            "canUntrash": true
+          },
+          "viewersCanCopyContent": true,
+          "copyRequiresWriterPermission": false,
+          "writersCanShare": true,
+          "permissions": [
+            {
+              "kind": "drive#permission",
+              "id": "07453703320583141147",
+              "type": "user",
+              "emailAddress": "rounak153d@gmail.com",
+              "role": "owner",
+              "displayName": "rounak153d",
+              "deleted": false,
+              "pendingOwner": false
+            }
+          ],
+          "permissionIds": [
+            "07453703320583141147"
+          ],
+          "originalFilename": "Untitled",
+          "fullFileExtension": "",
+          "fileExtension": "",
+          "md5Checksum": "5a9ad8c4ef29cea552a589ee36c533fa",
+          "sha1Checksum": "7377758e6b82467790c8386b889ff5a72147012f",
+          "sha256Checksum": "e4d494fb7eebb9db0f5112db5b0dd982a320c58233fc9c8f6db5dd105a4953f3",
+          "size": "1266547",
+          "quotaBytesUsed": "1266547",
+          "headRevisionId": "0B4B_noqMeirteERXK3JiK0EzNVRDZm12V1pXVWo3RVYvWDdjPQ",
+          "imageMediaMetadata": {
+            "width": 1024,
+            "height": 1024,
+            "rotation": 0
+          },
+          "isAppAuthorized": true,
+          "linkShareMetadata": {
+            "securityUpdateEligible": false,
+            "securityUpdateEnabled": true
+          },
+          "inheritedPermissionsDisabled": false
+        }
+      }
+    ],
+    "AI Agent": [
+      {
+        "json": {
+          "output": "Here are the news summaries, presented in a crisp and sharp manner:\n\n---\n\n**1. Nobel Snub: Venezuelan Leader Machado Wins 2025 Peace Prize; Trump Misses Out.**\n*Venezuelan opposition leader Maria Corina Machado awarded the 2025 Nobel Peace Prize for her anti-Maduro fight, dashing Donald Trump's stated expectations.*\n\n**2. Patna Metro Stations Marred by Gutka Stains Days After Opening.**\n*Patna Metro stations, barely inaugurated, are already covered in widespread gutka stains, sparking public outrage over civic sense.*\n\n**3. Microsoft Engineer Resigns Over Israeli Military Contracts, Citing Inability to 'Enable War'.**\n*A principal software engineer at Microsoft quit, protesting the company's cloud contracts with the Israeli military and emailing thousands of staff about his moral stand.*\n\n**4. China Imposes 'Special Port Fees' on US Ships, Retaliating Against US Measures.**\n*Beijing will levy \"special port fees\" on US-built or operated ships from October 14, mirroring retaliatory tariffs imposed by the US on Chinese vessels.*\n\n**5. India Reopens Kabul Embassy; Jaishankar Meets Afghan FM, Discusses Cooperation & Security Pledges.**\n*India upgrades its Kabul mission to a full embassy, with EAM Jaishankar meeting Afghan FM Muttaqi to discuss trade, mining, and a pledge against anti-India activities from Afghan soil.*\n\n**6. PayPal Co-founder Thiel Warns Musk Against Giving Pledge, Citing Bill Gates' Influence on Wealth Distribution.**\n*Peter Thiel advised Elon Musk to reconsider the Giving Pledge, fearing his fortune could fund \"left-leaning nonprofits\" chosen by Bill Gates.*\n\n**7. Bengaluru Traffic Jams 'A Sign of Growth,' Says Minister Priyank Kharge.**\n*Karnataka Minister Priyank Kharge justifies Bengaluru's severe traffic as a positive indicator of economic growth, attributing it to job opportunities and migration.*\n\n**8. AP, Kerala, Gujarat Lead Top States for Women's Employment Preference: India Skills Report.**\n*The India Skills Report 2025 identifies Andhra Pradesh, Kerala, and Gujarat as top states where women prefer to work, driven by safety, infrastructure, and career opportunities.*\n\n**9. Google Tightens 'Work From Anywhere' Policy: One Day Now Counts As Full Week.**\n*Google's revised \"Work from Anywhere\" policy now counts a single remote day outside the office as a full week, restricting its use as a regular work-from-home alternative.*\n\n**10. Bihar Polls: Prashant Kishor's Jan Suraaj Unveils 51 Candidates, Prioritizing Non-Political Backgrounds & Diverse Representation.**\n*Prashant Kishor's Jan Suraaj party announced its first 51 Bihar poll candidates, focusing on non-political backgrounds and ensuring diverse representation across castes and genders.*"
+        }
+      }
+    ],
+    "AI Agent2": [
+      {
+        "json": {
+          "output": {
+            "scene1": "Visuals: Maria Corina Machado on a podium, smiling, holding a Nobel prize. Donald Trump looking dejected.\nCaptions: Machado triumphs, Trump misses.",
+            "scene2": "Visuals: Close-up of a new, clean metro station wall, but with visible red gutka stains.\nCaptions: New metro, old habits.",
+            "scene3": "Visuals: A person (representing an engineer) walking away from a Microsoft logo, a subtle Israeli flag in the background.\nCaptions: Engineer quits, protests war.",
+            "scene4": "Visuals: A Chinese port with US ships being inspected, a \"Special Fee\" sign visible.\nCaptions: China retaliates with port fees.",
+            "scene5": "Visuals: Jaishankar and Afghan FM shaking hands in front of an Indian embassy building.\nCaptions: India reopens Kabul embassy.",
+            "scene6": "Visuals: Peter Thiel whispering to Elon Musk, Bill Gates in the background pointing to a charity.\nCaptions: Thiel warns Musk on charity.",
+            "scene7": "Visuals: A minister smiling brightly, gesturing towards a massive, congested traffic jam.\nCaptions: Traffic jam equals growth.",
+            "scene8": "Visuals: Three distinct state maps (AP, Kerala, Gujarat) with women professionals happily working.\nCaptions: Women prefer these states.",
+            "scene9": "Visuals: A person working remotely on a laptop, a giant \"1 day = 1 week\" stamp overlaid.\nCaptions: Google tightens remote work.",
+            "scene10": "Visuals: Prashant Kishor presenting diverse group of new candidates.\nCaptions: New faces for Bihar."
+          }
+        }
+      }
+    ],
+    "Schedule Trigger": [
+      {
+        "json": {
+          "timestamp": "2025-10-10T15:53:53.337+05:30",
+          "Readable date": "October 10th 2025, 3:53:53 pm",
+          "Readable time": "3:53:53 pm",
+          "Day of week": "Friday",
+          "Year": "2025",
+          "Month": "October",
+          "Day of month": "10",
+          "Hour": "15",
+          "Minute": "53",
+          "Second": "53",
+          "Timezone": "Asia/Kolkata (UTC+05:30)"
+        }
+      }
+    ],
+    "Get row(s) in sheet": [
+      {
+        "json": {
+          "row_number": 2,
+          "headline": "Nobel snub: Donald Trump misses out on Peace Prize - why he lost",
+          "description": "Donald Trump, the former President of the United States, was a recurring figure in discussions surrounding the Nobel Peace Prize, receiving multiple nominations during and after his time in office, yet he consistently missed out on the coveted award. A primary reason for his consideration by nominators was the pivotal role his administration played in orchestrating the Abraham Accords. These historic diplomatic agreements marked a significant breakthrough, establishing normalization of relations between Israel and several Arab nations, specifically the United Arab Emirates, Bahrain, Sudan, and Morocco. His proponents and political allies enthusiastically championed these accords as a profound and transformative achievement, asserting they represented the most significant progress towards peace in the Middle East in decades. They contended that such groundbreaking efforts, which sought to bridge long-standing animosities and foster cooperation, undeniably merited the international recognition conferred by the Nobel Peace Prize. Many of his supporters saw his strategic approach to foreign policy as highly effective, emphasizing tangible results over traditional diplomatic methods. However, the article consistently points to Trump's repeated \"snub\" by the Norwegian Nobel Committee. Despite fervent support and the demonstrable impact of the Abraham Accords, the committee's decisions diverged from the expectations of his base. The Nobel Peace Prize has historically honored individuals and organizations for a broader spectrum of efforts, often prioritizing work in areas such as human rights advocacy, democratic institution-building, freedom of the press, and the peaceful resolution of conflicts through multilateral channels. This broader emphasis by the committee on values extending beyond specific peace treaties, particularly when viewed alongside other aspects of Trump's presidency—which critics sometimes characterized as disruptive to international norms or domestic unity—likely contributed to his consistent omission. The repeated bypassing of Trump for the award typically resulted in expressions of frustration and criticism from his loyalists, who often perceived the committee's decisions as politically motivated or unfair, failing to acknowledge what they considered his substantial contributions to global peace. The reporting highlights the ongoing debate and differing perspectives on what constitutes deserving peace efforts on the world stage.",
+          "date": "Fri, 10 Oct 2025 14:41:07 +0530"
+        }
+      },
+      {
+        "json": {
+          "row_number": 3,
+          "headline": "Watch: Patna metro station filled with gutka stains in 3 days",
+          "description": "A recently inaugurated Patna Metro station, specifically the Malahi Pakri elevated station, faced widespread criticism and disgust after a video went viral. The video depicted its pristine walls, stairs, and escalators heavily stained with red gutka and paan masala spit. This egregious defacement occurred merely three days following the station's grand opening, sparking profound outrage across various social media platforms and among the general public. The viral footage prominently displayed vivid, reddish-brown spit marks splattered across the otherwise spotless white and grey surfaces. This created an immediate and stark contrast that drew immense condemnation. The shocking visual evidence highlighted a severe lack of civic sense exhibited by some of its initial users, leaving many citizens deeply disappointed and ashamed. They articulated their dismay over the utter disrespect shown towards brand new public infrastructure, which was built with significant investment for the collective benefit of the city's residents.\n\nThe unfortunate incident quickly ignited a fervent debate on the critical issues of public hygiene, responsible behavior, and the individual obligation required for maintaining shared urban spaces. The hashtag #KuchTohSharamKarloBiharWalo (Have some shame, people of Bihar) rapidly gained traction and trended online, eloquently reflecting the collective frustration, embarrassment, and palpable anger over the deplorable state of the newly unveiled public amenity. Commentators from all walks of life widely lamented that such thoughtless and irresponsible acts not only instantly mar the aesthetic appeal of modern facilities but also severely undermine the substantial public investment made in developing advanced transportation systems like the Patna Metro. Such projects are specifically designed to uplift urban living standards and provide a comfortable, clean commuting experience.\n\nThis clear act of vandalism by users of chewing tobacco drew sharp criticism from all quarters, strongly emphasizing the urgent need for greater public awareness campaigns focused on cleanliness. It also called for the implementation of stricter deterrent measures, including substantial fines and penalties, against such destructive practices. The incident served as a stark, disheartening, and very public reminder of the persistent challenges faced by authorities in preserving public property from habitual and intentional defacement, a problem unfortunately prevalent in many Indian cities. It profoundly underscored the vital importance of actively fostering a robust culture of cleanliness, respect, and collective ownership for shared amenities among the populace. This is essential to ensure the long-term longevity, proper upkeep, and continued pride in crucial urban development projects, which are cornerstones of a developing city's progress. The immediate and swift staining of the newly unveiled station prompted urgent calls for improved surveillance technologies, such as comprehensive CCTV camera networks, and more rigorous enforcement mechanisms. These steps are crucial to effectively deter similar deplorable acts in the future, thereby safeguarding valuable public assets for generations to come.",
+          "date": "Fri, 10 Oct 2025 14:17:39 +0530"
+        }
+      },
+      {
+        "json": {
+          "row_number": 4,
+          "headline": "Microsoft engineer quits: emails thousands of staff; says can't enable war",
+          "description": "A Microsoft engineer, Brian Belmont, resigned after 13 years of service, sending a powerful resignation email to thousands of employees.\nHis departure was driven by a profound moral objection to Microsoft's extensive military contracts and its perceived role in profiting from global conflicts.\nBelmont explicitly stated he could no longer work for a company that provides cloud services and artificial intelligence to militaries, including the Israeli military.\nHe directly linked this to the ongoing situation in Gaza, which he characterized as a genocide, expressing deep feelings of complicity in the violence.\nThe engineer's email urged his fellow employees to critically examine their own involvement and the ethical implications of their work for the company.\nHe called for Microsoft to cease its collaboration with military entities and to divest completely from what he termed the 'war machine'.\nBelmont highlighted the company's significant agreements with the US Department of Defense and various armed forces around the world.\nHis message underscored the growing ethical dilemma faced by tech workers whose innovations are leveraged in warfare and intelligence operations.\nThe resignation email swiftly went viral within Microsoft, sparking widespread internal debate and drawing considerable external attention.\nIt became a powerful statement on corporate responsibility, ethics, and the role of employee activism within the tech sector.\nBelmont expressed that continuing to work for Microsoft had become emotionally and morally unsustainable for him due to these concerns.\nHe challenged his colleagues to consider the human cost and the broader societal impact of their company's partnerships.\nThe incident amplified calls for greater transparency and accountability from major tech corporations regarding their military and government engagements.\nIt reignited discussions about where the line should be drawn between technological advancement and fundamental ethical boundaries.\nBelmont's act of conscience aimed to inspire a shift in corporate policy and employee perspective regarding such controversial contracts.\nHis resignation serves as a notable example of individual protest against corporate involvement in geopolitical conflicts and human rights issues.\nHe emphasized that technology, when developed and utilized without ethical consideration, can have devastating real-world consequences.\nThe engineer's stand illustrates a personal decision to prioritize strong moral convictions over a long-standing and successful career.\nThis event underscores the increasing pressure on tech companies to align their operations with global human rights standards and peace initiatives.",
+          "date": "Fri, 10 Oct 2025 14:17:08 +0530"
+        }
+      },
+      {
+        "json": {
+          "row_number": 5,
+          "headline": "China-US tensions: Beijing hits US ships with ‘special port fees’",
+          "description": "China has implemented new \"special port fees\" specifically targeting US ships, a direct and immediate retaliatory action mirroring the fees recently imposed by the United States on Chinese vessels. This significant move, effective the very same day as the US fees, marks a notable escalation in the simmering economic tensions between the world's two largest economies. The new charges by Beijing apply to a comprehensive range of essential maritime services, including but not limited to pilotage, tug services, and various critical port entry and exit procedures for American-flagged or US-owned ships operating within Chinese ports. This reciprocal action by Beijing unequivocally underscores its firm stance and explicit willingness to respond in kind to any perceived trade barriers or punitive economic measures initiated by Washington. The imposition of these additional fees is widely expected to significantly increase operational costs for American shipping companies, which could subsequently translate into higher freight charges and potential disruptions within already fragile global supply chains. This incident clearly reflects a growing tit-for-tat dynamic that has characterized much of the recent trade relationship between the two nations, demonstrating China's unwavering commitment to protecting its economic interests through direct counter-measures. This latest development further complicates ongoing efforts to de-escalate existing trade disputes, strongly suggesting a prolonged period of economic friction and an environment where retaliatory actions are becoming an increasingly standard practice in bilateral relations, impacting international commerce and the broader geopolitical landscape.",
+          "date": "Fri, 10 Oct 2025 15:18:37 +0530"
+        }
+      },
+      {
+        "json": {
+          "row_number": 6,
+          "headline": "Committed to sovereignty': Jaishankar meets Afghan FM; India to reopen embassy in Kabul",
+          "description": "India is set to reopen its embassy in Kabul, marking a significant step in its engagement with Afghanistan. This move follows a crucial meeting between External Affairs Minister S Jaishankar and Afghanistan's acting Foreign Minister Amir Khan Muttaqi on the sidelines of a regional conference in Samarkand, Uzbekistan. This high-level interaction represents India's pragmatic approach towards the Taliban government, despite its non-recognition, and signals a shift from its earlier decision to close the embassy after the Taliban's takeover in August 2021. India had evacuated its diplomatic staff at that time, but has maintained a 'technical mission' in Kabul. The article highlights an 'upgrading' of this technical mission, suggesting an expansion of its role and capacity. The mission has been vital in overseeing the delivery of substantial humanitarian aid from India, including food grains, medicines, and vaccines, demonstrating India's continued commitment to the Afghan people. The reopening of the embassy will allow India to restore its full diplomatic presence, safeguarding its strategic interests and ensuring more effective coordination of its ongoing humanitarian and developmental assistance. Discussions between Jaishankar and Muttaqi likely encompassed aid efforts, regional stability, security concerns, and India's long-term projects aimed at assisting the Afghan populace. This development underscores India's resolve to maintain direct channels of communication and influence in Afghanistan amidst its complex geopolitical landscape.",
+          "date": "Fri, 10 Oct 2025 12:28:58 +0530"
+        }
+      },
+      {
+        "json": {
+          "row_number": 7,
+          "headline": "‘Don't give your wealth to Bill Gates’: PayPal founder tells Elon Musk; urges him to…",
+          "description": "The news article details a significant piece of advice given by PayPal co-founder Peter Thiel to Elon Musk. This interaction reportedly took place when Musk was contemplating making substantial philanthropic contributions. Thiel issued a stark warning to Musk, specifically advising him against donating his wealth to Bill Gates. Thiel's reasoning was highly critical, characterizing Gates as an \"enemy\" and a \"monopolist.\" He went further, labeling Gates a \"fake philanthropist,\" suggesting that Gates's charitable activities were not purely altruistic. Thiel reportedly argued that Gates was not truly dispersing his wealth, but rather converting his financial resources into political and social capital, thereby expanding his influence and power through his foundation. Thiel's counsel implied that contributing to Gates's initiatives would inadvertently strengthen someone he perceived as an adversary, particularly within the competitive landscape of technology and innovation. This guidance underscores Thiel's often-critical stance on established power structures and his skepticism towards certain large-scale philanthropic efforts. He urged Musk to be highly discerning in his philanthropic choices, particularly concerning figures like Gates, whom Thiel viewed with suspicion regarding their ultimate intentions and impact on society. The anecdote highlights a fascinating ideological divide among prominent tech leaders regarding wealth, philanthropy, and societal influence.",
+          "date": "Fri, 10 Oct 2025 14:31:58 +0530"
+        }
+      },
+      {
+        "json": {
+          "row_number": 8,
+          "headline": "Traffic means growth': Priyank Kharge's bizarre justification for Bengaluru jams",
+          "description": "Priyank Kharge, Karnataka's Minister for IT/BT and Rural Development & Panchayat Raj, ignited controversy by presenting a peculiar justification for Bengaluru's severe traffic congestion. He declared that the city's pervasive and messy traffic jams should be interpreted as a positive sign of \"growth.\" Kharge attributed the escalating gridlock to a significant influx of migrants, who are flocking to Bengaluru in search of abundant employment opportunities. He also cited a substantial boom in new offices and businesses across the city as a contributing factor. According to the minister, this phenomenon underscores Bengaluru's economic vibrancy and desirability, indicating that people are actively choosing the city for its promising prospects.\n\nHis remarks came amid widespread public frustration over the city's crumbling infrastructure and the daily struggles faced by commuters. Kharge attempted to normalize Bengaluru's traffic situation by drawing comparisons to major global cities like Mumbai, Delhi, and New York, suggesting that residents there also endure considerable commuting times. While acknowledging the problem, he assured that the state government is diligently working on long-term solutions to alleviate the congestion. These proposed measures include ambitious infrastructure projects such as the construction of the Peripheral Ring Road (PRR), exploration of underground tunnel networks, expansion of the existing Metro rail system, and comprehensive improvements to public transportation.\n\nHowever, Kharge's justification was widely slammed as \"bizarre\" and an oversimplification of a complex urban planning failure. Critics argued that merely equating traffic with growth overlooks the critical necessity for proactive infrastructure development and efficient urban management to support such expansion, rather than simply accepting gridlock as an unavoidable consequence of success. Many perceived his statement as an attempt to deflect accountability and downplay the severe impact on citizens' quality of life and productivity.",
+          "date": "Fri, 10 Oct 2025 12:22:31 +0530"
+        }
+      },
+      {
+        "json": {
+          "row_number": 9,
+          "headline": "Where women want to work in India: AP, Kerala Gujarat lead; top 10 list here",
+          "description": "The Times of India article provides an insightful analysis into the top Indian states where women professionals find the most conducive environments for their careers. It delves into various factors, including safety, economic opportunities, social infrastructure, and supportive government policies. Kerala consistently emerges as a top choice, primarily due to its exceptional human development indicators, including high literacy rates among women, superior healthcare facilities, and a strong emphasis on social equality, which collectively foster a safe and inclusive work culture. Maharashtra, a bustling economic powerhouse, attracts women with its vast and diverse career opportunities across finance, technology, and manufacturing sectors. Major cities like Mumbai and Pune offer advanced urban infrastructure, robust public transport, and a cosmopolitan lifestyle, which are significant draws. Tamil Nadu is also highly regarded, benefiting from its strong industrial base and a proactive focus on educational attainment. The state has implemented effective government initiatives aimed at enhancing women's safety and encouraging their active participation in the workforce. Karnataka, especially Bengaluru, is a global hub for Information Technology and innovation. This translates into a dynamic job market, competitive salaries, and a generally forward-thinking professional environment, making it a key destination for tech-savvy women. Gujarat's rapid industrialization and business-friendly policies have opened up numerous employment avenues. The state's commitment to women's empowerment and skill development adds to its appeal. Both Andhra Pradesh and Telangana are identified as emerging economic powerhouses. Hyderabad, in particular, stands out as a critical hub for IT and pharmaceuticals, providing a growing array of professional roles and supportive urban amenities. Delhi, despite facing scrutiny regarding safety, remains an undeniable magnet for career advancement due to its status as the national capital. It offers extensive opportunities in government, corporate, and educational sectors. Himachal Pradesh is cherished for its serene environment, high safety standards, and excellent quality of life, appealing to those seeking a less urbanized yet secure work setting. Haryana, leveraging its proximity to the National Capital Region, has developing industrial corridors and expanding job markets, making it an increasingly viable option. These states collectively present the most attractive working landscapes for women in India, blending safety, economic prospects, and progressive social frameworks.",
+          "date": "Fri, 10 Oct 2025 14:04:46 +0530"
+        }
+      },
+      {
+        "json": {
+          "row_number": 10,
+          "headline": "Google changes work policy: ‘Work From Anywhere’ can’t be used for WFH; sends memo",
+          "description": "Google has provided a crucial clarification regarding its \"work from anywhere\" (WFA) policy to its employees. The tech giant informed its staff that these designated WFA weeks are not to be utilized as standard \"work from home\" days. This instruction is specifically aimed at employees who are assigned to a particular office location. The company's hybrid work model generally requires most employees to be in the office three days a week. Under the \"work from anywhere\" scheme, employees are granted up to four weeks annually to perform their duties from a location other than their primary office. However, Google's Chief People Officer, Fiona Cicconi, emphasized that these WFA weeks are designed for employees to work from a genuinely different remote location. They are not intended as a substitute for coming into the assigned office on days when employees are otherwise expected to be physically present. The clarification aims to prevent the misuse of the WFA benefit. Employees cannot simply use their WFA allowance to stay at their residence instead of reporting to their office workspace when their job necessitates an office presence. The policy's essence is to offer flexibility for working from another distinct geographical spot, perhaps a different city or country, rather than to bypass the office attendance requirements from one's own home. This guidance ensures the WFA program aligns with its original intent of providing flexibility for travel or temporary relocation, without undermining the company's hybrid office-centric strategy.",
+          "date": "Thu, 09 Oct 2025 16:04:22 +0530"
+        }
+      },
+      {
+        "json": {
+          "row_number": 11,
+          "headline": "Bihar polls: 17 EBC, 11 OBC, 9 general, 7 Muslims in Jan Suraaj's 1st list",
+          "description": "Jan Suraj, a political initiative, has released its initial roster of candidates for the upcoming Bihar polls. This first list comprises a total of 44 individuals, showcasing a deliberate attempt at diverse representation across various social segments. Among the nominees, 17 candidates hail from the Extremely Backward Classes (EBCs), highlighting a significant focus on this demographic. \n\nAdditionally, the list includes 11 candidates from Other Backward Classes (OBCs), further underscoring the party's intent to include historically marginalized communities. The party has also allocated 9 tickets to individuals from the General category, ensuring a broader spectrum of society is represented. Furthermore, 7 candidates from the Muslim community have been given tickets, reflecting an outreach to religious minorities. \n\nNotably, the granddaughter of a former Chief Minister has also secured a ticket, adding a layer of political legacy to the new nominations. Party leaders emphasized that the selection process prioritized individuals from diverse professional backgrounds, including former bureaucrats, doctors, engineers, and teachers, aiming for a pool of experienced and capable contenders. \n\nThe distribution of these tickets largely aligns with the areas extensively covered during the party leader's extensive statewide foot march, indicating a grassroots approach to candidate selection. While some political discourse has centered on the caste dynamics of the nominations, Jan Suraj asserts that its list is a balanced and inclusive reflection of all sections of Bihar society, challenging notions of purely caste-based political maneuvers and affirming its commitment to broad societal representation.",
+          "date": "Fri, 10 Oct 2025 09:45:04 +0530"
+        }
+      }
+    ],
+    "Get row(s) in sheet1": [
+      {
+        "json": {
+          "row_number": 2,
+          "links": "[\"https://iili.io/KwL2lWu.png\",\"https://iili.io/KwL2RJ2.png\",\"https://iili.io/KwL25RS.png\",\"https://iili.io/KwL27O7.png\",\"https://iili.io/KwL20ib.png\",\"https://iili.io/KwL2uUl.png\",\"https://iili.io/KwL2xiG.png\",\"https://iili.io/KwL2oVs.png\",\"https://iili.io/KwL2cxe.png\",\"https://iili.io/KwL2Yb9.png\"]"
+        }
+      }
+    ],
+    "Code3": [
+      {
+        "json": {
+          "articles": [
+            {
+              "row_number": 2,
+              "headline": "Nobel snub: Donald Trump misses out on Peace Prize - why he lost",
+              "description": "Donald Trump, the former President of the United States, was a recurring figure in discussions surrounding the Nobel Peace Prize, receiving multiple nominations during and after his time in office, yet he consistently missed out on the coveted award. A primary reason for his consideration by nominators was the pivotal role his administration played in orchestrating the Abraham Accords. These historic diplomatic agreements marked a significant breakthrough, establishing normalization of relations between Israel and several Arab nations, specifically the United Arab Emirates, Bahrain, Sudan, and Morocco. His proponents and political allies enthusiastically championed these accords as a profound and transformative achievement, asserting they represented the most significant progress towards peace in the Middle East in decades. They contended that such groundbreaking efforts, which sought to bridge long-standing animosities and foster cooperation, undeniably merited the international recognition conferred by the Nobel Peace Prize. Many of his supporters saw his strategic approach to foreign policy as highly effective, emphasizing tangible results over traditional diplomatic methods. However, the article consistently points to Trump's repeated \"snub\" by the Norwegian Nobel Committee. Despite fervent support and the demonstrable impact of the Abraham Accords, the committee's decisions diverged from the expectations of his base. The Nobel Peace Prize has historically honored individuals and organizations for a broader spectrum of efforts, often prioritizing work in areas such as human rights advocacy, democratic institution-building, freedom of the press, and the peaceful resolution of conflicts through multilateral channels. This broader emphasis by the committee on values extending beyond specific peace treaties, particularly when viewed alongside other aspects of Trump's presidency—which critics sometimes characterized as disruptive to international norms or domestic unity—likely contributed to his consistent omission. The repeated bypassing of Trump for the award typically resulted in expressions of frustration and criticism from his loyalists, who often perceived the committee's decisions as politically motivated or unfair, failing to acknowledge what they considered his substantial contributions to global peace. The reporting highlights the ongoing debate and differing perspectives on what constitutes deserving peace efforts on the world stage.",
+              "date": "Fri, 10 Oct 2025 14:41:07 +0530",
+              "link": "https://iili.io/KwL2lWu.png"
+            },
+            {
+              "row_number": 3,
+              "headline": "Watch: Patna metro station filled with gutka stains in 3 days",
+              "description": "A recently inaugurated Patna Metro station, specifically the Malahi Pakri elevated station, faced widespread criticism and disgust after a video went viral. The video depicted its pristine walls, stairs, and escalators heavily stained with red gutka and paan masala spit. This egregious defacement occurred merely three days following the station's grand opening, sparking profound outrage across various social media platforms and among the general public. The viral footage prominently displayed vivid, reddish-brown spit marks splattered across the otherwise spotless white and grey surfaces. This created an immediate and stark contrast that drew immense condemnation. The shocking visual evidence highlighted a severe lack of civic sense exhibited by some of its initial users, leaving many citizens deeply disappointed and ashamed. They articulated their dismay over the utter disrespect shown towards brand new public infrastructure, which was built with significant investment for the collective benefit of the city's residents.\n\nThe unfortunate incident quickly ignited a fervent debate on the critical issues of public hygiene, responsible behavior, and the individual obligation required for maintaining shared urban spaces. The hashtag #KuchTohSharamKarloBiharWalo (Have some shame, people of Bihar) rapidly gained traction and trended online, eloquently reflecting the collective frustration, embarrassment, and palpable anger over the deplorable state of the newly unveiled public amenity. Commentators from all walks of life widely lamented that such thoughtless and irresponsible acts not only instantly mar the aesthetic appeal of modern facilities but also severely undermine the substantial public investment made in developing advanced transportation systems like the Patna Metro. Such projects are specifically designed to uplift urban living standards and provide a comfortable, clean commuting experience.\n\nThis clear act of vandalism by users of chewing tobacco drew sharp criticism from all quarters, strongly emphasizing the urgent need for greater public awareness campaigns focused on cleanliness. It also called for the implementation of stricter deterrent measures, including substantial fines and penalties, against such destructive practices. The incident served as a stark, disheartening, and very public reminder of the persistent challenges faced by authorities in preserving public property from habitual and intentional defacement, a problem unfortunately prevalent in many Indian cities. It profoundly underscored the vital importance of actively fostering a robust culture of cleanliness, respect, and collective ownership for shared amenities among the populace. This is essential to ensure the long-term longevity, proper upkeep, and continued pride in crucial urban development projects, which are cornerstones of a developing city's progress. The immediate and swift staining of the newly unveiled station prompted urgent calls for improved surveillance technologies, such as comprehensive CCTV camera networks, and more rigorous enforcement mechanisms. These steps are crucial to effectively deter similar deplorable acts in the future, thereby safeguarding valuable public assets for generations to come.",
+              "date": "Fri, 10 Oct 2025 14:17:39 +0530",
+              "link": "https://iili.io/KwL2RJ2.png"
+            },
+            {
+              "row_number": 4,
+              "headline": "Microsoft engineer quits: emails thousands of staff; says can't enable war",
+              "description": "A Microsoft engineer, Brian Belmont, resigned after 13 years of service, sending a powerful resignation email to thousands of employees.\nHis departure was driven by a profound moral objection to Microsoft's extensive military contracts and its perceived role in profiting from global conflicts.\nBelmont explicitly stated he could no longer work for a company that provides cloud services and artificial intelligence to militaries, including the Israeli military.\nHe directly linked this to the ongoing situation in Gaza, which he characterized as a genocide, expressing deep feelings of complicity in the violence.\nThe engineer's email urged his fellow employees to critically examine their own involvement and the ethical implications of their work for the company.\nHe called for Microsoft to cease its collaboration with military entities and to divest completely from what he termed the 'war machine'.\nBelmont highlighted the company's significant agreements with the US Department of Defense and various armed forces around the world.\nHis message underscored the growing ethical dilemma faced by tech workers whose innovations are leveraged in warfare and intelligence operations.\nThe resignation email swiftly went viral within Microsoft, sparking widespread internal debate and drawing considerable external attention.\nIt became a powerful statement on corporate responsibility, ethics, and the role of employee activism within the tech sector.\nBelmont expressed that continuing to work for Microsoft had become emotionally and morally unsustainable for him due to these concerns.\nHe challenged his colleagues to consider the human cost and the broader societal impact of their company's partnerships.\nThe incident amplified calls for greater transparency and accountability from major tech corporations regarding their military and government engagements.\nIt reignited discussions about where the line should be drawn between technological advancement and fundamental ethical boundaries.\nBelmont's act of conscience aimed to inspire a shift in corporate policy and employee perspective regarding such controversial contracts.\nHis resignation serves as a notable example of individual protest against corporate involvement in geopolitical conflicts and human rights issues.\nHe emphasized that technology, when developed and utilized without ethical consideration, can have devastating real-world consequences.\nThe engineer's stand illustrates a personal decision to prioritize strong moral convictions over a long-standing and successful career.\nThis event underscores the increasing pressure on tech companies to align their operations with global human rights standards and peace initiatives.",
+              "date": "Fri, 10 Oct 2025 14:17:08 +0530",
+              "link": "https://iili.io/KwL25RS.png"
+            },
+            {
+              "row_number": 5,
+              "headline": "China-US tensions: Beijing hits US ships with ‘special port fees’",
+              "description": "China has implemented new \"special port fees\" specifically targeting US ships, a direct and immediate retaliatory action mirroring the fees recently imposed by the United States on Chinese vessels. This significant move, effective the very same day as the US fees, marks a notable escalation in the simmering economic tensions between the world's two largest economies. The new charges by Beijing apply to a comprehensive range of essential maritime services, including but not limited to pilotage, tug services, and various critical port entry and exit procedures for American-flagged or US-owned ships operating within Chinese ports. This reciprocal action by Beijing unequivocally underscores its firm stance and explicit willingness to respond in kind to any perceived trade barriers or punitive economic measures initiated by Washington. The imposition of these additional fees is widely expected to significantly increase operational costs for American shipping companies, which could subsequently translate into higher freight charges and potential disruptions within already fragile global supply chains. This incident clearly reflects a growing tit-for-tat dynamic that has characterized much of the recent trade relationship between the two nations, demonstrating China's unwavering commitment to protecting its economic interests through direct counter-measures. This latest development further complicates ongoing efforts to de-escalate existing trade disputes, strongly suggesting a prolonged period of economic friction and an environment where retaliatory actions are becoming an increasingly standard practice in bilateral relations, impacting international commerce and the broader geopolitical landscape.",
+              "date": "Fri, 10 Oct 2025 15:18:37 +0530",
+              "link": "https://iili.io/KwL27O7.png"
+            },
+            {
+              "row_number": 6,
+              "headline": "Committed to sovereignty': Jaishankar meets Afghan FM; India to reopen embassy in Kabul",
+              "description": "India is set to reopen its embassy in Kabul, marking a significant step in its engagement with Afghanistan. This move follows a crucial meeting between External Affairs Minister S Jaishankar and Afghanistan's acting Foreign Minister Amir Khan Muttaqi on the sidelines of a regional conference in Samarkand, Uzbekistan. This high-level interaction represents India's pragmatic approach towards the Taliban government, despite its non-recognition, and signals a shift from its earlier decision to close the embassy after the Taliban's takeover in August 2021. India had evacuated its diplomatic staff at that time, but has maintained a 'technical mission' in Kabul. The article highlights an 'upgrading' of this technical mission, suggesting an expansion of its role and capacity. The mission has been vital in overseeing the delivery of substantial humanitarian aid from India, including food grains, medicines, and vaccines, demonstrating India's continued commitment to the Afghan people. The reopening of the embassy will allow India to restore its full diplomatic presence, safeguarding its strategic interests and ensuring more effective coordination of its ongoing humanitarian and developmental assistance. Discussions between Jaishankar and Muttaqi likely encompassed aid efforts, regional stability, security concerns, and India's long-term projects aimed at assisting the Afghan populace. This development underscores India's resolve to maintain direct channels of communication and influence in Afghanistan amidst its complex geopolitical landscape.",
+              "date": "Fri, 10 Oct 2025 12:28:58 +0530",
+              "link": "https://iili.io/KwL20ib.png"
+            },
+            {
+              "row_number": 7,
+              "headline": "‘Don't give your wealth to Bill Gates’: PayPal founder tells Elon Musk; urges him to…",
+              "description": "The news article details a significant piece of advice given by PayPal co-founder Peter Thiel to Elon Musk. This interaction reportedly took place when Musk was contemplating making substantial philanthropic contributions. Thiel issued a stark warning to Musk, specifically advising him against donating his wealth to Bill Gates. Thiel's reasoning was highly critical, characterizing Gates as an \"enemy\" and a \"monopolist.\" He went further, labeling Gates a \"fake philanthropist,\" suggesting that Gates's charitable activities were not purely altruistic. Thiel reportedly argued that Gates was not truly dispersing his wealth, but rather converting his financial resources into political and social capital, thereby expanding his influence and power through his foundation. Thiel's counsel implied that contributing to Gates's initiatives would inadvertently strengthen someone he perceived as an adversary, particularly within the competitive landscape of technology and innovation. This guidance underscores Thiel's often-critical stance on established power structures and his skepticism towards certain large-scale philanthropic efforts. He urged Musk to be highly discerning in his philanthropic choices, particularly concerning figures like Gates, whom Thiel viewed with suspicion regarding their ultimate intentions and impact on society. The anecdote highlights a fascinating ideological divide among prominent tech leaders regarding wealth, philanthropy, and societal influence.",
+              "date": "Fri, 10 Oct 2025 14:31:58 +0530",
+              "link": "https://iili.io/KwL2uUl.png"
+            },
+            {
+              "row_number": 8,
+              "headline": "Traffic means growth': Priyank Kharge's bizarre justification for Bengaluru jams",
+              "description": "Priyank Kharge, Karnataka's Minister for IT/BT and Rural Development & Panchayat Raj, ignited controversy by presenting a peculiar justification for Bengaluru's severe traffic congestion. He declared that the city's pervasive and messy traffic jams should be interpreted as a positive sign of \"growth.\" Kharge attributed the escalating gridlock to a significant influx of migrants, who are flocking to Bengaluru in search of abundant employment opportunities. He also cited a substantial boom in new offices and businesses across the city as a contributing factor. According to the minister, this phenomenon underscores Bengaluru's economic vibrancy and desirability, indicating that people are actively choosing the city for its promising prospects.\n\nHis remarks came amid widespread public frustration over the city's crumbling infrastructure and the daily struggles faced by commuters. Kharge attempted to normalize Bengaluru's traffic situation by drawing comparisons to major global cities like Mumbai, Delhi, and New York, suggesting that residents there also endure considerable commuting times. While acknowledging the problem, he assured that the state government is diligently working on long-term solutions to alleviate the congestion. These proposed measures include ambitious infrastructure projects such as the construction of the Peripheral Ring Road (PRR), exploration of underground tunnel networks, expansion of the existing Metro rail system, and comprehensive improvements to public transportation.\n\nHowever, Kharge's justification was widely slammed as \"bizarre\" and an oversimplification of a complex urban planning failure. Critics argued that merely equating traffic with growth overlooks the critical necessity for proactive infrastructure development and efficient urban management to support such expansion, rather than simply accepting gridlock as an unavoidable consequence of success. Many perceived his statement as an attempt to deflect accountability and downplay the severe impact on citizens' quality of life and productivity.",
+              "date": "Fri, 10 Oct 2025 12:22:31 +0530",
+              "link": "https://iili.io/KwL2xiG.png"
+            },
+            {
+              "row_number": 9,
+              "headline": "Where women want to work in India: AP, Kerala Gujarat lead; top 10 list here",
+              "description": "The Times of India article provides an insightful analysis into the top Indian states where women professionals find the most conducive environments for their careers. It delves into various factors, including safety, economic opportunities, social infrastructure, and supportive government policies. Kerala consistently emerges as a top choice, primarily due to its exceptional human development indicators, including high literacy rates among women, superior healthcare facilities, and a strong emphasis on social equality, which collectively foster a safe and inclusive work culture. Maharashtra, a bustling economic powerhouse, attracts women with its vast and diverse career opportunities across finance, technology, and manufacturing sectors. Major cities like Mumbai and Pune offer advanced urban infrastructure, robust public transport, and a cosmopolitan lifestyle, which are significant draws. Tamil Nadu is also highly regarded, benefiting from its strong industrial base and a proactive focus on educational attainment. The state has implemented effective government initiatives aimed at enhancing women's safety and encouraging their active participation in the workforce. Karnataka, especially Bengaluru, is a global hub for Information Technology and innovation. This translates into a dynamic job market, competitive salaries, and a generally forward-thinking professional environment, making it a key destination for tech-savvy women. Gujarat's rapid industrialization and business-friendly policies have opened up numerous employment avenues. The state's commitment to women's empowerment and skill development adds to its appeal. Both Andhra Pradesh and Telangana are identified as emerging economic powerhouses. Hyderabad, in particular, stands out as a critical hub for IT and pharmaceuticals, providing a growing array of professional roles and supportive urban amenities. Delhi, despite facing scrutiny regarding safety, remains an undeniable magnet for career advancement due to its status as the national capital. It offers extensive opportunities in government, corporate, and educational sectors. Himachal Pradesh is cherished for its serene environment, high safety standards, and excellent quality of life, appealing to those seeking a less urbanized yet secure work setting. Haryana, leveraging its proximity to the National Capital Region, has developing industrial corridors and expanding job markets, making it an increasingly viable option. These states collectively present the most attractive working landscapes for women in India, blending safety, economic prospects, and progressive social frameworks.",
+              "date": "Fri, 10 Oct 2025 14:04:46 +0530",
+              "link": "https://iili.io/KwL2oVs.png"
+            },
+            {
+              "row_number": 10,
+              "headline": "Google changes work policy: ‘Work From Anywhere’ can’t be used for WFH; sends memo",
+              "description": "Google has provided a crucial clarification regarding its \"work from anywhere\" (WFA) policy to its employees. The tech giant informed its staff that these designated WFA weeks are not to be utilized as standard \"work from home\" days. This instruction is specifically aimed at employees who are assigned to a particular office location. The company's hybrid work model generally requires most employees to be in the office three days a week. Under the \"work from anywhere\" scheme, employees are granted up to four weeks annually to perform their duties from a location other than their primary office. However, Google's Chief People Officer, Fiona Cicconi, emphasized that these WFA weeks are designed for employees to work from a genuinely different remote location. They are not intended as a substitute for coming into the assigned office on days when employees are otherwise expected to be physically present. The clarification aims to prevent the misuse of the WFA benefit. Employees cannot simply use their WFA allowance to stay at their residence instead of reporting to their office workspace when their job necessitates an office presence. The policy's essence is to offer flexibility for working from another distinct geographical spot, perhaps a different city or country, rather than to bypass the office attendance requirements from one's own home. This guidance ensures the WFA program aligns with its original intent of providing flexibility for travel or temporary relocation, without undermining the company's hybrid office-centric strategy.",
+              "date": "Thu, 09 Oct 2025 16:04:22 +0530",
+              "link": "https://iili.io/KwL2cxe.png"
+            },
+            {
+              "row_number": 11,
+              "headline": "Bihar polls: 17 EBC, 11 OBC, 9 general, 7 Muslims in Jan Suraaj's 1st list",
+              "description": "Jan Suraj, a political initiative, has released its initial roster of candidates for the upcoming Bihar polls. This first list comprises a total of 44 individuals, showcasing a deliberate attempt at diverse representation across various social segments. Among the nominees, 17 candidates hail from the Extremely Backward Classes (EBCs), highlighting a significant focus on this demographic. \n\nAdditionally, the list includes 11 candidates from Other Backward Classes (OBCs), further underscoring the party's intent to include historically marginalized communities. The party has also allocated 9 tickets to individuals from the General category, ensuring a broader spectrum of society is represented. Furthermore, 7 candidates from the Muslim community have been given tickets, reflecting an outreach to religious minorities. \n\nNotably, the granddaughter of a former Chief Minister has also secured a ticket, adding a layer of political legacy to the new nominations. Party leaders emphasized that the selection process prioritized individuals from diverse professional backgrounds, including former bureaucrats, doctors, engineers, and teachers, aiming for a pool of experienced and capable contenders. \n\nThe distribution of these tickets largely aligns with the areas extensively covered during the party leader's extensive statewide foot march, indicating a grassroots approach to candidate selection. While some political discourse has centered on the caste dynamics of the nominations, Jan Suraj asserts that its list is a balanced and inclusive reflection of all sections of Bihar society, challenging notions of purely caste-based political maneuvers and affirming its commitment to broad societal representation.",
+              "date": "Fri, 10 Oct 2025 09:45:04 +0530",
+              "link": "https://iili.io/KwL2Yb9.png"
+            }
+          ]
+        }
+      }
+    ],
+    "Merge": [
+      {
+        "json": {
+          "row_number": 2,
+          "headline": "Nobel snub: Donald Trump misses out on Peace Prize - why he lost",
+          "description": "Donald Trump, the former President of the United States, was a recurring figure in discussions surrounding the Nobel Peace Prize, receiving multiple nominations during and after his time in office, yet he consistently missed out on the coveted award. A primary reason for his consideration by nominators was the pivotal role his administration played in orchestrating the Abraham Accords. These historic diplomatic agreements marked a significant breakthrough, establishing normalization of relations between Israel and several Arab nations, specifically the United Arab Emirates, Bahrain, Sudan, and Morocco. His proponents and political allies enthusiastically championed these accords as a profound and transformative achievement, asserting they represented the most significant progress towards peace in the Middle East in decades. They contended that such groundbreaking efforts, which sought to bridge long-standing animosities and foster cooperation, undeniably merited the international recognition conferred by the Nobel Peace Prize. Many of his supporters saw his strategic approach to foreign policy as highly effective, emphasizing tangible results over traditional diplomatic methods. However, the article consistently points to Trump's repeated \"snub\" by the Norwegian Nobel Committee. Despite fervent support and the demonstrable impact of the Abraham Accords, the committee's decisions diverged from the expectations of his base. The Nobel Peace Prize has historically honored individuals and organizations for a broader spectrum of efforts, often prioritizing work in areas such as human rights advocacy, democratic institution-building, freedom of the press, and the peaceful resolution of conflicts through multilateral channels. This broader emphasis by the committee on values extending beyond specific peace treaties, particularly when viewed alongside other aspects of Trump's presidency—which critics sometimes characterized as disruptive to international norms or domestic unity—likely contributed to his consistent omission. The repeated bypassing of Trump for the award typically resulted in expressions of frustration and criticism from his loyalists, who often perceived the committee's decisions as politically motivated or unfair, failing to acknowledge what they considered his substantial contributions to global peace. The reporting highlights the ongoing debate and differing perspectives on what constitutes deserving peace efforts on the world stage.",
+          "date": "Fri, 10 Oct 2025 14:41:07 +0530",
+          "_source": "input1"
+        }
+      },
+      {
+        "json": {
+          "row_number": 3,
+          "headline": "Watch: Patna metro station filled with gutka stains in 3 days",
+          "description": "A recently inaugurated Patna Metro station, specifically the Malahi Pakri elevated station, faced widespread criticism and disgust after a video went viral. The video depicted its pristine walls, stairs, and escalators heavily stained with red gutka and paan masala spit. This egregious defacement occurred merely three days following the station's grand opening, sparking profound outrage across various social media platforms and among the general public. The viral footage prominently displayed vivid, reddish-brown spit marks splattered across the otherwise spotless white and grey surfaces. This created an immediate and stark contrast that drew immense condemnation. The shocking visual evidence highlighted a severe lack of civic sense exhibited by some of its initial users, leaving many citizens deeply disappointed and ashamed. They articulated their dismay over the utter disrespect shown towards brand new public infrastructure, which was built with significant investment for the collective benefit of the city's residents.\n\nThe unfortunate incident quickly ignited a fervent debate on the critical issues of public hygiene, responsible behavior, and the individual obligation required for maintaining shared urban spaces. The hashtag #KuchTohSharamKarloBiharWalo (Have some shame, people of Bihar) rapidly gained traction and trended online, eloquently reflecting the collective frustration, embarrassment, and palpable anger over the deplorable state of the newly unveiled public amenity. Commentators from all walks of life widely lamented that such thoughtless and irresponsible acts not only instantly mar the aesthetic appeal of modern facilities but also severely undermine the substantial public investment made in developing advanced transportation systems like the Patna Metro. Such projects are specifically designed to uplift urban living standards and provide a comfortable, clean commuting experience.\n\nThis clear act of vandalism by users of chewing tobacco drew sharp criticism from all quarters, strongly emphasizing the urgent need for greater public awareness campaigns focused on cleanliness. It also called for the implementation of stricter deterrent measures, including substantial fines and penalties, against such destructive practices. The incident served as a stark, disheartening, and very public reminder of the persistent challenges faced by authorities in preserving public property from habitual and intentional defacement, a problem unfortunately prevalent in many Indian cities. It profoundly underscored the vital importance of actively fostering a robust culture of cleanliness, respect, and collective ownership for shared amenities among the populace. This is essential to ensure the long-term longevity, proper upkeep, and continued pride in crucial urban development projects, which are cornerstones of a developing city's progress. The immediate and swift staining of the newly unveiled station prompted urgent calls for improved surveillance technologies, such as comprehensive CCTV camera networks, and more rigorous enforcement mechanisms. These steps are crucial to effectively deter similar deplorable acts in the future, thereby safeguarding valuable public assets for generations to come.",
+          "date": "Fri, 10 Oct 2025 14:17:39 +0530",
+          "_source": "input1"
+        }
+      },
+      {
+        "json": {
+          "row_number": 4,
+          "headline": "Microsoft engineer quits: emails thousands of staff; says can't enable war",
+          "description": "A Microsoft engineer, Brian Belmont, resigned after 13 years of service, sending a powerful resignation email to thousands of employees.\nHis departure was driven by a profound moral objection to Microsoft's extensive military contracts and its perceived role in profiting from global conflicts.\nBelmont explicitly stated he could no longer work for a company that provides cloud services and artificial intelligence to militaries, including the Israeli military.\nHe directly linked this to the ongoing situation in Gaza, which he characterized as a genocide, expressing deep feelings of complicity in the violence.\nThe engineer's email urged his fellow employees to critically examine their own involvement and the ethical implications of their work for the company.\nHe called for Microsoft to cease its collaboration with military entities and to divest completely from what he termed the 'war machine'.\nBelmont highlighted the company's significant agreements with the US Department of Defense and various armed forces around the world.\nHis message underscored the growing ethical dilemma faced by tech workers whose innovations are leveraged in warfare and intelligence operations.\nThe resignation email swiftly went viral within Microsoft, sparking widespread internal debate and drawing considerable external attention.\nIt became a powerful statement on corporate responsibility, ethics, and the role of employee activism within the tech sector.\nBelmont expressed that continuing to work for Microsoft had become emotionally and morally unsustainable for him due to these concerns.\nHe challenged his colleagues to consider the human cost and the broader societal impact of their company's partnerships.\nThe incident amplified calls for greater transparency and accountability from major tech corporations regarding their military and government engagements.\nIt reignited discussions about where the line should be drawn between technological advancement and fundamental ethical boundaries.\nBelmont's act of conscience aimed to inspire a shift in corporate policy and employee perspective regarding such controversial contracts.\nHis resignation serves as a notable example of individual protest against corporate involvement in geopolitical conflicts and human rights issues.\nHe emphasized that technology, when developed and utilized without ethical consideration, can have devastating real-world consequences.\nThe engineer's stand illustrates a personal decision to prioritize strong moral convictions over a long-standing and successful career.\nThis event underscores the increasing pressure on tech companies to align their operations with global human rights standards and peace initiatives.",
+          "date": "Fri, 10 Oct 2025 14:17:08 +0530",
+          "_source": "input1"
+        }
+      },
+      {
+        "json": {
+          "row_number": 5,
+          "headline": "China-US tensions: Beijing hits US ships with ‘special port fees’",
+          "description": "China has implemented new \"special port fees\" specifically targeting US ships, a direct and immediate retaliatory action mirroring the fees recently imposed by the United States on Chinese vessels. This significant move, effective the very same day as the US fees, marks a notable escalation in the simmering economic tensions between the world's two largest economies. The new charges by Beijing apply to a comprehensive range of essential maritime services, including but not limited to pilotage, tug services, and various critical port entry and exit procedures for American-flagged or US-owned ships operating within Chinese ports. This reciprocal action by Beijing unequivocally underscores its firm stance and explicit willingness to respond in kind to any perceived trade barriers or punitive economic measures initiated by Washington. The imposition of these additional fees is widely expected to significantly increase operational costs for American shipping companies, which could subsequently translate into higher freight charges and potential disruptions within already fragile global supply chains. This incident clearly reflects a growing tit-for-tat dynamic that has characterized much of the recent trade relationship between the two nations, demonstrating China's unwavering commitment to protecting its economic interests through direct counter-measures. This latest development further complicates ongoing efforts to de-escalate existing trade disputes, strongly suggesting a prolonged period of economic friction and an environment where retaliatory actions are becoming an increasingly standard practice in bilateral relations, impacting international commerce and the broader geopolitical landscape.",
+          "date": "Fri, 10 Oct 2025 15:18:37 +0530",
+          "_source": "input1"
+        }
+      },
+      {
+        "json": {
+          "row_number": 6,
+          "headline": "Committed to sovereignty': Jaishankar meets Afghan FM; India to reopen embassy in Kabul",
+          "description": "India is set to reopen its embassy in Kabul, marking a significant step in its engagement with Afghanistan. This move follows a crucial meeting between External Affairs Minister S Jaishankar and Afghanistan's acting Foreign Minister Amir Khan Muttaqi on the sidelines of a regional conference in Samarkand, Uzbekistan. This high-level interaction represents India's pragmatic approach towards the Taliban government, despite its non-recognition, and signals a shift from its earlier decision to close the embassy after the Taliban's takeover in August 2021. India had evacuated its diplomatic staff at that time, but has maintained a 'technical mission' in Kabul. The article highlights an 'upgrading' of this technical mission, suggesting an expansion of its role and capacity. The mission has been vital in overseeing the delivery of substantial humanitarian aid from India, including food grains, medicines, and vaccines, demonstrating India's continued commitment to the Afghan people. The reopening of the embassy will allow India to restore its full diplomatic presence, safeguarding its strategic interests and ensuring more effective coordination of its ongoing humanitarian and developmental assistance. Discussions between Jaishankar and Muttaqi likely encompassed aid efforts, regional stability, security concerns, and India's long-term projects aimed at assisting the Afghan populace. This development underscores India's resolve to maintain direct channels of communication and influence in Afghanistan amidst its complex geopolitical landscape.",
+          "date": "Fri, 10 Oct 2025 12:28:58 +0530",
+          "_source": "input1"
+        }
+      },
+      {
+        "json": {
+          "row_number": 7,
+          "headline": "‘Don't give your wealth to Bill Gates’: PayPal founder tells Elon Musk; urges him to…",
+          "description": "The news article details a significant piece of advice given by PayPal co-founder Peter Thiel to Elon Musk. This interaction reportedly took place when Musk was contemplating making substantial philanthropic contributions. Thiel issued a stark warning to Musk, specifically advising him against donating his wealth to Bill Gates. Thiel's reasoning was highly critical, characterizing Gates as an \"enemy\" and a \"monopolist.\" He went further, labeling Gates a \"fake philanthropist,\" suggesting that Gates's charitable activities were not purely altruistic. Thiel reportedly argued that Gates was not truly dispersing his wealth, but rather converting his financial resources into political and social capital, thereby expanding his influence and power through his foundation. Thiel's counsel implied that contributing to Gates's initiatives would inadvertently strengthen someone he perceived as an adversary, particularly within the competitive landscape of technology and innovation. This guidance underscores Thiel's often-critical stance on established power structures and his skepticism towards certain large-scale philanthropic efforts. He urged Musk to be highly discerning in his philanthropic choices, particularly concerning figures like Gates, whom Thiel viewed with suspicion regarding their ultimate intentions and impact on society. The anecdote highlights a fascinating ideological divide among prominent tech leaders regarding wealth, philanthropy, and societal influence.",
+          "date": "Fri, 10 Oct 2025 14:31:58 +0530",
+          "_source": "input1"
+        }
+      },
+      {
+        "json": {
+          "row_number": 8,
+          "headline": "Traffic means growth': Priyank Kharge's bizarre justification for Bengaluru jams",
+          "description": "Priyank Kharge, Karnataka's Minister for IT/BT and Rural Development & Panchayat Raj, ignited controversy by presenting a peculiar justification for Bengaluru's severe traffic congestion. He declared that the city's pervasive and messy traffic jams should be interpreted as a positive sign of \"growth.\" Kharge attributed the escalating gridlock to a significant influx of migrants, who are flocking to Bengaluru in search of abundant employment opportunities. He also cited a substantial boom in new offices and businesses across the city as a contributing factor. According to the minister, this phenomenon underscores Bengaluru's economic vibrancy and desirability, indicating that people are actively choosing the city for its promising prospects.\n\nHis remarks came amid widespread public frustration over the city's crumbling infrastructure and the daily struggles faced by commuters. Kharge attempted to normalize Bengaluru's traffic situation by drawing comparisons to major global cities like Mumbai, Delhi, and New York, suggesting that residents there also endure considerable commuting times. While acknowledging the problem, he assured that the state government is diligently working on long-term solutions to alleviate the congestion. These proposed measures include ambitious infrastructure projects such as the construction of the Peripheral Ring Road (PRR), exploration of underground tunnel networks, expansion of the existing Metro rail system, and comprehensive improvements to public transportation.\n\nHowever, Kharge's justification was widely slammed as \"bizarre\" and an oversimplification of a complex urban planning failure. Critics argued that merely equating traffic with growth overlooks the critical necessity for proactive infrastructure development and efficient urban management to support such expansion, rather than simply accepting gridlock as an unavoidable consequence of success. Many perceived his statement as an attempt to deflect accountability and downplay the severe impact on citizens' quality of life and productivity.",
+          "date": "Fri, 10 Oct 2025 12:22:31 +0530",
+          "_source": "input1"
+        }
+      },
+      {
+        "json": {
+          "row_number": 9,
+          "headline": "Where women want to work in India: AP, Kerala Gujarat lead; top 10 list here",
+          "description": "The Times of India article provides an insightful analysis into the top Indian states where women professionals find the most conducive environments for their careers. It delves into various factors, including safety, economic opportunities, social infrastructure, and supportive government policies. Kerala consistently emerges as a top choice, primarily due to its exceptional human development indicators, including high literacy rates among women, superior healthcare facilities, and a strong emphasis on social equality, which collectively foster a safe and inclusive work culture. Maharashtra, a bustling economic powerhouse, attracts women with its vast and diverse career opportunities across finance, technology, and manufacturing sectors. Major cities like Mumbai and Pune offer advanced urban infrastructure, robust public transport, and a cosmopolitan lifestyle, which are significant draws. Tamil Nadu is also highly regarded, benefiting from its strong industrial base and a proactive focus on educational attainment. The state has implemented effective government initiatives aimed at enhancing women's safety and encouraging their active participation in the workforce. Karnataka, especially Bengaluru, is a global hub for Information Technology and innovation. This translates into a dynamic job market, competitive salaries, and a generally forward-thinking professional environment, making it a key destination for tech-savvy women. Gujarat's rapid industrialization and business-friendly policies have opened up numerous employment avenues. The state's commitment to women's empowerment and skill development adds to its appeal. Both Andhra Pradesh and Telangana are identified as emerging economic powerhouses. Hyderabad, in particular, stands out as a critical hub for IT and pharmaceuticals, providing a growing array of professional roles and supportive urban amenities. Delhi, despite facing scrutiny regarding safety, remains an undeniable magnet for career advancement due to its status as the national capital. It offers extensive opportunities in government, corporate, and educational sectors. Himachal Pradesh is cherished for its serene environment, high safety standards, and excellent quality of life, appealing to those seeking a less urbanized yet secure work setting. Haryana, leveraging its proximity to the National Capital Region, has developing industrial corridors and expanding job markets, making it an increasingly viable option. These states collectively present the most attractive working landscapes for women in India, blending safety, economic prospects, and progressive social frameworks.",
+          "date": "Fri, 10 Oct 2025 14:04:46 +0530",
+          "_source": "input1"
+        }
+      },
+      {
+        "json": {
+          "row_number": 10,
+          "headline": "Google changes work policy: ‘Work From Anywhere’ can’t be used for WFH; sends memo",
+          "description": "Google has provided a crucial clarification regarding its \"work from anywhere\" (WFA) policy to its employees. The tech giant informed its staff that these designated WFA weeks are not to be utilized as standard \"work from home\" days. This instruction is specifically aimed at employees who are assigned to a particular office location. The company's hybrid work model generally requires most employees to be in the office three days a week. Under the \"work from anywhere\" scheme, employees are granted up to four weeks annually to perform their duties from a location other than their primary office. However, Google's Chief People Officer, Fiona Cicconi, emphasized that these WFA weeks are designed for employees to work from a genuinely different remote location. They are not intended as a substitute for coming into the assigned office on days when employees are otherwise expected to be physically present. The clarification aims to prevent the misuse of the WFA benefit. Employees cannot simply use their WFA allowance to stay at their residence instead of reporting to their office workspace when their job necessitates an office presence. The policy's essence is to offer flexibility for working from another distinct geographical spot, perhaps a different city or country, rather than to bypass the office attendance requirements from one's own home. This guidance ensures the WFA program aligns with its original intent of providing flexibility for travel or temporary relocation, without undermining the company's hybrid office-centric strategy.",
+          "date": "Thu, 09 Oct 2025 16:04:22 +0530",
+          "_source": "input1"
+        }
+      },
+      {
+        "json": {
+          "row_number": 11,
+          "headline": "Bihar polls: 17 EBC, 11 OBC, 9 general, 7 Muslims in Jan Suraaj's 1st list",
+          "description": "Jan Suraj, a political initiative, has released its initial roster of candidates for the upcoming Bihar polls. This first list comprises a total of 44 individuals, showcasing a deliberate attempt at diverse representation across various social segments. Among the nominees, 17 candidates hail from the Extremely Backward Classes (EBCs), highlighting a significant focus on this demographic. \n\nAdditionally, the list includes 11 candidates from Other Backward Classes (OBCs), further underscoring the party's intent to include historically marginalized communities. The party has also allocated 9 tickets to individuals from the General category, ensuring a broader spectrum of society is represented. Furthermore, 7 candidates from the Muslim community have been given tickets, reflecting an outreach to religious minorities. \n\nNotably, the granddaughter of a former Chief Minister has also secured a ticket, adding a layer of political legacy to the new nominations. Party leaders emphasized that the selection process prioritized individuals from diverse professional backgrounds, including former bureaucrats, doctors, engineers, and teachers, aiming for a pool of experienced and capable contenders. \n\nThe distribution of these tickets largely aligns with the areas extensively covered during the party leader's extensive statewide foot march, indicating a grassroots approach to candidate selection. While some political discourse has centered on the caste dynamics of the nominations, Jan Suraj asserts that its list is a balanced and inclusive reflection of all sections of Bihar society, challenging notions of purely caste-based political maneuvers and affirming its commitment to broad societal representation.",
+          "date": "Fri, 10 Oct 2025 09:45:04 +0530",
+          "_source": "input1"
+        }
+      },
+      {
+        "json": {
+          "row_number": 2,
+          "links": "[\"https://iili.io/KwL2lWu.png\",\"https://iili.io/KwL2RJ2.png\",\"https://iili.io/KwL25RS.png\",\"https://iili.io/KwL27O7.png\",\"https://iili.io/KwL20ib.png\",\"https://iili.io/KwL2uUl.png\",\"https://iili.io/KwL2xiG.png\",\"https://iili.io/KwL2oVs.png\",\"https://iili.io/KwL2cxe.png\",\"https://iili.io/KwL2Yb9.png\"]",
+          "_source": "input2"
+        }
+      }
+    ],
+    "HTML": [
+      {
+        "json": {
+          "html": "<!DOCTYPE html>\n<html>\n<head>\n  <meta charset=\"UTF-8\">\n  <title>Vintage Newspaper</title>\n  <style>\n    /* Global styles */\n    body {\n      font-family: 'Times New Roman', serif !important;\n      background-color: #f5f2e7 !important;\n      color: #000 !important;\n      margin: 0;\n      padding: 0;\n    }\n\n    /* Wrapper for centering and width */\n    .wrapper {\n      max-width: 700px;\n      margin: 0 auto;\n      padding: 20px;\n      background-color: #f5f2e7;\n      line-height: 1.6;\n    }\n\n    /* Header styles */\n    .newspaper-header {\n      display: flex;\n      justify-content: space-between;\n      align-items: center;\n      border-bottom: 2px solid #000;\n      padding-bottom: 10px;\n      margin-bottom: 30px;\n    }\n\n    .newspaper-title {\n      font-size: 32px;\n      font-weight: bold;\n      text-transform: uppercase;\n      letter-spacing: 2px;\n    }\n\n    .newspaper-date {\n      font-size: 14px;\n      font-style: italic;\n      text-align: right;\n    }\n\n    /* Article styles */\n    .article {\n      margin-bottom: 40px;\n      border-bottom: 1px dashed #999;\n      padding-bottom: 20px;\n    }\n\n    .article h2 {\n      font-size: 20px;\n      margin-bottom: 10px;\n      text-transform: uppercase;\n    }\n\n    .article-date {\n      font-size: 14px;\n      font-style: italic;\n      margin-bottom: 10px;\n      color: #000;\n    }\n\n    .article img {\n      max-width: 100%;\n      height: auto;\n      margin: 10px 0;\n      display: block;\n    }\n\n    .article p {\n      font-size: 16px;\n      color: #000;\n      margin-bottom: 12px;\n      text-align: justify;\n    }\n\n    /* Drop-cap for first paragraph of each article */\n    .article p:first-of-type::first-letter {\n      font-size: 36px;\n      float: left;\n      line-height: 1;\n      padding-right: 8px;\n      font-weight: bold;\n    }\n\n    /* Responsive adjustments */\n    @media screen and (max-width: 768px) {\n      .wrapper { padding: 10px; }\n      .newspaper-title { font-size: 28px; }\n      .article h2 { font-size: 18px; }\n    }\n  </style>\n</head>\n<body>\n  <div class=\"wrapper\">\n    <div class=\"newspaper-header\">\n      <div class=\"newspaper-title\">The Daily Chronicle</div>\n      <div class=\"newspaper-date\">10/10/2025</div>\n    </div>\n\n    <!-- Articles -->\n    \n\n        <div class=\"article\">\n\n          <h2>Nobel snub: Donald Trump misses out on Peace Prize - why he lost</h2>\n\n          <div class=\"article-date\">10/10/2025, 2:41:07 pm</div>\n\n          <img src=\"https://iili.io/KwL2lWu.png\" alt=\"Nobel snub: Donald Trump misses out on Peace Prize - why he lost\">\n\n\n\n          <p>Donald Trump, the former President of the United States, was a recurring figure in discussions surrounding the Nobel Peace Prize, receiving multiple nominations during and after his time in office, yet he consistently missed out on the coveted award. A primary reason for his consideration by nominators was the pivotal role his administration played in orchestrating the Abraham Accords. These historic diplomatic agreements marked a significant breakthrough, establishing normalization of relations between Israel and several Arab nations, specifically the United Arab Emirates, Bahrain, Sudan, and Morocco. His proponents and political allies enthusiastically championed these accords as a profound and transformative achievement, asserting they represented the most significant progress towards peace in the Middle East in decades. They contended that such groundbreaking efforts, which sought to bridge long-standing animosities and foster cooperation, undeniably merited the international recognition conferred by the Nobel Peace Prize. Many of his supporters saw his strategic approach to foreign policy as highly effective, emphasizing tangible results over traditional diplomatic methods. However, the article consistently points to Trump's repeated \"snub\" by the Norwegian Nobel Committee. Despite fervent support and the demonstrable impact of the Abraham Accords, the committee's decisions diverged from the expectations of his base. The Nobel Peace Prize has historically honored individuals and organizations for a broader spectrum of efforts, often prioritizing work in areas such as human rights advocacy, democratic institution-building, freedom of the press, and the peaceful resolution of conflicts through multilateral channels. This broader emphasis by the committee on values extending beyond specific peace treaties, particularly when viewed alongside other aspects of Trump's presidency—which critics sometimes characterized as disruptive to international norms or domestic unity—likely contributed to his consistent omission. The repeated bypassing of Trump for the award typically resulted in expressions of frustration and criticism from his loyalists, who often perceived the committee's decisions as politically motivated or unfair, failing to acknowledge what they considered his substantial contributions to global peace. The reporting highlights the ongoing debate and differing perspectives on what constitutes deserving peace efforts on the world stage.</p>\n\n        </div>\n\n      \n\n        <div class=\"article\">\n\n          <h2>Watch: Patna metro station filled with gutka stains in 3 days</h2>\n\n          <div class=\"article-date\">10/10/2025, 2:17:39 pm</div>\n\n          <img src=\"https://iili.io/KwL2RJ2.png\" alt=\"Watch: Patna metro station filled with gutka stains in 3 days\">\n\n\n\n          <p>A recently inaugurated Patna Metro station, specifically the Malahi Pakri elevated station, faced widespread criticism and disgust after a video went viral. The video depicted its pristine walls, stairs, and escalators heavily stained with red gutka and paan masala spit. This egregious defacement occurred merely three days following the station's grand opening, sparking profound outrage across various social media platforms and among the general public. The viral footage prominently displayed vivid, reddish-brown spit marks splattered across the otherwise spotless white and grey surfaces. This created an immediate and stark contrast that drew immense condemnation. The shocking visual evidence highlighted a severe lack of civic sense exhibited by some of its initial users, leaving many citizens deeply disappointed and ashamed. They articulated their dismay over the utter disrespect shown towards brand new public infrastructure, which was built with significant investment for the collective benefit of the city's residents.</p><p>The unfortunate incident quickly ignited a fervent debate on the critical issues of public hygiene, responsible behavior, and the individual obligation required for maintaining shared urban spaces. The hashtag #KuchTohSharamKarloBiharWalo (Have some shame, people of Bihar) rapidly gained traction and trended online, eloquently reflecting the collective frustration, embarrassment, and palpable anger over the deplorable state of the newly unveiled public amenity. Commentators from all walks of life widely lamented that such thoughtless and irresponsible acts not only instantly mar the aesthetic appeal of modern facilities but also severely undermine the substantial public investment made in developing advanced transportation systems like the Patna Metro. Such projects are specifically designed to uplift urban living standards and provide a comfortable, clean commuting experience.</p><p>This clear act of vandalism by users of chewing tobacco drew sharp criticism from all quarters, strongly emphasizing the urgent need for greater public awareness campaigns focused on cleanliness. It also called for the implementation of stricter deterrent measures, including substantial fines and penalties, against such destructive practices. The incident served as a stark, disheartening, and very public reminder of the persistent challenges faced by authorities in preserving public property from habitual and intentional defacement, a problem unfortunately prevalent in many Indian cities. It profoundly underscored the vital importance of actively fostering a robust culture of cleanliness, respect, and collective ownership for shared amenities among the populace. This is essential to ensure the long-term longevity, proper upkeep, and continued pride in crucial urban development projects, which are cornerstones of a developing city's progress. The immediate and swift staining of the newly unveiled station prompted urgent calls for improved surveillance technologies, such as comprehensive CCTV camera networks, and more rigorous enforcement mechanisms. These steps are crucial to effectively deter similar deplorable acts in the future, thereby safeguarding valuable public assets for generations to come.</p>\n\n        </div>\n\n      \n\n        <div class=\"article\">\n\n          <h2>Microsoft engineer quits: emails thousands of staff; says can't enable war</h2>\n\n          <div class=\"article-date\">10/10/2025, 2:17:08 pm</div>\n\n          <img src=\"https://iili.io/KwL25RS.png\" alt=\"Microsoft engineer quits: emails thousands of staff; says can't enable war\">\n\n\n\n          <p>A Microsoft engineer, Brian Belmont, resigned after 13 years of service, sending a powerful resignation email to thousands of employees.</p><p>His departure was driven by a profound moral objection to Microsoft's extensive military contracts and its perceived role in profiting from global conflicts.</p><p>Belmont explicitly stated he could no longer work for a company that provides cloud services and artificial intelligence to militaries, including the Israeli military.</p><p>He directly linked this to the ongoing situation in Gaza, which he characterized as a genocide, expressing deep feelings of complicity in the violence.</p><p>The engineer's email urged his fellow employees to critically examine their own involvement and the ethical implications of their work for the company.</p><p>He called for Microsoft to cease its collaboration with military entities and to divest completely from what he termed the 'war machine'.</p><p>Belmont highlighted the company's significant agreements with the US Department of Defense and various armed forces around the world.</p><p>His message underscored the growing ethical dilemma faced by tech workers whose innovations are leveraged in warfare and intelligence operations.</p><p>The resignation email swiftly went viral within Microsoft, sparking widespread internal debate and drawing considerable external attention.</p><p>It became a powerful statement on corporate responsibility, ethics, and the role of employee activism within the tech sector.</p><p>Belmont expressed that continuing to work for Microsoft had become emotionally and morally unsustainable for him due to these concerns.</p><p>He challenged his colleagues to consider the human cost and the broader societal impact of their company's partnerships.</p><p>The incident amplified calls for greater transparency and accountability from major tech corporations regarding their military and government engagements.</p><p>It reignited discussions about where the line should be drawn between technological advancement and fundamental ethical boundaries.</p><p>Belmont's act of conscience aimed to inspire a shift in corporate policy and employee perspective regarding such controversial contracts.</p><p>His resignation serves as a notable example of individual protest against corporate involvement in geopolitical conflicts and human rights issues.</p><p>He emphasized that technology, when developed and utilized without ethical consideration, can have devastating real-world consequences.</p><p>The engineer's stand illustrates a personal decision to prioritize strong moral convictions over a long-standing and successful career.</p><p>This event underscores the increasing pressure on tech companies to align their operations with global human rights standards and peace initiatives.</p>\n\n        </div>\n\n      \n\n        <div class=\"article\">\n\n          <h2>China-US tensions: Beijing hits US ships with ‘special port fees’</h2>\n\n          <div class=\"article-date\">10/10/2025, 3:18:37 pm</div>\n\n          <img src=\"https://iili.io/KwL27O7.png\" alt=\"China-US tensions: Beijing hits US ships with ‘special port fees’\">\n\n\n\n          <p>China has implemented new \"special port fees\" specifically targeting US ships, a direct and immediate retaliatory action mirroring the fees recently imposed by the United States on Chinese vessels. This significant move, effective the very same day as the US fees, marks a notable escalation in the simmering economic tensions between the world's two largest economies. The new charges by Beijing apply to a comprehensive range of essential maritime services, including but not limited to pilotage, tug services, and various critical port entry and exit procedures for American-flagged or US-owned ships operating within Chinese ports. This reciprocal action by Beijing unequivocally underscores its firm stance and explicit willingness to respond in kind to any perceived trade barriers or punitive economic measures initiated by Washington. The imposition of these additional fees is widely expected to significantly increase operational costs for American shipping companies, which could subsequently translate into higher freight charges and potential disruptions within already fragile global supply chains. This incident clearly reflects a growing tit-for-tat dynamic that has characterized much of the recent trade relationship between the two nations, demonstrating China's unwavering commitment to protecting its economic interests through direct counter-measures. This latest development further complicates ongoing efforts to de-escalate existing trade disputes, strongly suggesting a prolonged period of economic friction and an environment where retaliatory actions are becoming an increasingly standard practice in bilateral relations, impacting international commerce and the broader geopolitical landscape.</p>\n\n        </div>\n\n      \n\n        <div class=\"article\">\n\n          <h2>Committed to sovereignty': Jaishankar meets Afghan FM; India to reopen embassy in Kabul</h2>\n\n          <div class=\"article-date\">10/10/2025, 12:28:58 pm</div>\n\n          <img src=\"https://iili.io/KwL20ib.png\" alt=\"Committed to sovereignty': Jaishankar meets Afghan FM; India to reopen embassy in Kabul\">\n\n\n\n          <p>India is set to reopen its embassy in Kabul, marking a significant step in its engagement with Afghanistan. This move follows a crucial meeting between External Affairs Minister S Jaishankar and Afghanistan's acting Foreign Minister Amir Khan Muttaqi on the sidelines of a regional conference in Samarkand, Uzbekistan. This high-level interaction represents India's pragmatic approach towards the Taliban government, despite its non-recognition, and signals a shift from its earlier decision to close the embassy after the Taliban's takeover in August 2021. India had evacuated its diplomatic staff at that time, but has maintained a 'technical mission' in Kabul. The article highlights an 'upgrading' of this technical mission, suggesting an expansion of its role and capacity. The mission has been vital in overseeing the delivery of substantial humanitarian aid from India, including food grains, medicines, and vaccines, demonstrating India's continued commitment to the Afghan people. The reopening of the embassy will allow India to restore its full diplomatic presence, safeguarding its strategic interests and ensuring more effective coordination of its ongoing humanitarian and developmental assistance. Discussions between Jaishankar and Muttaqi likely encompassed aid efforts, regional stability, security concerns, and India's long-term projects aimed at assisting the Afghan populace. This development underscores India's resolve to maintain direct channels of communication and influence in Afghanistan amidst its complex geopolitical landscape.</p>\n\n        </div>\n\n      \n\n        <div class=\"article\">\n\n          <h2>‘Don't give your wealth to Bill Gates’: PayPal founder tells Elon Musk; urges him to…</h2>\n\n          <div class=\"article-date\">10/10/2025, 2:31:58 pm</div>\n\n          <img src=\"https://iili.io/KwL2uUl.png\" alt=\"‘Don't give your wealth to Bill Gates’: PayPal founder tells Elon Musk; urges him to…\">\n\n\n\n          <p>The news article details a significant piece of advice given by PayPal co-founder Peter Thiel to Elon Musk. This interaction reportedly took place when Musk was contemplating making substantial philanthropic contributions. Thiel issued a stark warning to Musk, specifically advising him against donating his wealth to Bill Gates. Thiel's reasoning was highly critical, characterizing Gates as an \"enemy\" and a \"monopolist.\" He went further, labeling Gates a \"fake philanthropist,\" suggesting that Gates's charitable activities were not purely altruistic. Thiel reportedly argued that Gates was not truly dispersing his wealth, but rather converting his financial resources into political and social capital, thereby expanding his influence and power through his foundation. Thiel's counsel implied that contributing to Gates's initiatives would inadvertently strengthen someone he perceived as an adversary, particularly within the competitive landscape of technology and innovation. This guidance underscores Thiel's often-critical stance on established power structures and his skepticism towards certain large-scale philanthropic efforts. He urged Musk to be highly discerning in his philanthropic choices, particularly concerning figures like Gates, whom Thiel viewed with suspicion regarding their ultimate intentions and impact on society. The anecdote highlights a fascinating ideological divide among prominent tech leaders regarding wealth, philanthropy, and societal influence.</p>\n\n        </div>\n\n      \n\n        <div class=\"article\">\n\n          <h2>Traffic means growth': Priyank Kharge's bizarre justification for Bengaluru jams</h2>\n\n          <div class=\"article-date\">10/10/2025, 12:22:31 pm</div>\n\n          <img src=\"https://iili.io/KwL2xiG.png\" alt=\"Traffic means growth': Priyank Kharge's bizarre justification for Bengaluru jams\">\n\n\n\n          <p>Priyank Kharge, Karnataka's Minister for IT/BT and Rural Development & Panchayat Raj, ignited controversy by presenting a peculiar justification for Bengaluru's severe traffic congestion. He declared that the city's pervasive and messy traffic jams should be interpreted as a positive sign of \"growth.\" Kharge attributed the escalating gridlock to a significant influx of migrants, who are flocking to Bengaluru in search of abundant employment opportunities. He also cited a substantial boom in new offices and businesses across the city as a contributing factor. According to the minister, this phenomenon underscores Bengaluru's economic vibrancy and desirability, indicating that people are actively choosing the city for its promising prospects.</p><p>His remarks came amid widespread public frustration over the city's crumbling infrastructure and the daily struggles faced by commuters. Kharge attempted to normalize Bengaluru's traffic situation by drawing comparisons to major global cities like Mumbai, Delhi, and New York, suggesting that residents there also endure considerable commuting times. While acknowledging the problem, he assured that the state government is diligently working on long-term solutions to alleviate the congestion. These proposed measures include ambitious infrastructure projects such as the construction of the Peripheral Ring Road (PRR), exploration of underground tunnel networks, expansion of the existing Metro rail system, and comprehensive improvements to public transportation.</p><p>However, Kharge's justification was widely slammed as \"bizarre\" and an oversimplification of a complex urban planning failure. Critics argued that merely equating traffic with growth overlooks the critical necessity for proactive infrastructure development and efficient urban management to support such expansion, rather than simply accepting gridlock as an unavoidable consequence of success. Many perceived his statement as an attempt to deflect accountability and downplay the severe impact on citizens' quality of life and productivity.</p>\n\n        </div>\n\n      \n\n        <div class=\"article\">\n\n          <h2>Where women want to work in India: AP, Kerala Gujarat lead; top 10 list here</h2>\n\n          <div class=\"article-date\">10/10/2025, 2:04:46 pm</div>\n\n          <img src=\"https://iili.io/KwL2oVs.png\" alt=\"Where women want to work in India: AP, Kerala Gujarat lead; top 10 list here\">\n\n\n\n          <p>The Times of India article provides an insightful analysis into the top Indian states where women professionals find the most conducive environments for their careers. It delves into various factors, including safety, economic opportunities, social infrastructure, and supportive government policies. Kerala consistently emerges as a top choice, primarily due to its exceptional human development indicators, including high literacy rates among women, superior healthcare facilities, and a strong emphasis on social equality, which collectively foster a safe and inclusive work culture. Maharashtra, a bustling economic powerhouse, attracts women with its vast and diverse career opportunities across finance, technology, and manufacturing sectors. Major cities like Mumbai and Pune offer advanced urban infrastructure, robust public transport, and a cosmopolitan lifestyle, which are significant draws. Tamil Nadu is also highly regarded, benefiting from its strong industrial base and a proactive focus on educational attainment. The state has implemented effective government initiatives aimed at enhancing women's safety and encouraging their active participation in the workforce. Karnataka, especially Bengaluru, is a global hub for Information Technology and innovation. This translates into a dynamic job market, competitive salaries, and a generally forward-thinking professional environment, making it a key destination for tech-savvy women. Gujarat's rapid industrialization and business-friendly policies have opened up numerous employment avenues. The state's commitment to women's empowerment and skill development adds to its appeal. Both Andhra Pradesh and Telangana are identified as emerging economic powerhouses. Hyderabad, in particular, stands out as a critical hub for IT and pharmaceuticals, providing a growing array of professional roles and supportive urban amenities. Delhi, despite facing scrutiny regarding safety, remains an undeniable magnet for career advancement due to its status as the national capital. It offers extensive opportunities in government, corporate, and educational sectors. Himachal Pradesh is cherished for its serene environment, high safety standards, and excellent quality of life, appealing to those seeking a less urbanized yet secure work setting. Haryana, leveraging its proximity to the National Capital Region, has developing industrial corridors and expanding job markets, making it an increasingly viable option. These states collectively present the most attractive working landscapes for women in India, blending safety, economic prospects, and progressive social frameworks.</p>\n\n        </div>\n\n      \n\n        <div class=\"article\">\n\n          <h2>Google changes work policy: ‘Work From Anywhere’ can’t be used for WFH; sends memo</h2>\n\n          <div class=\"article-date\">9/10/2025, 4:04:22 pm</div>\n\n          <img src=\"https://iili.io/KwL2cxe.png\" alt=\"Google changes work policy: ‘Work From Anywhere’ can’t be used for WFH; sends memo\">\n\n\n\n          <p>Google has provided a crucial clarification regarding its \"work from anywhere\" (WFA) policy to its employees. The tech giant informed its staff that these designated WFA weeks are not to be utilized as standard \"work from home\" days. This instruction is specifically aimed at employees who are assigned to a particular office location. The company's hybrid work model generally requires most employees to be in the office three days a week. Under the \"work from anywhere\" scheme, employees are granted up to four weeks annually to perform their duties from a location other than their primary office. However, Google's Chief People Officer, Fiona Cicconi, emphasized that these WFA weeks are designed for employees to work from a genuinely different remote location. They are not intended as a substitute for coming into the assigned office on days when employees are otherwise expected to be physically present. The clarification aims to prevent the misuse of the WFA benefit. Employees cannot simply use their WFA allowance to stay at their residence instead of reporting to their office workspace when their job necessitates an office presence. The policy's essence is to offer flexibility for working from another distinct geographical spot, perhaps a different city or country, rather than to bypass the office attendance requirements from one's own home. This guidance ensures the WFA program aligns with its original intent of providing flexibility for travel or temporary relocation, without undermining the company's hybrid office-centric strategy.</p>\n\n        </div>\n\n      \n\n        <div class=\"article\">\n\n          <h2>Bihar polls: 17 EBC, 11 OBC, 9 general, 7 Muslims in Jan Suraaj's 1st list</h2>\n\n          <div class=\"article-date\">10/10/2025, 9:45:04 am</div>\n\n          <img src=\"https://iili.io/KwL2Yb9.png\" alt=\"Bihar polls: 17 EBC, 11 OBC, 9 general, 7 Muslims in Jan Suraaj's 1st list\">\n\n\n\n          <p>Jan Suraj, a political initiative, has released its initial roster of candidates for the upcoming Bihar polls. This first list comprises a total of 44 individuals, showcasing a deliberate attempt at diverse representation across various social segments. Among the nominees, 17 candidates hail from the Extremely Backward Classes (EBCs), highlighting a significant focus on this demographic.</p><p>Additionally, the list includes 11 candidates from Other Backward Classes (OBCs), further underscoring the party's intent to include historically marginalized communities. The party has also allocated 9 tickets to individuals from the General category, ensuring a broader spectrum of society is represented. Furthermore, 7 candidates from the Muslim community have been given tickets, reflecting an outreach to religious minorities.</p><p>Notably, the granddaughter of a former Chief Minister has also secured a ticket, adding a layer of political legacy to the new nominations. Party leaders emphasized that the selection process prioritized individuals from diverse professional backgrounds, including former bureaucrats, doctors, engineers, and teachers, aiming for a pool of experienced and capable contenders.</p><p>The distribution of these tickets largely aligns with the areas extensively covered during the party leader's extensive statewide foot march, indicating a grassroots approach to candidate selection. While some political discourse has centered on the caste dynamics of the nominations, Jan Suraj asserts that its list is a balanced and inclusive reflection of all sections of Bihar society, challenging notions of purely caste-based political maneuvers and affirming its commitment to broad societal representation.</p>\n\n        </div>\n\n      \n\n  </div>\n</body>\n</html>\n"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "AI Agent2",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        []
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        []
+      ]
+    },
+    "Structured Output Parser1": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent2": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "AI Agent2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate an image2": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload file2": {
+      "main": [
+        [
+          {
+            "node": "Share file2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Share file2": {
+      "main": [
+        []
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Generate an image2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        []
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "RSS Read",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Clear sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Generate an image2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code1": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RSS Read": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code2": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get row(s) in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet1": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Code3": {
+      "main": [
+        [
+          {
+            "node": "HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Code3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTML": {
+      "main": [
+        [
+          {
+            "node": "Send a message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        [
+          {
+            "node": "Code1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Code2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "Clear sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser2": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        []
+      ]
+    },
+    "Clear sheet": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Clear sheet1": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Kolkata",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "versionId": "63f85075-dc5f-4ceb-9750-cc7a40014355",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "30e8840a5d55d1e1b6af4c778e833f7fe652325f38939676863a8cb542d69c34"
+  },
+  "id": "G9JaukECqJEzUh5F",
+  "tags": []
+}
