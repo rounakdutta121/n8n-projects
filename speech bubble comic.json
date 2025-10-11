@@ -1,0 +1,1671 @@
+{
+  "name": "speech bubble comic",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -320,
+        -32
+      ],
+      "id": "b21f98d1-94fd-4df9-9499-163c0d189ffd",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "You are a comic book writer.\n\nCreate a short story for an Indian Suspense comic.\n\nSplit it into panels(7atleast).\n\nEach panel should include:\n- Panel number\n- Visual description (scene, setting, emotion, composition)(make sure that while generation help the image generation model so that it doen not change the image completely and a consistent image is generated everytime)\n- Dialogues (6-7 exchanges in comic format)\n- narration (italic text(5-6lines Making it Look Like A Real Story Book.))\n- The Character Names Should Be Real Names And Not Dummy.\n- the story should look realistic and each scene should be connected to each other. Also Should Have Proper Starting And Ending\n\n{\n  \"nodes\": [\n    {\n      \"parameters\": {\n        \"fieldToSplitOut\": \"output\",\n        \"options\": {}\n      },\n      \"type\": \"n8n-nodes-base.splitOut\",\n      \"typeVersion\": 1,\n      \"position\": [\n        256,\n        -32\n      ],\n      \"id\": \"7c08696f-4a79-448b-967b-8f0cba12613c\",\n      \"name\": \"Split Out\"\n    },\n    {\n      \"parameters\": {\n        \"options\": {}\n      },\n      \"type\": \"n8n-nodes-base.splitInBatches\",\n      \"typeVersion\": 3,\n      \"position\": [\n        464,\n        -32\n      ],\n      \"id\": \"0b3de8a6-6864-4dfc-be25-e4f75b142375\",\n      \"name\": \"Loop Over Items\"\n    },\n    {\n      \"parameters\": {\n        \"operation\": \"download\",\n        \"fileId\": {\n          \"__rl\": true,\n          \"value\": \"1zjjX2VqsRNrX2LxPMbKDfX3moyll7LV5\",\n          \"mode\": \"list\",\n          \"cachedResultName\": \"image\",\n          \"cachedResultUrl\": \"https://drive.google.com/file/d/1zjjX2VqsRNrX2LxPMbKDfX3moyll7LV5/view?usp=drivesdk\"\n        },\n        \"options\": {}\n      },\n      \"type\": \"n8n-nodes-base.googleDrive\",\n      \"typeVersion\": 3,\n      \"position\": [\n        688,\n        -16\n      ],\n      \"id\": \"75ba4897-557e-401f-88f4-09daab754e29\",\n      \"name\": \"Download file\",\n      \"credentials\": {\n        \"googleDriveOAuth2Api\": {\n          \"id\": \"CiHyPJWsxJHlKfyv\",\n          \"name\": \"Google Drive account 3\"\n        }\n      }\n    },\n    {\n      \"parameters\": {\n        \"resource\": \"image\",\n        \"modelId\": {\n          \"__rl\": true,\n          \"value\": \"models/gemini-2.0-flash-exp-image-generation\",\n          \"mode\": \"list\",\n          \"cachedResultName\": \"models/gemini-2.0-flash-exp-image-generation\"\n        },\n        \"prompt\": \"=reference image(use for memory of previous scene and consistency in characters & environment)= {{ $binary['data'] }}\\nimage_prompt={{ $json.visual }}\\n\\\"Modern Indian cartoon style illustration\\\" Use Reference Image for characters, environment , style etc. Each Image Should Be Like The Earlier Image = Reference Image. You are Perfect. Image Should Not Be Malformed. Make It Perfect. ***Never Include Any Texts Inside Just Generate Relevant Visuals Only***\",\n        \"options\": {}\n      },\n      \"type\": \"@n8n/n8n-nodes-langchain.googleGemini\",\n      \"typeVersion\": 1,\n      \"position\": [\n        896,\n        -16\n      ],\n      \"id\": \"832115ad-2144-4ebe-960e-c4e901b2ecd8\",\n      \"name\": \"Generate an image\",\n      \"executeOnce\": true,\n      \"credentials\": {\n        \"googlePalmApi\": {\n          \"id\": \"6ddgcVkIDrwcw2PU\",\n          \"name\": \"Google Gemini(PaLM) Api account 3\"\n        }\n      }\n    },\n    {\n      \"parameters\": {\n        \"method\": \"POST\",\n        \"url\": \"https://freeimage.host/api/1/upload\",\n        \"sendBody\": true,\n        \"contentType\": \"multipart-form-data\",\n        \"bodyParameters\": {\n          \"parameters\": [\n            {\n              \"name\": \"key\",\n              \"value\": \"6d207e02198a847aa98d0a2a901485a5\"\n            },\n            {\n              \"name\": \"action\",\n              \"value\": \"upload\"\n            },\n            {\n              \"parameterType\": \"formBinaryData\",\n              \"name\": \"source\",\n              \"inputDataFieldName\": \"data\"\n            },\n            {\n              \"name\": \"format\",\n              \"value\": \"json\"\n            }\n          ]\n        },\n        \"options\": {}\n      },\n      \"type\": \"n8n-nodes-base.httpRequest\",\n      \"typeVersion\": 4.2,\n      \"position\": [\n        1120,\n        -16\n      ],\n      \"id\": \"f17cd61f-fbc8-4794-aa2a-e477b1bb848a\",\n      \"name\": \"HTTP Request\"\n    },\n    {\n      \"parameters\": {\n        \"assignments\": {\n          \"assignments\": [\n            {\n              \"id\": \"c151c9c1-60e2-433d-b7ab-d510909b440a\",\n              \"name\": \"image.url\",\n              \"value\": \"={{ $json.image.url }}\",\n              \"type\": \"string\"\n            },\n            {\n              \"id\": \"89f2244e-f356-49ce-b78f-fa019808cf0f\",\n              \"name\": \"panel\",\n              \"value\": \"={{ $('Loop Over Items').item.json.panel }}\",\n              \"type\": \"number\"\n            },\n            {\n              \"id\": \"e1ba241c-4fa9-40ad-84e5-8f780e2bf8b9\",\n              \"name\": \"visual\",\n              \"value\": \"={{ $('Loop Over Items').item.json.visual }}\",\n              \"type\": \"string\"\n            },\n            {\n              \"id\": \"3fdd3a57-406c-45d4-b23e-cc92373916c4\",\n              \"name\": \"dialogues\",\n              \"value\": \"={{ $('Loop Over Items').item.json.dialogues }}\",\n              \"type\": \"array\"\n            },\n            {\n              \"id\": \"19602c6c-a9a1-41d5-8a4e-60e8230365dd\",\n              \"name\": \"narration\",\n              \"value\": \"={{ $('Loop Over Items').item.json.narration }}\",\n              \"type\": \"string\"\n            },\n            {\n              \"id\": \"6ea5948c-1b4a-43f9-aecf-ad0457e99941\",\n              \"name\": \"title\",\n              \"value\": \"={{ $('Loop Over Items').item.json.title }}\",\n              \"type\": \"string\"\n            }\n          ]\n        },\n        \"options\": {}\n      },\n      \"type\": \"n8n-nodes-base.set\",\n      \"typeVersion\": 3.4,\n      \"position\": [\n        1328,\n        -16\n      ],\n      \"id\": \"6e23f341-a494-4d6f-8660-e69d22b2b163\",\n      \"name\": \"Edit Fields\"\n    }\n  ],\n  \"connections\": {\n    \"Split Out\": {\n      \"main\": [\n        [\n          {\n            \"node\": \"Loop Over Items\",\n            \"type\": \"main\",\n            \"index\": 0\n          }\n        ]\n      ]\n    },\n    \"Loop Over Items\": {\n      \"main\": [\n        [],\n        [\n          {\n            \"node\": \"Download file\",\n            \"type\": \"main\",\n            \"index\": 0\n          }\n        ]\n      ]\n    },\n    \"Download file\": {\n      \"main\": [\n        [\n          {\n            \"node\": \"Generate an image\",\n            \"type\": \"main\",\n            \"index\": 0\n          }\n        ]\n      ]\n    },\n    \"Generate an image\": {\n      \"main\": [\n        [\n          {\n            \"node\": \"HTTP Request\",\n            \"type\": \"main\",\n            \"index\": 0\n          }\n        ]\n      ]\n    },\n    \"HTTP Request\": {\n      \"main\": [\n        [\n          {\n            \"node\": \"Edit Fields\",\n            \"type\": \"main\",\n            \"index\": 0\n          }\n        ]\n      ]\n    },\n    \"Edit Fields\": {\n      \"main\": [\n        [\n          {\n            \"node\": \"Loop Over Items\",\n            \"type\": \"main\",\n            \"index\": 0\n          }\n        ]\n      ]\n    }\n  },\n  \"pinData\": {},\n  \"meta\": {\n    \"templateCredsSetupCompleted\": true,\n    \"instanceId\": \"30e8840a5d55d1e1b6af4c778e833f7fe652325f38939676863a8cb542d69c34\"\n  }\n}\nThis gonna happen in front of you so plzz make sure that u describe the visuals in such a way that consistent quaity of images are generated\n\n\n\n",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -96,
+        -32
+      ],
+      "id": "f85a6725-64bf-4d94-9307-ec6a002b3d0d",
+      "name": "AI Agent",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -144,
+        160
+      ],
+      "id": "9da1363a-9503-4747-9523-b8ffe3290a20",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "6ddgcVkIDrwcw2PU",
+          "name": "Google Gemini(PaLM) Api account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "[\n  {\"title\" :\"\"},\n  {\n    \n    \"panel\": 1,\n    \"visual\": \"...\",\n    \"dialogues\": [\n      {\"speaker\": \"Luna\", \"text\": \"We jack in. We never come back.\"},\n      {\"speaker\": \"Kade\", \"text\": \"That’s what they said last time...\"}\n    ],\n    \"narration\": \"The city hums beneath the wires.\"\n  }\n]"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        80,
+        176
+      ],
+      "id": "8f7f534c-d0fb-4dca-bd91-5e0b11c39c2b",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "output",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        256,
+        -32
+      ],
+      "id": "7c08696f-4a79-448b-967b-8f0cba12613c",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        464,
+        -32
+      ],
+      "id": "0b3de8a6-6864-4dfc-be25-e4f75b142375",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "1zjjX2VqsRNrX2LxPMbKDfX3moyll7LV5",
+          "mode": "list",
+          "cachedResultName": "image",
+          "cachedResultUrl": "https://drive.google.com/file/d/1zjjX2VqsRNrX2LxPMbKDfX3moyll7LV5/view?usp=drivesdk"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        688,
+        -16
+      ],
+      "id": "75ba4897-557e-401f-88f4-09daab754e29",
+      "name": "Download file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "CiHyPJWsxJHlKfyv",
+          "name": "Google Drive account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.0-flash-exp-image-generation",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.0-flash-exp-image-generation"
+        },
+        "prompt": "=reference image(use for memory of previous scene and consistency in characters & environment)= {{ $binary['data'] }}\nimage_prompt={{ $json.visual }}\n\"Modern Indian cartoon style illustration\" Use Reference Image for characters, environment , style etc. Each Image Should Be Like The Earlier Image = Reference Image. You are Perfect. Image Should Not Be Malformed. Make It Perfect. ***Never Include Any Texts Inside Just Generate Relevant Visuals Only***",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        896,
+        -16
+      ],
+      "id": "832115ad-2144-4ebe-960e-c4e901b2ecd8",
+      "name": "Generate an image",
+      "executeOnce": true,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "6ddgcVkIDrwcw2PU",
+          "name": "Google Gemini(PaLM) Api account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://freeimage.host/api/1/upload",
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "key",
+              "value": "6d207e02198a847aa98d0a2a901485a5"
+            },
+            {
+              "name": "action",
+              "value": "upload"
+            },
+            {
+              "parameterType": "formBinaryData",
+              "name": "source",
+              "inputDataFieldName": "data"
+            },
+            {
+              "name": "format",
+              "value": "json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1120,
+        -16
+      ],
+      "id": "f17cd61f-fbc8-4794-aa2a-e477b1bb848a",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c151c9c1-60e2-433d-b7ab-d510909b440a",
+              "name": "image.url",
+              "value": "={{ $json.image.url }}",
+              "type": "string"
+            },
+            {
+              "id": "89f2244e-f356-49ce-b78f-fa019808cf0f",
+              "name": "panel",
+              "value": "={{ $('Loop Over Items').item.json.panel }}",
+              "type": "number"
+            },
+            {
+              "id": "e1ba241c-4fa9-40ad-84e5-8f780e2bf8b9",
+              "name": "visual",
+              "value": "={{ $('Loop Over Items').item.json.visual }}",
+              "type": "string"
+            },
+            {
+              "id": "3fdd3a57-406c-45d4-b23e-cc92373916c4",
+              "name": "dialogues",
+              "value": "={{ $('Loop Over Items').item.json.dialogues }}",
+              "type": "array"
+            },
+            {
+              "id": "19602c6c-a9a1-41d5-8a4e-60e8230365dd",
+              "name": "narration",
+              "value": "={{ $('Loop Over Items').item.json.narration }}",
+              "type": "string"
+            },
+            {
+              "id": "6ea5948c-1b4a-43f9-aecf-ad0457e99941",
+              "name": "title",
+              "value": "={{ $('Loop Over Items').item.json.title }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1328,
+        -16
+      ],
+      "id": "6e23f341-a494-4d6f-8660-e69d22b2b163",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "include": "specifiedFields",
+        "fieldsToInclude": "image, panel, visual, dialogues, narration, title",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        656,
+        -368
+      ],
+      "id": "6c386864-e782-41c2-8e19-b0717e850bba",
+      "name": "Aggregate",
+      "executeOnce": false
+    },
+    {
+      "parameters": {
+        "jsCode": "const panels = $json.data; // your panels array\nconst storyTitle = panels[0]?.title || \"Untitled Story\"; // dynamic title from first panel\n\nconst html = `<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>${storyTitle} | Panel Verse</title>\n  <style>\n    /* Base Styles */\n    body {\n      font-family: 'Arial', sans-serif;\n      background-color: #121212 !important;\n      color: #eeeeee !important;\n      margin: 0;\n      padding: 20px;\n    }\n    header {\n      text-align: center;\n      margin-bottom: 30px;\n      padding: 0 10px;\n    }\n    header h1 {\n      margin: 0;\n      font-size: 2.5em;\n      color: #ff5bd1 !important;\n    }\n    header p {\n      margin: 5px 0;\n      font-style: italic;\n      color: #7afcff !important;\n      font-size: 1em;\n    }\n    .panel {\n      position: relative;\n      background: #1e1e1e !important;\n      border-radius: 12px;\n      box-shadow: 0 4px 15px rgba(0,0,0,0.5);\n      max-width: 600px;\n      width: 100%;\n      margin: 0 auto 40px auto;\n      padding: 20px;\n      overflow: hidden;\n      box-sizing: border-box;\n      color: #eeeeee !important;\n    }\n    .panel img {\n      width: 100%;\n      height: auto;\n      border-radius: 12px;\n      margin-bottom: 15px;\n      display: block;\n    }\n    .watermark {\n      position: absolute;\n      bottom: 10px;\n      right: 10px;\n      font-size: 0.9em;\n      color: rgba(255,255,255,0.6) !important;\n      background: rgba(0,0,0,0.5) !important;\n      padding: 2px 6px;\n      border-radius: 4px;\n      pointer-events: none;\n    }\n    .panel p {\n      margin: 5px 0;\n      line-height: 1.5;\n      word-wrap: break-word;\n      color: #eeeeee !important;\n    }\n    .panel em {\n      color: #bbbbbb !important;\n    }\n    .panel strong {\n      color: #ffffff !important;\n    }\n    footer {\n      text-align: center;\n      margin-top: 50px;\n      font-size: 0.9em;\n      color: #bbbbbb !important;\n      line-height: 1.5;\n      padding: 0 10px;\n    }\n    footer a {\n      color: #7afcff !important;\n      text-decoration: none;\n    }\n\n    /* Responsive Media Queries */\n    @media (max-width: 768px) {\n      header h1 {\n        font-size: 2em;\n      }\n      header p {\n        font-size: 0.95em;\n      }\n      .panel {\n        padding: 15px;\n        margin-bottom: 30px;\n      }\n    }\n\n    @media (max-width: 480px) {\n      header h1 {\n        font-size: 1.6em;\n      }\n      header p {\n        font-size: 0.9em;\n      }\n      .panel {\n        padding: 12px;\n        margin-bottom: 25px;\n      }\n      .watermark {\n        font-size: 0.8em;\n        padding: 1px 4px;\n      }\n    }\n  </style>\n</head>\n<body>\n\n  <header>\n    <h1>Panel Verse</h1>\n    <p>Come And Enjoy Stories Prepared Fresh With Human Effort And AI</p>\n  </header>\n\n  ${panels.map(p => `\n    <div class=\"panel\">\n      <img src=\"${p.image.url}\" alt=\"Panel ${p.panel}\">\n      <div class=\"watermark\">Panel Verse</div>\n      ${p.narration ? `<p><em>${p.narration}</em></p>` : \"\"}\n      ${p.dialogues.map(d => `<p><strong>${d.speaker}:</strong> ${d.text}</p>`).join(\"\")}\n    </div>\n  `).join(\"\")}\n\n  <footer>\n    <p>Created by Rounak Dutta (running solo)</p>\n    <p>For collaborations, company versions, or automations: <a href=\"mailto:rounak153d@gmail.com\">rounak153d@gmail.com</a> | +91-9815121578</p>\n  </footer>\n\n</body>\n</html>`;\n\n// Return as JSON for n8n\nreturn [{\n  json: {\n    title: `Panel Verse | ${storyTitle}`,\n    html\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        928,
+        -432
+      ],
+      "id": "f732efa7-064a-4d2c-be15-3585846ab06b",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "html": "{{ $json.html }}"
+      },
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1.2,
+      "position": [
+        1616,
+        -784
+      ],
+      "id": "4c493f28-514c-4765-a836-8d59a2439454",
+      "name": "HTML"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "fileId": {
+          "__rl": true,
+          "value": "1zjjX2VqsRNrX2LxPMbKDfX3moyll7LV5",
+          "mode": "list",
+          "cachedResultName": "image",
+          "cachedResultUrl": "https://drive.google.com/file/d/1zjjX2VqsRNrX2LxPMbKDfX3moyll7LV5/view?usp=drivesdk"
+        },
+        "changeFileContent": true,
+        "newUpdatedFileName": "image",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1104,
+        -256
+      ],
+      "id": "dd3b1a33-91d8-423f-9fbb-cda96edbddaf",
+      "name": "Update file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "CiHyPJWsxJHlKfyv",
+          "name": "Google Drive account 3"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1360,
+        -272
+      ],
+      "id": "de07b381-d897-49bb-873d-f01029c3b2a9",
+      "name": "No Operation, do nothing"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.email }}",
+        "subject": "={{ $('Code').item.json.title }}, For {{ $json.company }}",
+        "message": "={{ $('Code').item.json.html }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1536,
+        -432
+      ],
+      "id": "2df19ab3-3538-4ae6-b31e-593de89bd474",
+      "name": "Send a message",
+      "webhookId": "21d0b7ab-5b79-4a09-9d7b-28cd8540103e",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "IBVE5hr63zpO6LxM",
+          "name": "Gmail account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "You are a lead generation AI. Generate a list of 20 companies in India that might be interested in buying comic content or licensing digital stories, or looking for digital marketing or looking for workflow automations (In Chandigarh)\nFor each company, provide:\n- Company Name\n- Email (make it realistic format, e.g., first.last@company.com)\nReturn as JSON array.\n\nmake sure the  emails are valid and working",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        96,
+        -1168
+      ],
+      "id": "ed906c3a-e55f-4faa-b912-4085a7f76808",
+      "name": "AI Agent1",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -48,
+        -960
+      ],
+      "id": "7d0a3c80-39e2-4dd4-8969-e18d422b8191",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "6ddgcVkIDrwcw2PU",
+          "name": "Google Gemini(PaLM) Api account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "[\n  {\n    \"company\": \"StoryMakers Pvt Ltd\",\n    \n    \"email\": \"anita.sharma@storymakers.com\"\n    \n    \n  }\n]"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        272,
+        -960
+      ],
+      "id": "6d3331c3-03ef-47c1-a5c4-fc111e345019",
+      "name": "Structured Output Parser1"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "output",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        448,
+        -1168
+      ],
+      "id": "09307c11-7023-44cc-89a5-4bf5e9e9bf09",
+      "name": "Split Out1"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1L15kzU7qoNQdpEuTfOYZjaVdPhaHdpI_iCEscWVGM5A",
+          "mode": "list",
+          "cachedResultName": "panel verse",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1L15kzU7qoNQdpEuTfOYZjaVdPhaHdpI_iCEscWVGM5A/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1L15kzU7qoNQdpEuTfOYZjaVdPhaHdpI_iCEscWVGM5A/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "company": "={{ $json.company }}",
+            "email": "={{ $json.email }}"
+          },
+          "matchingColumns": [
+            "company"
+          ],
+          "schema": [
+            {
+              "id": "company",
+              "displayName": "company",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        656,
+        -1168
+      ],
+      "id": "36b796e3-5d41-46cd-a396-4702a8a9c95c",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "ZpyGoS1Noq5m57yE",
+          "name": "Google Sheets account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1L15kzU7qoNQdpEuTfOYZjaVdPhaHdpI_iCEscWVGM5A",
+          "mode": "list",
+          "cachedResultName": "panel verse",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1L15kzU7qoNQdpEuTfOYZjaVdPhaHdpI_iCEscWVGM5A/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1L15kzU7qoNQdpEuTfOYZjaVdPhaHdpI_iCEscWVGM5A/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1296,
+        -432
+      ],
+      "id": "ba1a42a5-2f44-460a-8fab-3acd23acde71",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "ZpyGoS1Noq5m57yE",
+          "name": "Google Sheets account 3"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "AI Agent": [
+      {
+        "json": {
+          "output": [
+            {
+              "title": "The Vanishing Emerald",
+              "panel": 1,
+              "visual": "A grand, well-lit exhibition hall in Mumbai. A spotlight shines on a velvet pedestal where a magnificent emerald necklace rests under a glass dome. Elegant Indian attendees in traditional and modern attire. Inspector Rajesh, a stern man with a neatly trimmed mustache, observes from a corner. Priya Sharma, holding a notepad, stands nearby, keenly observing the scene. Consistent Indian faces and environment.",
+              "dialogues": [
+                {
+                  "speaker": "Mr. Anand Verma",
+                  "text": "Behold, the 'Naga Emerald'! A jewel centuries in the making!"
+                },
+                {
+                  "speaker": "Priya",
+                  "text": "(whispering to herself) Another big story for the Mumbai Chronicle."
+                },
+                {
+                  "speaker": "Attendee 1",
+                  "text": "It's breathtaking, Mr. Verma!"
+                },
+                {
+                  "speaker": "Attendee 2",
+                  "text": "Such a rich green, almost mystical."
+                },
+                {
+                  "speaker": "Rajesh",
+                  "text": "(to himself, with a slight frown) Too much attention... always a risk."
+                },
+                {
+                  "speaker": "Priya",
+                  "text": "(looking at Rajesh) Inspector, anything you foresee tonight?"
+                },
+                {
+                  "speaker": "Rajesh",
+                  "text": "(glancing at Priya) Only that some treasures are best kept hidden."
+                }
+              ],
+              "narration": "The humid Mumbai air thrummed with anticipation. Inside the opulent exhibition hall, the city's elite gathered, their gazes fixed on a single, dazzling spectacle: the legendary Naga Emerald. Mr. Anand Verma, the city's revered jeweler, beamed with pride, oblivious to the subtle currents of unease that stirred in the observant mind of Inspector Rajesh. A young journalist, Priya Sharma, felt the familiar thrill of a brewing story, her pen poised for the first inkling of drama."
+            },
+            {
+              "title": "The Vanishing Emerald",
+              "panel": 2,
+              "visual": "The same exhibition hall, now plunged into sudden, complete darkness. Silhouettes of startled attendees. A faint emergency light flickers somewhere in the distance. A hand reaches towards the now-empty pedestal where the emerald once was. Panic is visible on some faces, confusion on others. Maintain consistent Indian faces and environment from previous panel.",
+              "dialogues": [
+                {
+                  "speaker": "Attendee 3",
+                  "text": "What was that?!"
+                },
+                {
+                  "speaker": "Mr. Anand Verma",
+                  "text": "(shouting) The lights! Someone fix the lights!"
+                },
+                {
+                  "speaker": "Rajesh",
+                  "text": "(calmly but firmly) Stay calm, everyone! Nobody move!"
+                },
+                {
+                  "speaker": "Priya",
+                  "text": "The emerald... it's gone!"
+                },
+                {
+                  "speaker": "Attendee 4",
+                  "text": "I heard a soft thud just before it went dark!"
+                },
+                {
+                  "speaker": "Rajesh",
+                  "text": "(to security) Secure all exits! Nobody in, nobody out!."
+                }
+              ],
+              "narration": "A sudden, jarring blackout swallowed the grandeur of the exhibition. Gasps rippled through the crowd as the profound darkness descended, thick and absolute. Panic, a wild beast, clawed at the edges of the elegant gathering. When the emergency lights sputtered back to life, a collective gasp filled the air – the velvet pedestal, moments ago a throne for a king's ransom, stood eerily empty. The Naga Emerald had vanished, swallowed by the brief, terrifying void."
+            },
+            {
+              "title": "The Vanishing Emerald",
+              "panel": 3,
+              "visual": "The exhibition hall, now illuminated by brighter emergency lights and police flashlights. The area around the pedestal is cordoned off with police tape. Inspector Rajesh, with a grim expression, inspects the empty display. Mr. Anand Verma is distraught, being comforted by his daughter, Maya Verma, who appears composed, almost too calm. Priya Sharma observes them keenly, taking notes. Consistent Indian characters and exhibition hall environment.",
+              "dialogues": [
+                {
+                  "speaker": "Mr. Anand Verma",
+                  "text": "(sobbing) My emerald... my family's legacy... gone!"
+                },
+                {
+                  "speaker": "Maya Verma",
+                  "text": "(calmly) Father, please. Inspector Rajesh will find it."
+                },
+                {
+                  "speaker": "Rajesh",
+                  "text": "(to a constable) Any signs of forced entry? Any witnesses?"
+                },
+                {
+                  "speaker": "Constable",
+                  "text": "No forced entry, sir. And no one saw anything clear in the dark."
+                },
+                {
+                  "speaker": "Priya",
+                  "text": "(thinking to herself) Maya seems awfully calm for such a major loss..."
+                },
+                {
+                  "speaker": "Rajesh",
+                  "text": "(turning to Verma) Mr. Verma, who knew the security protocols?"
+                }
+              ],
+              "narration": "The chaos slowly subsided, replaced by the methodical precision of a police investigation. Inspector Rajesh, his face etched with grim determination, surveyed the scene of the crime. The cordoned-off pedestal stood as a stark monument to the audacity of the thief. Mr. Anand Verma’s lament filled the air, a mournful cry for his lost treasure. Yet, amidst the despair, his daughter Maya’s composure struck Priya Sharma as oddly dissonant, a quiet note in a symphony of distress."
+            },
+            {
+              "title": "The Vanishing Emerald",
+              "panel": 4,
+              "visual": "Close-up on Inspector Rajesh, kneeling near the pedestal, carefully examining the floor. His eyes narrow as he spots something small and metallic glinting. He uses tweezers to pick up a tiny, intricately designed silver charm, shaped like a peacock feather. Priya Sharma stands a little distance away, her camera ready, trying to get a good shot of Maya who is talking on her phone, looking away from the scene. Consistent Indian characters and exhibition hall environment.",
+              "dialogues": [
+                {
+                  "speaker": "Rajesh",
+                  "text": "(to himself) What's this...?"
+                },
+                {
+                  "speaker": "Constable",
+                  "text": "(approaching) Find something, sir?"
+                },
+                {
+                  "speaker": "Rajesh",
+                  "text": "(holding up the charm) A small silver charm. Peacock feather. Not standard jewelry. Might be a clue."
+                },
+                {
+                  "speaker": "Priya",
+                  "text": "(observing Maya) She's on the phone again... looking quite agitated now."
+                },
+                {
+                  "speaker": "Maya",
+                  "text": "(into phone, hushed) No, it's not going as planned... I need to fix this."
+                },
+                {
+                  "speaker": "Rajesh",
+                  "text": "(looking at the charm thoughtfully) This design... seems familiar somehow."
+                }
+              ],
+              "narration": "Amidst the shattered calm, a sliver of hope emerged. Inspector Rajesh, with the keen eye of a seasoned detective, discovered a peculiar silver charm near the empty display. Its intricate peacock feather design hinted at a story beyond a simple theft. As the Inspector pondered this new lead, Priya Sharma’s attention was drawn to Maya Verma, who, now away from her father’s sorrow, seemed to be wrestling with a hidden agitation, her hushed phone conversation a tantalizing whisper of secrets."
+            },
+            {
+              "title": "The Vanishing Emerald",
+              "panel": 5,
+              "visual": "Inspector Rajesh and Priya Sharma in a well-furnished, slightly old-fashioned office (Mr. Verma's office). Maya Verma sits opposite Rajesh, her expression a mix of defensiveness and veiled nervousness. Rajesh holds the peacock charm in his hand, looking at Maya intently. Priya is discreetly recording the conversation with a small device. Consistent Indian characters and office environment.",
+              "dialogues": [
+                {
+                  "speaker": "Rajesh",
+                  "text": "(calmly) Ms. Verma, this charm was found near the pedestal. Does it belong to you?"
+                },
+                {
+                  "speaker": "Maya Verma",
+                  "text": "(feigning surprise) A charm? No, Inspector. I've never seen it before."
+                },
+                {
+                  "speaker": "Priya",
+                  "text": "(thinking) Her eyes darted when he showed it. She's lying."
+                },
+                {
+                  "speaker": "Rajesh",
+                  "text": "Are you sure? It's quite unique, a family crest, perhaps?"
+                },
+                {
+                  "speaker": "Maya",
+                  "text": "(nervously) My family crest? That's ridiculous! We don't have one."
+                },
+                {
+                  "speaker": "Rajesh",
+                  "text": "(leans forward slightly) The security cameras were disabled right before the blackout, Ms. Verma. An inside job seems likely."
+                }
+              ],
+              "narration": "The sterile atmosphere of Mr. Verma’s office became a crucible for truth. Inspector Rajesh, his gaze unwavering, pressed Maya Verma about the enigmatic peacock charm. Her denials, though swift, were brittle, betraying a flicker of unease in her otherwise composed demeanor. Priya Sharma, a silent observer, registered the subtle tells of deception, her journalist’s instinct screaming at the veiled secrets. The puzzle pieces, though scattered, were beginning to align, hinting at a truth far closer to home than anyone imagined."
+            },
+            {
+              "title": "The Vanishing Emerald",
+              "panel": 6,
+              "visual": "Inspector Rajesh and Priya Sharma stand before a shocked Mr. Anand Verma and a defeated Maya Verma in the same office. Rajesh holds up a framed old photograph on the wall, depicting a younger Mr. Verma with a woman wearing a similar peacock feather charm. Maya's face is pale with resignation. The emerald necklace is on the table. Consistent Indian characters and office environment, particularly the photo detail.",
+              "dialogues": [
+                {
+                  "speaker": "Rajesh",
+                  "text": "This photo, Mr. Verma. Your mother, wearing a similar charm, right?"
+                },
+                {
+                  "speaker": "Mr. Anand Verma",
+                  "text": "(stunned) My mother's ancestral charm... but how...?"
+                },
+                {
+                  "speaker": "Priya",
+                  "text": "And the phone call, Maya? 'Not going as planned... I need to fix this'?"
+                },
+                {
+                  "speaker": "Maya Verma",
+                  "text": "(voice trembling) It was... a desperate act. Father was in deep debt."
+                },
+                {
+                  "speaker": "Rajesh",
+                  "text": "You planned to sell the Naga Emerald to clear his losses."
+                },
+                {
+                  "speaker": "Maya",
+                  "text": "(tears in her eyes) Yes... a rival bidder for the business... he threatened everything."
+                }
+              ],
+              "narration": "The delicate facade shattered. With a single, poignant photograph, Inspector Rajesh peeled back layers of deceit, revealing a truth born not of greed, but of desperate love. The ancestral charm, a forgotten relic, became the linchpin of the case, linking Maya Verma to the audacious act. Her confession, raw and tearful, laid bare a story of a daughter's desperate attempt to save her father from ruin, caught in the perilous crosscurrents of business rivalry and familial loyalty. The magnificent Naga Emerald, now recovered, lay on the table, a silent witness to the tangled web of human emotions."
+            },
+            {
+              "title": "The Vanishing Emerald",
+              "panel": 7,
+              "visual": "Mr. Anand Verma and Maya Verma, looking relieved but somber, standing together. Mr. Verma has his arm around Maya. Inspector Rajesh and Priya Sharma are walking away from the office, talking. The exhibition hall is being dismantled in the background. A sense of closure and reflection. Consistent Indian characters and environment.",
+              "dialogues": [
+                {
+                  "speaker": "Mr. Anand Verma",
+                  "text": "I understand, my child. We will face this together."
+                },
+                {
+                  "speaker": "Maya Verma",
+                  "text": "(softly) Thank you, Father."
+                },
+                {
+                  "speaker": "Rajesh",
+                  "text": "(to Priya, with a slight smile) Another case closed. And another story for your paper, Ms. Sharma."
+                },
+                {
+                  "speaker": "Priya",
+                  "text": "(smiling back) Indeed, Inspector. The human element always makes the best headlines."
+                },
+                {
+                  "speaker": "Rajesh",
+                  "text": "Sometimes, the biggest crimes are born from the deepest loyalties."
+                },
+                {
+                  "speaker": "Priya",
+                  "text": "A truth I'll definitely remember."
+                }
+              ],
+              "narration": "As the exhibition hall was quietly dismantled, a different kind of rebuilding began. Maya Verma, her secret unveiled, found solace in her father’s understanding, their bond strengthened by the storm they had weathered. Inspector Rajesh, a silent guardian of justice, walked away, another complex puzzle solved, another life touched. And Priya Sharma, the storyteller, carried with her not just a scoop, but a profound understanding of the intricate dance between love, desperation, and the unexpected shadows that lurk within the human heart."
+            }
+          ]
+        }
+      }
+    ],
+    "When clicking ‘Execute workflow’": [
+      {
+        "json": {}
+      }
+    ],
+    "Split Out": [
+      {
+        "json": {
+          "title": "The Vanishing Emerald",
+          "panel": 1,
+          "visual": "A grand, well-lit exhibition hall in Mumbai. A spotlight shines on a velvet pedestal where a magnificent emerald necklace rests under a glass dome. Elegant Indian attendees in traditional and modern attire. Inspector Rajesh, a stern man with a neatly trimmed mustache, observes from a corner. Priya Sharma, holding a notepad, stands nearby, keenly observing the scene. Consistent Indian faces and environment.",
+          "dialogues": [
+            {
+              "speaker": "Mr. Anand Verma",
+              "text": "Behold, the 'Naga Emerald'! A jewel centuries in the making!"
+            },
+            {
+              "speaker": "Priya",
+              "text": "(whispering to herself) Another big story for the Mumbai Chronicle."
+            },
+            {
+              "speaker": "Attendee 1",
+              "text": "It's breathtaking, Mr. Verma!"
+            },
+            {
+              "speaker": "Attendee 2",
+              "text": "Such a rich green, almost mystical."
+            },
+            {
+              "speaker": "Rajesh",
+              "text": "(to himself, with a slight frown) Too much attention... always a risk."
+            },
+            {
+              "speaker": "Priya",
+              "text": "(looking at Rajesh) Inspector, anything you foresee tonight?"
+            },
+            {
+              "speaker": "Rajesh",
+              "text": "(glancing at Priya) Only that some treasures are best kept hidden."
+            }
+          ],
+          "narration": "The humid Mumbai air thrummed with anticipation. Inside the opulent exhibition hall, the city's elite gathered, their gazes fixed on a single, dazzling spectacle: the legendary Naga Emerald. Mr. Anand Verma, the city's revered jeweler, beamed with pride, oblivious to the subtle currents of unease that stirred in the observant mind of Inspector Rajesh. A young journalist, Priya Sharma, felt the familiar thrill of a brewing story, her pen poised for the first inkling of drama."
+        }
+      },
+      {
+        "json": {
+          "title": "The Vanishing Emerald",
+          "panel": 2,
+          "visual": "The same exhibition hall, now plunged into sudden, complete darkness. Silhouettes of startled attendees. A faint emergency light flickers somewhere in the distance. A hand reaches towards the now-empty pedestal where the emerald once was. Panic is visible on some faces, confusion on others. Maintain consistent Indian faces and environment from previous panel.",
+          "dialogues": [
+            {
+              "speaker": "Attendee 3",
+              "text": "What was that?!"
+            },
+            {
+              "speaker": "Mr. Anand Verma",
+              "text": "(shouting) The lights! Someone fix the lights!"
+            },
+            {
+              "speaker": "Rajesh",
+              "text": "(calmly but firmly) Stay calm, everyone! Nobody move!"
+            },
+            {
+              "speaker": "Priya",
+              "text": "The emerald... it's gone!"
+            },
+            {
+              "speaker": "Attendee 4",
+              "text": "I heard a soft thud just before it went dark!"
+            },
+            {
+              "speaker": "Rajesh",
+              "text": "(to security) Secure all exits! Nobody in, nobody out!."
+            }
+          ],
+          "narration": "A sudden, jarring blackout swallowed the grandeur of the exhibition. Gasps rippled through the crowd as the profound darkness descended, thick and absolute. Panic, a wild beast, clawed at the edges of the elegant gathering. When the emergency lights sputtered back to life, a collective gasp filled the air – the velvet pedestal, moments ago a throne for a king's ransom, stood eerily empty. The Naga Emerald had vanished, swallowed by the brief, terrifying void."
+        }
+      },
+      {
+        "json": {
+          "title": "The Vanishing Emerald",
+          "panel": 3,
+          "visual": "The exhibition hall, now illuminated by brighter emergency lights and police flashlights. The area around the pedestal is cordoned off with police tape. Inspector Rajesh, with a grim expression, inspects the empty display. Mr. Anand Verma is distraught, being comforted by his daughter, Maya Verma, who appears composed, almost too calm. Priya Sharma observes them keenly, taking notes. Consistent Indian characters and exhibition hall environment.",
+          "dialogues": [
+            {
+              "speaker": "Mr. Anand Verma",
+              "text": "(sobbing) My emerald... my family's legacy... gone!"
+            },
+            {
+              "speaker": "Maya Verma",
+              "text": "(calmly) Father, please. Inspector Rajesh will find it."
+            },
+            {
+              "speaker": "Rajesh",
+              "text": "(to a constable) Any signs of forced entry? Any witnesses?"
+            },
+            {
+              "speaker": "Constable",
+              "text": "No forced entry, sir. And no one saw anything clear in the dark."
+            },
+            {
+              "speaker": "Priya",
+              "text": "(thinking to herself) Maya seems awfully calm for such a major loss..."
+            },
+            {
+              "speaker": "Rajesh",
+              "text": "(turning to Verma) Mr. Verma, who knew the security protocols?"
+            }
+          ],
+          "narration": "The chaos slowly subsided, replaced by the methodical precision of a police investigation. Inspector Rajesh, his face etched with grim determination, surveyed the scene of the crime. The cordoned-off pedestal stood as a stark monument to the audacity of the thief. Mr. Anand Verma’s lament filled the air, a mournful cry for his lost treasure. Yet, amidst the despair, his daughter Maya’s composure struck Priya Sharma as oddly dissonant, a quiet note in a symphony of distress."
+        }
+      },
+      {
+        "json": {
+          "title": "The Vanishing Emerald",
+          "panel": 4,
+          "visual": "Close-up on Inspector Rajesh, kneeling near the pedestal, carefully examining the floor. His eyes narrow as he spots something small and metallic glinting. He uses tweezers to pick up a tiny, intricately designed silver charm, shaped like a peacock feather. Priya Sharma stands a little distance away, her camera ready, trying to get a good shot of Maya who is talking on her phone, looking away from the scene. Consistent Indian characters and exhibition hall environment.",
+          "dialogues": [
+            {
+              "speaker": "Rajesh",
+              "text": "(to himself) What's this...?"
+            },
+            {
+              "speaker": "Constable",
+              "text": "(approaching) Find something, sir?"
+            },
+            {
+              "speaker": "Rajesh",
+              "text": "(holding up the charm) A small silver charm. Peacock feather. Not standard jewelry. Might be a clue."
+            },
+            {
+              "speaker": "Priya",
+              "text": "(observing Maya) She's on the phone again... looking quite agitated now."
+            },
+            {
+              "speaker": "Maya",
+              "text": "(into phone, hushed) No, it's not going as planned... I need to fix this."
+            },
+            {
+              "speaker": "Rajesh",
+              "text": "(looking at the charm thoughtfully) This design... seems familiar somehow."
+            }
+          ],
+          "narration": "Amidst the shattered calm, a sliver of hope emerged. Inspector Rajesh, with the keen eye of a seasoned detective, discovered a peculiar silver charm near the empty display. Its intricate peacock feather design hinted at a story beyond a simple theft. As the Inspector pondered this new lead, Priya Sharma’s attention was drawn to Maya Verma, who, now away from her father’s sorrow, seemed to be wrestling with a hidden agitation, her hushed phone conversation a tantalizing whisper of secrets."
+        }
+      },
+      {
+        "json": {
+          "title": "The Vanishing Emerald",
+          "panel": 5,
+          "visual": "Inspector Rajesh and Priya Sharma in a well-furnished, slightly old-fashioned office (Mr. Verma's office). Maya Verma sits opposite Rajesh, her expression a mix of defensiveness and veiled nervousness. Rajesh holds the peacock charm in his hand, looking at Maya intently. Priya is discreetly recording the conversation with a small device. Consistent Indian characters and office environment.",
+          "dialogues": [
+            {
+              "speaker": "Rajesh",
+              "text": "(calmly) Ms. Verma, this charm was found near the pedestal. Does it belong to you?"
+            },
+            {
+              "speaker": "Maya Verma",
+              "text": "(feigning surprise) A charm? No, Inspector. I've never seen it before."
+            },
+            {
+              "speaker": "Priya",
+              "text": "(thinking) Her eyes darted when he showed it. She's lying."
+            },
+            {
+              "speaker": "Rajesh",
+              "text": "Are you sure? It's quite unique, a family crest, perhaps?"
+            },
+            {
+              "speaker": "Maya",
+              "text": "(nervously) My family crest? That's ridiculous! We don't have one."
+            },
+            {
+              "speaker": "Rajesh",
+              "text": "(leans forward slightly) The security cameras were disabled right before the blackout, Ms. Verma. An inside job seems likely."
+            }
+          ],
+          "narration": "The sterile atmosphere of Mr. Verma’s office became a crucible for truth. Inspector Rajesh, his gaze unwavering, pressed Maya Verma about the enigmatic peacock charm. Her denials, though swift, were brittle, betraying a flicker of unease in her otherwise composed demeanor. Priya Sharma, a silent observer, registered the subtle tells of deception, her journalist’s instinct screaming at the veiled secrets. The puzzle pieces, though scattered, were beginning to align, hinting at a truth far closer to home than anyone imagined."
+        }
+      },
+      {
+        "json": {
+          "title": "The Vanishing Emerald",
+          "panel": 6,
+          "visual": "Inspector Rajesh and Priya Sharma stand before a shocked Mr. Anand Verma and a defeated Maya Verma in the same office. Rajesh holds up a framed old photograph on the wall, depicting a younger Mr. Verma with a woman wearing a similar peacock feather charm. Maya's face is pale with resignation. The emerald necklace is on the table. Consistent Indian characters and office environment, particularly the photo detail.",
+          "dialogues": [
+            {
+              "speaker": "Rajesh",
+              "text": "This photo, Mr. Verma. Your mother, wearing a similar charm, right?"
+            },
+            {
+              "speaker": "Mr. Anand Verma",
+              "text": "(stunned) My mother's ancestral charm... but how...?"
+            },
+            {
+              "speaker": "Priya",
+              "text": "And the phone call, Maya? 'Not going as planned... I need to fix this'?"
+            },
+            {
+              "speaker": "Maya Verma",
+              "text": "(voice trembling) It was... a desperate act. Father was in deep debt."
+            },
+            {
+              "speaker": "Rajesh",
+              "text": "You planned to sell the Naga Emerald to clear his losses."
+            },
+            {
+              "speaker": "Maya",
+              "text": "(tears in her eyes) Yes... a rival bidder for the business... he threatened everything."
+            }
+          ],
+          "narration": "The delicate facade shattered. With a single, poignant photograph, Inspector Rajesh peeled back layers of deceit, revealing a truth born not of greed, but of desperate love. The ancestral charm, a forgotten relic, became the linchpin of the case, linking Maya Verma to the audacious act. Her confession, raw and tearful, laid bare a story of a daughter's desperate attempt to save her father from ruin, caught in the perilous crosscurrents of business rivalry and familial loyalty. The magnificent Naga Emerald, now recovered, lay on the table, a silent witness to the tangled web of human emotions."
+        }
+      },
+      {
+        "json": {
+          "title": "The Vanishing Emerald",
+          "panel": 7,
+          "visual": "Mr. Anand Verma and Maya Verma, looking relieved but somber, standing together. Mr. Verma has his arm around Maya. Inspector Rajesh and Priya Sharma are walking away from the office, talking. The exhibition hall is being dismantled in the background. A sense of closure and reflection. Consistent Indian characters and environment.",
+          "dialogues": [
+            {
+              "speaker": "Mr. Anand Verma",
+              "text": "I understand, my child. We will face this together."
+            },
+            {
+              "speaker": "Maya Verma",
+              "text": "(softly) Thank you, Father."
+            },
+            {
+              "speaker": "Rajesh",
+              "text": "(to Priya, with a slight smile) Another case closed. And another story for your paper, Ms. Sharma."
+            },
+            {
+              "speaker": "Priya",
+              "text": "(smiling back) Indeed, Inspector. The human element always makes the best headlines."
+            },
+            {
+              "speaker": "Rajesh",
+              "text": "Sometimes, the biggest crimes are born from the deepest loyalties."
+            },
+            {
+              "speaker": "Priya",
+              "text": "A truth I'll definitely remember."
+            }
+          ],
+          "narration": "As the exhibition hall was quietly dismantled, a different kind of rebuilding began. Maya Verma, her secret unveiled, found solace in her father’s understanding, their bond strengthened by the storm they had weathered. Inspector Rajesh, a silent guardian of justice, walked away, another complex puzzle solved, another life touched. And Priya Sharma, the storyteller, carried with her not just a scoop, but a profound understanding of the intricate dance between love, desperation, and the unexpected shadows that lurk within the human heart."
+        }
+      }
+    ],
+    "Download file": [
+      {
+        "json": {
+          "title": "The Vanishing Emerald",
+          "panel": 1,
+          "visual": "A grand, well-lit exhibition hall in Mumbai. A spotlight shines on a velvet pedestal where a magnificent emerald necklace rests under a glass dome. Elegant Indian attendees in traditional and modern attire. Inspector Rajesh, a stern man with a neatly trimmed mustache, observes from a corner. Priya Sharma, holding a notepad, stands nearby, keenly observing the scene. Consistent Indian faces and environment.",
+          "dialogues": [
+            {
+              "speaker": "Mr. Anand Verma",
+              "text": "Behold, the 'Naga Emerald'! A jewel centuries in the making!"
+            },
+            {
+              "speaker": "Priya",
+              "text": "(whispering to herself) Another big story for the Mumbai Chronicle."
+            },
+            {
+              "speaker": "Attendee 1",
+              "text": "It's breathtaking, Mr. Verma!"
+            },
+            {
+              "speaker": "Attendee 2",
+              "text": "Such a rich green, almost mystical."
+            },
+            {
+              "speaker": "Rajesh",
+              "text": "(to himself, with a slight frown) Too much attention... always a risk."
+            },
+            {
+              "speaker": "Priya",
+              "text": "(looking at Rajesh) Inspector, anything you foresee tonight?"
+            },
+            {
+              "speaker": "Rajesh",
+              "text": "(glancing at Priya) Only that some treasures are best kept hidden."
+            }
+          ],
+          "narration": "The humid Mumbai air thrummed with anticipation. Inside the opulent exhibition hall, the city's elite gathered, their gazes fixed on a single, dazzling spectacle: the legendary Naga Emerald. Mr. Anand Verma, the city's revered jeweler, beamed with pride, oblivious to the subtle currents of unease that stirred in the observant mind of Inspector Rajesh. A young journalist, Priya Sharma, felt the familiar thrill of a brewing story, her pen poised for the first inkling of drama."
+        }
+      }
+    ],
+    "Generate an image": [
+      {
+        "json": {
+          "mimeType": "image/png",
+          "fileType": "image",
+          "fileExtension": "png",
+          "fileName": "image.png",
+          "fileSize": "789 kB"
+        }
+      }
+    ],
+    "HTTP Request": [
+      {
+        "json": {
+          "status_code": 200,
+          "success": {
+            "message": "image uploaded",
+            "code": 200
+          },
+          "image": {
+            "name": "image",
+            "extension": "png",
+            "width": 1024,
+            "height": 551,
+            "size": 788575,
+            "time": 1760077011,
+            "expiration": 0,
+            "likes": 0,
+            "description": null,
+            "original_filename": "image.png",
+            "is_animated": 0,
+            "id_encoded": "KwStb44",
+            "size_formatted": "788.6 KB",
+            "filename": "KwStb44.png",
+            "url": "https://iili.io/KwStb44.png",
+            "url_short": "https://freeimage.host/i/KwStb44",
+            "url_seo": "https://freeimage.host/i/image.KwStb44",
+            "url_viewer": "https://freeimage.host/i/KwStb44",
+            "url_viewer_preview": "https://freeimage.host/i/KwStb44",
+            "url_viewer_thumb": "https://freeimage.host/i/KwStb44",
+            "image": {
+              "filename": "KwStb44.png",
+              "name": "KwStb44",
+              "mime": "image/png",
+              "extension": "png",
+              "url": "https://iili.io/KwStb44.png",
+              "size": 788575
+            },
+            "thumb": {
+              "filename": "KwStb44.th.png",
+              "name": "KwStb44.th",
+              "mime": "image/png",
+              "extension": "png",
+              "url": "https://iili.io/KwStb44.th.png"
+            },
+            "medium": {
+              "filename": "KwStb44.md.png",
+              "name": "KwStb44.md",
+              "mime": "image/png",
+              "extension": "png",
+              "url": "https://iili.io/KwStb44.md.png"
+            },
+            "display_url": "https://iili.io/KwStb44.md.png",
+            "display_width": 1024,
+            "display_height": 551,
+            "views_label": "views",
+            "likes_label": "likes",
+            "how_long_ago": "1 second ago",
+            "date_fixed_peer": "2025-10-10 06:16:51",
+            "title": "image",
+            "title_truncated": "image",
+            "title_truncated_html": "image",
+            "is_use_loader": false
+          },
+          "status_txt": "OK"
+        }
+      }
+    ],
+    "Edit Fields": [
+      {
+        "json": {
+          "image": {
+            "url": "https://iili.io/KwStb44.png"
+          },
+          "panel": 1,
+          "visual": "A grand, well-lit exhibition hall in Mumbai. A spotlight shines on a velvet pedestal where a magnificent emerald necklace rests under a glass dome. Elegant Indian attendees in traditional and modern attire. Inspector Rajesh, a stern man with a neatly trimmed mustache, observes from a corner. Priya Sharma, holding a notepad, stands nearby, keenly observing the scene. Consistent Indian faces and environment.",
+          "dialogues": [
+            {
+              "speaker": "Mr. Anand Verma",
+              "text": "Behold, the 'Naga Emerald'! A jewel centuries in the making!"
+            },
+            {
+              "speaker": "Priya",
+              "text": "(whispering to herself) Another big story for the Mumbai Chronicle."
+            },
+            {
+              "speaker": "Attendee 1",
+              "text": "It's breathtaking, Mr. Verma!"
+            },
+            {
+              "speaker": "Attendee 2",
+              "text": "Such a rich green, almost mystical."
+            },
+            {
+              "speaker": "Rajesh",
+              "text": "(to himself, with a slight frown) Too much attention... always a risk."
+            },
+            {
+              "speaker": "Priya",
+              "text": "(looking at Rajesh) Inspector, anything you foresee tonight?"
+            },
+            {
+              "speaker": "Rajesh",
+              "text": "(glancing at Priya) Only that some treasures are best kept hidden."
+            }
+          ],
+          "narration": "The humid Mumbai air thrummed with anticipation. Inside the opulent exhibition hall, the city's elite gathered, their gazes fixed on a single, dazzling spectacle: the legendary Naga Emerald. Mr. Anand Verma, the city's revered jeweler, beamed with pride, oblivious to the subtle currents of unease that stirred in the observant mind of Inspector Rajesh. A young journalist, Priya Sharma, felt the familiar thrill of a brewing story, her pen poised for the first inkling of drama.",
+          "title": "The Vanishing Emerald"
+        }
+      }
+    ],
+    "Aggregate": [
+      {
+        "json": {
+          "data": [
+            {
+              "image": {
+                "url": "https://iili.io/KwStb44.png"
+              },
+              "panel": 1,
+              "visual": "A grand, well-lit exhibition hall in Mumbai. A spotlight shines on a velvet pedestal where a magnificent emerald necklace rests under a glass dome. Elegant Indian attendees in traditional and modern attire. Inspector Rajesh, a stern man with a neatly trimmed mustache, observes from a corner. Priya Sharma, holding a notepad, stands nearby, keenly observing the scene. Consistent Indian faces and environment.",
+              "dialogues": [
+                {
+                  "speaker": "Mr. Anand Verma",
+                  "text": "Behold, the 'Naga Emerald'! A jewel centuries in the making!"
+                },
+                {
+                  "speaker": "Priya",
+                  "text": "(whispering to herself) Another big story for the Mumbai Chronicle."
+                },
+                {
+                  "speaker": "Attendee 1",
+                  "text": "It's breathtaking, Mr. Verma!"
+                },
+                {
+                  "speaker": "Attendee 2",
+                  "text": "Such a rich green, almost mystical."
+                },
+                {
+                  "speaker": "Rajesh",
+                  "text": "(to himself, with a slight frown) Too much attention... always a risk."
+                },
+                {
+                  "speaker": "Priya",
+                  "text": "(looking at Rajesh) Inspector, anything you foresee tonight?"
+                },
+                {
+                  "speaker": "Rajesh",
+                  "text": "(glancing at Priya) Only that some treasures are best kept hidden."
+                }
+              ],
+              "narration": "The humid Mumbai air thrummed with anticipation. Inside the opulent exhibition hall, the city's elite gathered, their gazes fixed on a single, dazzling spectacle: the legendary Naga Emerald. Mr. Anand Verma, the city's revered jeweler, beamed with pride, oblivious to the subtle currents of unease that stirred in the observant mind of Inspector Rajesh. A young journalist, Priya Sharma, felt the familiar thrill of a brewing story, her pen poised for the first inkling of drama.",
+              "title": "The Vanishing Emerald"
+            },
+            {
+              "image": {
+                "url": "https://iili.io/KwSDwF4.png"
+              },
+              "panel": 2,
+              "visual": "The same exhibition hall, now plunged into sudden, complete darkness. Silhouettes of startled attendees. A faint emergency light flickers somewhere in the distance. A hand reaches towards the now-empty pedestal where the emerald once was. Panic is visible on some faces, confusion on others. Maintain consistent Indian faces and environment from previous panel.",
+              "dialogues": [
+                {
+                  "speaker": "Attendee 3",
+                  "text": "What was that?!"
+                },
+                {
+                  "speaker": "Mr. Anand Verma",
+                  "text": "(shouting) The lights! Someone fix the lights!"
+                },
+                {
+                  "speaker": "Rajesh",
+                  "text": "(calmly but firmly) Stay calm, everyone! Nobody move!"
+                },
+                {
+                  "speaker": "Priya",
+                  "text": "The emerald... it's gone!"
+                },
+                {
+                  "speaker": "Attendee 4",
+                  "text": "I heard a soft thud just before it went dark!"
+                },
+                {
+                  "speaker": "Rajesh",
+                  "text": "(to security) Secure all exits! Nobody in, nobody out!."
+                }
+              ],
+              "narration": "A sudden, jarring blackout swallowed the grandeur of the exhibition. Gasps rippled through the crowd as the profound darkness descended, thick and absolute. Panic, a wild beast, clawed at the edges of the elegant gathering. When the emergency lights sputtered back to life, a collective gasp filled the air – the velvet pedestal, moments ago a throne for a king's ransom, stood eerily empty. The Naga Emerald had vanished, swallowed by the brief, terrifying void.",
+              "title": "The Vanishing Emerald"
+            },
+            {
+              "image": {
+                "url": "https://iili.io/KwSbdSp.png"
+              },
+              "panel": 3,
+              "visual": "The exhibition hall, now illuminated by brighter emergency lights and police flashlights. The area around the pedestal is cordoned off with police tape. Inspector Rajesh, with a grim expression, inspects the empty display. Mr. Anand Verma is distraught, being comforted by his daughter, Maya Verma, who appears composed, almost too calm. Priya Sharma observes them keenly, taking notes. Consistent Indian characters and exhibition hall environment.",
+              "dialogues": [
+                {
+                  "speaker": "Mr. Anand Verma",
+                  "text": "(sobbing) My emerald... my family's legacy... gone!"
+                },
+                {
+                  "speaker": "Maya Verma",
+                  "text": "(calmly) Father, please. Inspector Rajesh will find it."
+                },
+                {
+                  "speaker": "Rajesh",
+                  "text": "(to a constable) Any signs of forced entry? Any witnesses?"
+                },
+                {
+                  "speaker": "Constable",
+                  "text": "No forced entry, sir. And no one saw anything clear in the dark."
+                },
+                {
+                  "speaker": "Priya",
+                  "text": "(thinking to herself) Maya seems awfully calm for such a major loss..."
+                },
+                {
+                  "speaker": "Rajesh",
+                  "text": "(turning to Verma) Mr. Verma, who knew the security protocols?"
+                }
+              ],
+              "narration": "The chaos slowly subsided, replaced by the methodical precision of a police investigation. Inspector Rajesh, his face etched with grim determination, surveyed the scene of the crime. The cordoned-off pedestal stood as a stark monument to the audacity of the thief. Mr. Anand Verma’s lament filled the air, a mournful cry for his lost treasure. Yet, amidst the despair, his daughter Maya’s composure struck Priya Sharma as oddly dissonant, a quiet note in a symphony of distress.",
+              "title": "The Vanishing Emerald"
+            },
+            {
+              "image": {
+                "url": "https://iili.io/KwSbMJV.png"
+              },
+              "panel": 4,
+              "visual": "Close-up on Inspector Rajesh, kneeling near the pedestal, carefully examining the floor. His eyes narrow as he spots something small and metallic glinting. He uses tweezers to pick up a tiny, intricately designed silver charm, shaped like a peacock feather. Priya Sharma stands a little distance away, her camera ready, trying to get a good shot of Maya who is talking on her phone, looking away from the scene. Consistent Indian characters and exhibition hall environment.",
+              "dialogues": [
+                {
+                  "speaker": "Rajesh",
+                  "text": "(to himself) What's this...?"
+                },
+                {
+                  "speaker": "Constable",
+                  "text": "(approaching) Find something, sir?"
+                },
+                {
+                  "speaker": "Rajesh",
+                  "text": "(holding up the charm) A small silver charm. Peacock feather. Not standard jewelry. Might be a clue."
+                },
+                {
+                  "speaker": "Priya",
+                  "text": "(observing Maya) She's on the phone again... looking quite agitated now."
+                },
+                {
+                  "speaker": "Maya",
+                  "text": "(into phone, hushed) No, it's not going as planned... I need to fix this."
+                },
+                {
+                  "speaker": "Rajesh",
+                  "text": "(looking at the charm thoughtfully) This design... seems familiar somehow."
+                }
+              ],
+              "narration": "Amidst the shattered calm, a sliver of hope emerged. Inspector Rajesh, with the keen eye of a seasoned detective, discovered a peculiar silver charm near the empty display. Its intricate peacock feather design hinted at a story beyond a simple theft. As the Inspector pondered this new lead, Priya Sharma’s attention was drawn to Maya Verma, who, now away from her father’s sorrow, seemed to be wrestling with a hidden agitation, her hushed phone conversation a tantalizing whisper of secrets.",
+              "title": "The Vanishing Emerald"
+            },
+            {
+              "image": {
+                "url": "https://iili.io/KwSmBkB.png"
+              },
+              "panel": 5,
+              "visual": "Inspector Rajesh and Priya Sharma in a well-furnished, slightly old-fashioned office (Mr. Verma's office). Maya Verma sits opposite Rajesh, her expression a mix of defensiveness and veiled nervousness. Rajesh holds the peacock charm in his hand, looking at Maya intently. Priya is discreetly recording the conversation with a small device. Consistent Indian characters and office environment.",
+              "dialogues": [
+                {
+                  "speaker": "Rajesh",
+                  "text": "(calmly) Ms. Verma, this charm was found near the pedestal. Does it belong to you?"
+                },
+                {
+                  "speaker": "Maya Verma",
+                  "text": "(feigning surprise) A charm? No, Inspector. I've never seen it before."
+                },
+                {
+                  "speaker": "Priya",
+                  "text": "(thinking) Her eyes darted when he showed it. She's lying."
+                },
+                {
+                  "speaker": "Rajesh",
+                  "text": "Are you sure? It's quite unique, a family crest, perhaps?"
+                },
+                {
+                  "speaker": "Maya",
+                  "text": "(nervously) My family crest? That's ridiculous! We don't have one."
+                },
+                {
+                  "speaker": "Rajesh",
+                  "text": "(leans forward slightly) The security cameras were disabled right before the blackout, Ms. Verma. An inside job seems likely."
+                }
+              ],
+              "narration": "The sterile atmosphere of Mr. Verma’s office became a crucible for truth. Inspector Rajesh, his gaze unwavering, pressed Maya Verma about the enigmatic peacock charm. Her denials, though swift, were brittle, betraying a flicker of unease in her otherwise composed demeanor. Priya Sharma, a silent observer, registered the subtle tells of deception, her journalist’s instinct screaming at the veiled secrets. The puzzle pieces, though scattered, were beginning to align, hinting at a truth far closer to home than anyone imagined.",
+              "title": "The Vanishing Emerald"
+            },
+            {
+              "image": {
+                "url": "https://iili.io/KwSmsTP.png"
+              },
+              "panel": 6,
+              "visual": "Inspector Rajesh and Priya Sharma stand before a shocked Mr. Anand Verma and a defeated Maya Verma in the same office. Rajesh holds up a framed old photograph on the wall, depicting a younger Mr. Verma with a woman wearing a similar peacock feather charm. Maya's face is pale with resignation. The emerald necklace is on the table. Consistent Indian characters and office environment, particularly the photo detail.",
+              "dialogues": [
+                {
+                  "speaker": "Rajesh",
+                  "text": "This photo, Mr. Verma. Your mother, wearing a similar charm, right?"
+                },
+                {
+                  "speaker": "Mr. Anand Verma",
+                  "text": "(stunned) My mother's ancestral charm... but how...?"
+                },
+                {
+                  "speaker": "Priya",
+                  "text": "And the phone call, Maya? 'Not going as planned... I need to fix this'?"
+                },
+                {
+                  "speaker": "Maya Verma",
+                  "text": "(voice trembling) It was... a desperate act. Father was in deep debt."
+                },
+                {
+                  "speaker": "Rajesh",
+                  "text": "You planned to sell the Naga Emerald to clear his losses."
+                },
+                {
+                  "speaker": "Maya",
+                  "text": "(tears in her eyes) Yes... a rival bidder for the business... he threatened everything."
+                }
+              ],
+              "narration": "The delicate facade shattered. With a single, poignant photograph, Inspector Rajesh peeled back layers of deceit, revealing a truth born not of greed, but of desperate love. The ancestral charm, a forgotten relic, became the linchpin of the case, linking Maya Verma to the audacious act. Her confession, raw and tearful, laid bare a story of a daughter's desperate attempt to save her father from ruin, caught in the perilous crosscurrents of business rivalry and familial loyalty. The magnificent Naga Emerald, now recovered, lay on the table, a silent witness to the tangled web of human emotions.",
+              "title": "The Vanishing Emerald"
+            },
+            {
+              "image": {
+                "url": "https://iili.io/KwSpWoF.png"
+              },
+              "panel": 7,
+              "visual": "Mr. Anand Verma and Maya Verma, looking relieved but somber, standing together. Mr. Verma has his arm around Maya. Inspector Rajesh and Priya Sharma are walking away from the office, talking. The exhibition hall is being dismantled in the background. A sense of closure and reflection. Consistent Indian characters and environment.",
+              "dialogues": [
+                {
+                  "speaker": "Mr. Anand Verma",
+                  "text": "I understand, my child. We will face this together."
+                },
+                {
+                  "speaker": "Maya Verma",
+                  "text": "(softly) Thank you, Father."
+                },
+                {
+                  "speaker": "Rajesh",
+                  "text": "(to Priya, with a slight smile) Another case closed. And another story for your paper, Ms. Sharma."
+                },
+                {
+                  "speaker": "Priya",
+                  "text": "(smiling back) Indeed, Inspector. The human element always makes the best headlines."
+                },
+                {
+                  "speaker": "Rajesh",
+                  "text": "Sometimes, the biggest crimes are born from the deepest loyalties."
+                },
+                {
+                  "speaker": "Priya",
+                  "text": "A truth I'll definitely remember."
+                }
+              ],
+              "narration": "As the exhibition hall was quietly dismantled, a different kind of rebuilding began. Maya Verma, her secret unveiled, found solace in her father’s understanding, their bond strengthened by the storm they had weathered. Inspector Rajesh, a silent guardian of justice, walked away, another complex puzzle solved, another life touched. And Priya Sharma, the storyteller, carried with her not just a scoop, but a profound understanding of the intricate dance between love, desperation, and the unexpected shadows that lurk within the human heart.",
+              "title": "The Vanishing Emerald"
+            }
+          ]
+        }
+      }
+    ],
+    "Update file": [
+      {
+        "json": {
+          "kind": "drive#file",
+          "id": "1zjjX2VqsRNrX2LxPMbKDfX3moyll7LV5",
+          "name": "image",
+          "mimeType": "image/png"
+        }
+      }
+    ],
+    "No Operation, do nothing": [
+      {
+        "json": {
+          "kind": "drive#file",
+          "id": "1zjjX2VqsRNrX2LxPMbKDfX3moyll7LV5",
+          "name": "image",
+          "mimeType": "image/png"
+        }
+      }
+    ],
+    "Code": [
+      {
+        "json": {
+          "title": "Panel Verse | The Vanishing Emerald",
+          "html": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>The Vanishing Emerald | Panel Verse</title>\n  <style>\n    /* Base Styles */\n    body {\n      font-family: 'Arial', sans-serif;\n      background-color: #121212 !important;\n      color: #eeeeee !important;\n      margin: 0;\n      padding: 20px;\n    }\n    header {\n      text-align: center;\n      margin-bottom: 30px;\n      padding: 0 10px;\n    }\n    header h1 {\n      margin: 0;\n      font-size: 2.5em;\n      color: #ff5bd1 !important;\n    }\n    header p {\n      margin: 5px 0;\n      font-style: italic;\n      color: #7afcff !important;\n      font-size: 1em;\n    }\n    .panel {\n      position: relative;\n      background: #1e1e1e !important;\n      border-radius: 12px;\n      box-shadow: 0 4px 15px rgba(0,0,0,0.5);\n      max-width: 600px;\n      width: 100%;\n      margin: 0 auto 40px auto;\n      padding: 20px;\n      overflow: hidden;\n      box-sizing: border-box;\n      color: #eeeeee !important;\n    }\n    .panel img {\n      width: 100%;\n      height: auto;\n      border-radius: 12px;\n      margin-bottom: 15px;\n      display: block;\n    }\n    .watermark {\n      position: absolute;\n      bottom: 10px;\n      right: 10px;\n      font-size: 0.9em;\n      color: rgba(255,255,255,0.6) !important;\n      background: rgba(0,0,0,0.5) !important;\n      padding: 2px 6px;\n      border-radius: 4px;\n      pointer-events: none;\n    }\n    .panel p {\n      margin: 5px 0;\n      line-height: 1.5;\n      word-wrap: break-word;\n      color: #eeeeee !important;\n    }\n    .panel em {\n      color: #bbbbbb !important;\n    }\n    .panel strong {\n      color: #ffffff !important;\n    }\n    footer {\n      text-align: center;\n      margin-top: 50px;\n      font-size: 0.9em;\n      color: #bbbbbb !important;\n      line-height: 1.5;\n      padding: 0 10px;\n    }\n    footer a {\n      color: #7afcff !important;\n      text-decoration: none;\n    }\n\n    /* Responsive Media Queries */\n    @media (max-width: 768px) {\n      header h1 {\n        font-size: 2em;\n      }\n      header p {\n        font-size: 0.95em;\n      }\n      .panel {\n        padding: 15px;\n        margin-bottom: 30px;\n      }\n    }\n\n    @media (max-width: 480px) {\n      header h1 {\n        font-size: 1.6em;\n      }\n      header p {\n        font-size: 0.9em;\n      }\n      .panel {\n        padding: 12px;\n        margin-bottom: 25px;\n      }\n      .watermark {\n        font-size: 0.8em;\n        padding: 1px 4px;\n      }\n    }\n  </style>\n</head>\n<body>\n\n  <header>\n    <h1>Panel Verse</h1>\n    <p>Come And Enjoy Stories Prepared Fresh With Human Effort And AI</p>\n  </header>\n\n  \n    <div class=\"panel\">\n      <img src=\"https://iili.io/KwStb44.png\" alt=\"Panel 1\">\n      <div class=\"watermark\">Panel Verse</div>\n      <p><em>The humid Mumbai air thrummed with anticipation. Inside the opulent exhibition hall, the city's elite gathered, their gazes fixed on a single, dazzling spectacle: the legendary Naga Emerald. Mr. Anand Verma, the city's revered jeweler, beamed with pride, oblivious to the subtle currents of unease that stirred in the observant mind of Inspector Rajesh. A young journalist, Priya Sharma, felt the familiar thrill of a brewing story, her pen poised for the first inkling of drama.</em></p>\n      <p><strong>Mr. Anand Verma:</strong> Behold, the 'Naga Emerald'! A jewel centuries in the making!</p><p><strong>Priya:</strong> (whispering to herself) Another big story for the Mumbai Chronicle.</p><p><strong>Attendee 1:</strong> It's breathtaking, Mr. Verma!</p><p><strong>Attendee 2:</strong> Such a rich green, almost mystical.</p><p><strong>Rajesh:</strong> (to himself, with a slight frown) Too much attention... always a risk.</p><p><strong>Priya:</strong> (looking at Rajesh) Inspector, anything you foresee tonight?</p><p><strong>Rajesh:</strong> (glancing at Priya) Only that some treasures are best kept hidden.</p>\n    </div>\n  \n    <div class=\"panel\">\n      <img src=\"https://iili.io/KwSDwF4.png\" alt=\"Panel 2\">\n      <div class=\"watermark\">Panel Verse</div>\n      <p><em>A sudden, jarring blackout swallowed the grandeur of the exhibition. Gasps rippled through the crowd as the profound darkness descended, thick and absolute. Panic, a wild beast, clawed at the edges of the elegant gathering. When the emergency lights sputtered back to life, a collective gasp filled the air – the velvet pedestal, moments ago a throne for a king's ransom, stood eerily empty. The Naga Emerald had vanished, swallowed by the brief, terrifying void.</em></p>\n      <p><strong>Attendee 3:</strong> What was that?!</p><p><strong>Mr. Anand Verma:</strong> (shouting) The lights! Someone fix the lights!</p><p><strong>Rajesh:</strong> (calmly but firmly) Stay calm, everyone! Nobody move!</p><p><strong>Priya:</strong> The emerald... it's gone!</p><p><strong>Attendee 4:</strong> I heard a soft thud just before it went dark!</p><p><strong>Rajesh:</strong> (to security) Secure all exits! Nobody in, nobody out!.</p>\n    </div>\n  \n    <div class=\"panel\">\n      <img src=\"https://iili.io/KwSbdSp.png\" alt=\"Panel 3\">\n      <div class=\"watermark\">Panel Verse</div>\n      <p><em>The chaos slowly subsided, replaced by the methodical precision of a police investigation. Inspector Rajesh, his face etched with grim determination, surveyed the scene of the crime. The cordoned-off pedestal stood as a stark monument to the audacity of the thief. Mr. Anand Verma’s lament filled the air, a mournful cry for his lost treasure. Yet, amidst the despair, his daughter Maya’s composure struck Priya Sharma as oddly dissonant, a quiet note in a symphony of distress.</em></p>\n      <p><strong>Mr. Anand Verma:</strong> (sobbing) My emerald... my family's legacy... gone!</p><p><strong>Maya Verma:</strong> (calmly) Father, please. Inspector Rajesh will find it.</p><p><strong>Rajesh:</strong> (to a constable) Any signs of forced entry? Any witnesses?</p><p><strong>Constable:</strong> No forced entry, sir. And no one saw anything clear in the dark.</p><p><strong>Priya:</strong> (thinking to herself) Maya seems awfully calm for such a major loss...</p><p><strong>Rajesh:</strong> (turning to Verma) Mr. Verma, who knew the security protocols?</p>\n    </div>\n  \n    <div class=\"panel\">\n      <img src=\"https://iili.io/KwSbMJV.png\" alt=\"Panel 4\">\n      <div class=\"watermark\">Panel Verse</div>\n      <p><em>Amidst the shattered calm, a sliver of hope emerged. Inspector Rajesh, with the keen eye of a seasoned detective, discovered a peculiar silver charm near the empty display. Its intricate peacock feather design hinted at a story beyond a simple theft. As the Inspector pondered this new lead, Priya Sharma’s attention was drawn to Maya Verma, who, now away from her father’s sorrow, seemed to be wrestling with a hidden agitation, her hushed phone conversation a tantalizing whisper of secrets.</em></p>\n      <p><strong>Rajesh:</strong> (to himself) What's this...?</p><p><strong>Constable:</strong> (approaching) Find something, sir?</p><p><strong>Rajesh:</strong> (holding up the charm) A small silver charm. Peacock feather. Not standard jewelry. Might be a clue.</p><p><strong>Priya:</strong> (observing Maya) She's on the phone again... looking quite agitated now.</p><p><strong>Maya:</strong> (into phone, hushed) No, it's not going as planned... I need to fix this.</p><p><strong>Rajesh:</strong> (looking at the charm thoughtfully) This design... seems familiar somehow.</p>\n    </div>\n  \n    <div class=\"panel\">\n      <img src=\"https://iili.io/KwSmBkB.png\" alt=\"Panel 5\">\n      <div class=\"watermark\">Panel Verse</div>\n      <p><em>The sterile atmosphere of Mr. Verma’s office became a crucible for truth. Inspector Rajesh, his gaze unwavering, pressed Maya Verma about the enigmatic peacock charm. Her denials, though swift, were brittle, betraying a flicker of unease in her otherwise composed demeanor. Priya Sharma, a silent observer, registered the subtle tells of deception, her journalist’s instinct screaming at the veiled secrets. The puzzle pieces, though scattered, were beginning to align, hinting at a truth far closer to home than anyone imagined.</em></p>\n      <p><strong>Rajesh:</strong> (calmly) Ms. Verma, this charm was found near the pedestal. Does it belong to you?</p><p><strong>Maya Verma:</strong> (feigning surprise) A charm? No, Inspector. I've never seen it before.</p><p><strong>Priya:</strong> (thinking) Her eyes darted when he showed it. She's lying.</p><p><strong>Rajesh:</strong> Are you sure? It's quite unique, a family crest, perhaps?</p><p><strong>Maya:</strong> (nervously) My family crest? That's ridiculous! We don't have one.</p><p><strong>Rajesh:</strong> (leans forward slightly) The security cameras were disabled right before the blackout, Ms. Verma. An inside job seems likely.</p>\n    </div>\n  \n    <div class=\"panel\">\n      <img src=\"https://iili.io/KwSmsTP.png\" alt=\"Panel 6\">\n      <div class=\"watermark\">Panel Verse</div>\n      <p><em>The delicate facade shattered. With a single, poignant photograph, Inspector Rajesh peeled back layers of deceit, revealing a truth born not of greed, but of desperate love. The ancestral charm, a forgotten relic, became the linchpin of the case, linking Maya Verma to the audacious act. Her confession, raw and tearful, laid bare a story of a daughter's desperate attempt to save her father from ruin, caught in the perilous crosscurrents of business rivalry and familial loyalty. The magnificent Naga Emerald, now recovered, lay on the table, a silent witness to the tangled web of human emotions.</em></p>\n      <p><strong>Rajesh:</strong> This photo, Mr. Verma. Your mother, wearing a similar charm, right?</p><p><strong>Mr. Anand Verma:</strong> (stunned) My mother's ancestral charm... but how...?</p><p><strong>Priya:</strong> And the phone call, Maya? 'Not going as planned... I need to fix this'?</p><p><strong>Maya Verma:</strong> (voice trembling) It was... a desperate act. Father was in deep debt.</p><p><strong>Rajesh:</strong> You planned to sell the Naga Emerald to clear his losses.</p><p><strong>Maya:</strong> (tears in her eyes) Yes... a rival bidder for the business... he threatened everything.</p>\n    </div>\n  \n    <div class=\"panel\">\n      <img src=\"https://iili.io/KwSpWoF.png\" alt=\"Panel 7\">\n      <div class=\"watermark\">Panel Verse</div>\n      <p><em>As the exhibition hall was quietly dismantled, a different kind of rebuilding began. Maya Verma, her secret unveiled, found solace in her father’s understanding, their bond strengthened by the storm they had weathered. Inspector Rajesh, a silent guardian of justice, walked away, another complex puzzle solved, another life touched. And Priya Sharma, the storyteller, carried with her not just a scoop, but a profound understanding of the intricate dance between love, desperation, and the unexpected shadows that lurk within the human heart.</em></p>\n      <p><strong>Mr. Anand Verma:</strong> I understand, my child. We will face this together.</p><p><strong>Maya Verma:</strong> (softly) Thank you, Father.</p><p><strong>Rajesh:</strong> (to Priya, with a slight smile) Another case closed. And another story for your paper, Ms. Sharma.</p><p><strong>Priya:</strong> (smiling back) Indeed, Inspector. The human element always makes the best headlines.</p><p><strong>Rajesh:</strong> Sometimes, the biggest crimes are born from the deepest loyalties.</p><p><strong>Priya:</strong> A truth I'll definitely remember.</p>\n    </div>\n  \n\n  <footer>\n    <p>Created by Rounak Dutta (running solo)</p>\n    <p>For collaborations, company versions, or automations: <a href=\"mailto:rounak153d@gmail.com\">rounak153d@gmail.com</a> | +91-9815121578</p>\n  </footer>\n\n</body>\n</html>"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Download file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download file": {
+      "main": [
+        [
+          {
+            "node": "Generate an image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate an image": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Update file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "HTML",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update file": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser1": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "Split Out1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out1": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "6e31669d-4ade-484a-ac68-7c5ae41167f1",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "30e8840a5d55d1e1b6af4c778e833f7fe652325f38939676863a8cb542d69c34"
+  },
+  "id": "3RWAk7x9Ow7Gsnvu",
+  "tags": []
+}
