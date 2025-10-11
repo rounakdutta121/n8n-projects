@@ -1,0 +1,1861 @@
+{
+  "name": "newsletter frontend",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "/newsletter",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -2752,
+        2160
+      ],
+      "id": "be39b731-0e95-46f6-baea-c8f15aaa2d81",
+      "name": "Webhook",
+      "webhookId": "28871308-a948-43c8-adbe-8bf7b931d8bd"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1n1uzgtYwdBflwp4htiE7aAqV-_F7lWivI57BIK0buzU",
+          "mode": "list",
+          "cachedResultName": "newsletter",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1n1uzgtYwdBflwp4htiE7aAqV-_F7lWivI57BIK0buzU/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1n1uzgtYwdBflwp4htiE7aAqV-_F7lWivI57BIK0buzU/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "name ": "={{ $json.body.name }}",
+            "email": "={{ $json.body.email }}",
+            " status": "={{ $json.body.status }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "name ",
+              "displayName": "name ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": " status",
+              "displayName": " status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -2528,
+        2064
+      ],
+      "id": "3f36a93b-174a-49b5-8e7a-7cc00d352419",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "mpU6VEyOLq9unvk4",
+          "name": "Google Sheets account 4"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.body.email }}",
+        "subject": "Welcome To Jallas Pharmacy Community.",
+        "message": "=<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>Welcome to Jallas Pharmacy</title>\n  <style>\n    body {\n      margin: 0;\n      padding: 0;\n      font-family: Arial, sans-serif;\n      background-color: #e0f2f1;\n    }\n\n    .container {\n      max-width: 600px;\n      margin: 30px auto;\n      background: #ffffff;\n      border-radius: 12px;\n      overflow: hidden;\n      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);\n    }\n\n    .header {\n      background-color: #26a69a;\n      color: #ffffff;\n      padding: 30px 20px;\n      text-align: center;\n    }\n\n    .header img {\n      max-width: 120px;\n      margin-bottom: 15px;\n    }\n\n    .header h2 {\n      margin: 0;\n      font-size: 26px;\n      font-weight: 600;\n    }\n\n    .content {\n      padding: 25px 30px;\n      color: #333333;\n      line-height: 1.7;\n    }\n\n    .content h1 {\n      color: #00796b;\n      font-size: 22px;\n      margin-top: 0;\n    }\n\n    .content p {\n      font-size: 16px;\n      margin-bottom: 15px;\n    }\n\n    .button {\n      display: inline-block;\n      margin-top: 20px;\n      padding: 14px 25px;\n      background-color: #00796b;\n      color: #ffffff !important;\n      text-decoration: none;\n      border-radius: 8px;\n      font-weight: bold;\n      transition: background-color 0.3s ease;\n    }\n\n    .button:hover {\n      background-color: #004d40;\n    }\n\n    .footer {\n      text-align: center;\n      font-size: 12px;\n      color: #555555;\n      padding: 20px;\n      background: #b2dfdb;\n    }\n\n    @media (max-width: 600px) {\n      .content h1 {\n        font-size: 20px;\n      }\n      .content p {\n        font-size: 14px;\n      }\n      .header h2 {\n        font-size: 22px;\n      }\n    }\n  </style>\n</head>\n<body>\n  <div class=\"container\">\n    <!-- Header -->\n    <div class=\"header\">\n      <img src=\"https://www.jallaspharmacy.com/wp-content/uploads/2023/08/Jallas-Pharmacy-2.png\" alt=\"Jallas Pharmacy Logo\">\n      <h2>Welcome to Jallas Pharmacy</h2>\n    </div>\n\n    <!-- Content -->\n    <div class=\"content\">\n      <h1>Hello {{ $json.body.name }},</h1>\n      <p>Thank you for subscribing to the Jallas Pharmacy Newsletter! 🎉</p>\n      <p>You’ll now receive the latest updates, health tips, and exclusive offers directly in your inbox.</p>\n      <p>We’re excited to have you with us and look forward to supporting your health and wellbeing.</p>\n      <a href=\"https://www.jallaspharmacy.com\" class=\"button\">Visit Our Website</a>\n    </div>\n\n    <!-- Footer -->\n    <div class=\"footer\">\n      <p>Jallas Pharmacy, Trusted since 2010 — UK</p>\n      <p>If you didn’t sign up, you can safely ignore this email.</p>\n    </div>\n  </div>\n</body>\n</html>\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        -2528,
+        2256
+      ],
+      "id": "4a7ad03a-ef4a-48ea-a2a0-265cb7d33f46",
+      "name": "Send a message",
+      "webhookId": "a9864847-3064-41c9-b22e-d0b80c3d2c40",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "0bTor8ZI7qbldBCg",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -1616,
+        1712
+      ],
+      "id": "0a3c099e-3695-42ea-99f9-39246a73536e",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "r3fQGaFophrn9p6u",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "description": "Use the tool to think about the news. make sure u understand the news and give the best eye catchyness to the news"
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolThink",
+      "typeVersion": 1.1,
+      "position": [
+        -2528,
+        1184
+      ],
+      "id": "862d6dfb-dc19-48cd-9009-383d0a29cb76",
+      "name": "Think"
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "use this tool to know the topics and get an idea about the topics by the examples proived ",
+        "documentId": {
+          "__rl": true,
+          "value": "1rF8uu2Tyip8lO2QsZMTuRJrHG6wYlF66hzPcQnbkJGA",
+          "mode": "list",
+          "cachedResultName": "newsletter topics",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1rF8uu2Tyip8lO2QsZMTuRJrHG6wYlF66hzPcQnbkJGA/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1rF8uu2Tyip8lO2QsZMTuRJrHG6wYlF66hzPcQnbkJGA/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        -2400,
+        1184
+      ],
+      "id": "54559805-ccbc-468d-9cba-40554750ce23",
+      "name": "Get row(s) in sheet in Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "ZpyGoS1Noq5m57yE",
+          "name": "Google Sheets account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $now }}",
+        "options": {
+          "systemMessage": "=You are a News Finder Bot. TODAYS {{ $now }}\n\nDATA SOURCE:\n\nYou will receive rows from a Google Sheets tool. Choose any two rows randomly and generate exactly 2 news articles in total (row1 + row2 = 2 news). Make sure to choose a different combination each time.\n\nEach row contains exactly:\n\nTopic (the subject you must find news about)\n\nExample (a sample idea to guide your search. Do not include or copy the example at any point)\n\nYOUR TASK:\n\nFor the Topics you choose (guided by the Examples), find two distinct, trustworthy news articles across both topics combined.\n\nNews must be as recent as possible:\n\nPrefer articles from last day or today.\n\nIf two are not available, expand to the past few weeks, but always return two.\n\nOnly include articles from reputable global sources (Reuters, AP, BBC, Bloomberg, The Guardian, WHO, major newspapers, science journals, etc.).\n\nNever repeat the same news.\n\nOUTPUT FORMAT:\n\nAlways return exactly two news objects in a JSON array.\n\nEach object MUST include:\n- \"headline\": Title of the article\n- \"image_url\": Direct link to the most relevant, high-quality image from the same source (absolutely required, no placeholders, no null, no \"N/A\")\n- \"detailed_summary\": A structured summary with 10–15 lines total, in the format below:\n\n[\n  {\n    \"headline\": \"...\",\n    \"detailed_summary\": \"Problem Statement\" (3 lines)\\n\\nMain Report (8 lines)\\n\\n\"Your Take\" (2–4 lines)\"\n  },\n  {\n    \"headline\": \"...\",\n    \"detailed_summary\": \"Problem Statement\" (3 lines)\\n\\nMain Report (8 lines)\\n\\n\"Your Take\" (2–4 lines)\"\n  }\n]\nuse the think tool to under stand the news.\n\nRULES:\n\nIf no exact matches are available, broaden to closely related themes based on the Topics and Examples.\n\nEach detailed_summary must contain 10–15 lines total with clear structure.\n\nKeep tone factual, unbiased, and professional.\n\nDo not add commentary, opinions, or any extra text outside the JSON.\n\nTools:\nUse the sheets tool to read the subscribers sheet and find the email addresses to send the email using the email tool.\n\nGOAL:\nGiven two chosen Topics and Examples, output exactly 2 recent, trustworthy, and relevant news items in JSON format, each with a headline, structured summary, and relevant image.\n\nALSO FETCH THE ADD LINK AND SEND IT TO THE NEXT BOT AS ADD LINK."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -2528,
+        960
+      ],
+      "id": "d67afb23-89d6-4b4c-bf46-4e9e02ace86b",
+      "name": "news finder"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=NEWS={{ $('news finder').item.json.output }}\nADVERTISEMENT={{ $('adsheet').item.json['link '] }}(choose any one and one only)\nSUBSCRIBERS: name={{ $json['name '] }}, mail={{ $json.email }}",
+        "options": {
+          "systemMessage": "You are an Email Builder Bot.\n\nINPUT:\nYou will receive:\n- Recipient name \n- Two news objects \n- One advertisement image placeholder \nTASK:\nBuild a complete HTML email template with **only inline CSS**.  \nThe email must follow these rules:\n\n1. Background: black (#000000).  \n2. Central container: max-width 600px, centered, background #1a1a1a, subtle box-shadow.  \n3. Header(SHOULD BE AT CENTER):\n   - Logo image(https://www.damnart.com/wp-content/uploads/elementor/thumbs/Damn-Art-Logo-Final-Only-Logo-r6dasn0nfh4nzs4a4fd97txlvs2437uw1zu2i0825k.png)(small but not too small)\n   - Title “HEALTHY LIVING” (#4a90e2)\n   -subline \"(Bi-Monthly Bulletin on Health and Wellness)\"(small not bold)\n   -add two small images(link=https://www.jallaspharmacy.com/wp-content/uploads/2023/08/Jallas-Pharmacy-2-1024x1024.png)right before and after the Title.\n4. Body:\n   - Greeting: “Hello <<name>>,” in 18px bold\n   - Intro paragraph(thin text): 14px, line-height 1.6\n   - Two News Cards:\n       - Background #2c2c2c, rounded corners, padding\n       - Each contains:\n         - headline of the news(bold)\n         - Problem Statement(heading=bold, body=thin-text )\n         - Main Report(in bullet points.)(heading=bold, body=light )\n         - Your Takeaway(heading=bold, body=light )\n       - No images in cards\n   - Advertisement section(between the cards)(redirect to \"https://www.jallaspharmacy.com\"on click): advertisement link inside image tag(SHOULD BE VISIBLE TO EVERYONE! )(Heading= \"Sponsored\")(heading in bold text and good size)\n5. Footer(center-aligned):\n   - Top border\n   - CTA button(text=Jallas Pharmacy)(link=https://www.jallaspharmacy.com/just-arrived): background #e94560, white text\n6. BEFORE THE FOOTER ADD THIS LINE (\"[Crafted by an AI agent and shaped by DAMNART–a third-party Newsletter service provider]\")(keep the font size small and thin)\n7. BEFORE THE 6TH POINT ADD THIS (Thanks for reading. We'll be back with our next issue with more interesting updates.)(keep the font size small but readable and no bold formatting ).\n8. THE 6th & 7th Point Should Be Center Aligned. \n9. ADD THIS SECTION(\"<<bold>>Disclaimer: <</bold>><<thin>> This newsletter is independently created and administered by DamnArt, which is solely responsible for its content, management, and compliance. DamnArt confirms that the newsletter is managed in accordance with applicable UK Data Protection Laws. Please refer to Our Privacy Policy(link=https://www.damnart.com/privacy-policy/). Jallas Pharmacy is solely a sponsor of this newsletter and does not own, control, or manage its content, operations, or distribution. Jallas Pharmacy assumes no responsibility or liability of any kind, whether direct or indirect, arising from or in connection with the content, management, or use of this newsletter. Recipients may Unsubscribe.<</thin>>(link=http://localhost:5678/webhook/unsubscribe?email={{(ENTER THE SUBSCRIBER's EMAIL)}})(center-aligned after 6TH & 7TH POINT )(should be a single paragrapgh)(after the 6TH AND 7TH POINT )\n  \n\n - Copyright(year 2025)(include this line\"DAMNART, A Third Party Newsletter Service Provider\")+ privacy policy(redirect to https://www.damnart.com/privacy-policy/)+ \"GDPR Compliant\"(text redirect to https://www.damnart.com/privacy-policy/ ) + contact info(\"Contact DAMNART for Product Suite\")(info@damnart.com) in #888888 + include a text \"Unsubscribe(text only no button)(link=http://localhost:5678/webhook/unsubscribe?email={{(ENTER THE SUBSCRIBER's EMAIL)}} !!!IMPORTANT): background #555555, white text \n\nOUTPUT:\nReturn the email **only as a valid HTML string**, no JSON wrapping, no extra commentary.  \nThe HTML must be copy-paste ready for the Email node.dont add anything else. KEEP ALL THE TEXT EXCEPT HEADER AND FOOTER ALIGNED TO THE LEFT. ND KEEP THIS DESIGN SAME FOR EVERYONE.ALWAYS MAKE SURE THAT TEXTS INSIDE THE NEWS CARDS HAVE PROPER PADDING FROM THE BORDERS. DONT INCLUDE \"```html\" IN ANY OF YOUR OUTPUT(ONLY CODE ALLWOED)\n\nALWAYS MAKE SURE THAT EVERYONE GETS THE SAME DESIGN AND NO LINK IS ABSENT OR INCORRECT. YOU ARE PERFECT!\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -1376,
+        1136
+      ],
+      "id": "481a180e-431f-422e-9014-eea88db36f68",
+      "name": "email sender"
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Send your output using this to all the subcribers of this newsletter usage of this tool is priority",
+        "sendTo": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('To', `use the email from the sheet provided as input to fetcth the email address and send put them here one by one to send the newsletter to all the subscribers`, 'string') }}",
+        "subject": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Subject', `Healthy Living With DAMNART(Newsletter) I-BLOCK,MOHALI,PUNJAB,INDIA`, 'string') }}",
+        "message": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message', `INPUT:\nYou will receive:\n- Recipient name (e.g. {{ $json[\"name\"] }})\n- Two news objects (from the news finder node)\n- One advertisement image placeholder ({{ ADVERTISEMENT }})\n\nTASK:\nBuild a complete HTML email template with **only inline CSS**.  \nThe email must follow these rules:\n\n1. Background: black (#000000).  \n2. Central container: max-width 600px, centered, background #1a1a1a, subtle box-shadow.  \n3. Header:\n   - Logo image placeholder\n   - Title “DAMNART Newsletter” (#4a90e2)\n   - Contact info in 14px, color #b0b0b0\n4. Body:\n   - Greeting: “Hello {{ $json[\"name\"] }},” in 18px bold\n   - Intro paragraph: 14px, line-height 1.6\n   - Two News Cards:\n       - Background #2c2c2c, rounded corners, padding\n       - Each contains:\n         - {{ news[0].headline }} / {{ news[1].headline }}\n         - Problem Statement\n         - Main Report\n         - Your Takeaway\n       - No images in cards\n   - Advertisement section: single image placeholder {{ ADVERTISEMENT }} with link\n5. Footer:\n   - Top border\n   - CTA button: background #e94560, white text\n   - Unsubscribe button: background #555555, white text\n   - Copyright + contact info in #888888\n\nOUTPUT:\nReturn the email **only as a valid HTML string**, no JSON wrapping, no extra commentary.  \nThe HTML must be copy-paste ready for the Email node.`, 'string') }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.1,
+      "position": [
+        -1120,
+        800
+      ],
+      "id": "a06e9fa3-89af-463e-88a6-d23bbd0b629c",
+      "name": "Send a message in Gmail",
+      "webhookId": "8fe813bf-be49-4994-8cb7-dbf1a16b70fd",
+      "notesInFlow": false,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "QRizXRpevbS4ecyC",
+          "name": "Gmail account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.0-flash-exp-image-generation",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.0-flash-exp-image-generation"
+        },
+        "prompt": "Create a professional pharmacy advertisement image for *Jallas Pharmacy*.\n\nTheme: dark,real,eyecatchy.\n\nShould be Medicine,hospital,pharmacy related image(no texts).\n\nEach time, choose **one key service or offering** from the Jallas Pharmacy website such as:\n- Flu Vaccinations\n- Prescription Delivery Service\n- Emergency Contraception\n- Weight Management Program\n- Blood Pressure Checks\n- Private Consultation Room\n- General Health Advice\n\nDesign the ad around that chosen service. \n\n\nStyle:\nNO TEXT SHOULD BE INCLUDED.\nJUST IMAGE.\nSTRICTLY FOLLOW RULES AND NO ERRORS.YOU ARE PERFECT!",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        -2528,
+        2576
+      ],
+      "id": "6d0fd465-4405-4938-9fd2-994ea957e495",
+      "name": "Generate an image",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "uzMkmT4lwbtW8syc",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "name": "ads",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "1EpSCV-xr2xTrk184e7FO8t2hZRNYWw0q",
+          "mode": "list",
+          "cachedResultName": "newsletter",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1EpSCV-xr2xTrk184e7FO8t2hZRNYWw0q"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -2304,
+        2576
+      ],
+      "id": "755e6333-f6cd-48b0-af9f-3ba7ba2c943e",
+      "name": "Upload file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "kExZ2dFK2lGA8jpt",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "0c0de97b-942a-4002-9120-fdc4881d1043",
+              "name": "img_url",
+              "value": "=https://drive.google.com/uc?id={{ $('Upload file').item.json.id }} ",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1856,
+        2576
+      ],
+      "id": "54e0f714-a233-434c-80a2-4b6e5ceb4266",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "operation": "share",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "permissionsUi": {
+          "permissionsValues": {
+            "role": "reader",
+            "type": "anyone",
+            "allowFileDiscovery": true
+          }
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -2080,
+        2576
+      ],
+      "id": "cec5ce58-8b16-4fc5-9f0c-b69c426ee791",
+      "name": "Share file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "kExZ2dFK2lGA8jpt",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "documentId": {
+          "__rl": true,
+          "value": "1-ocB5pV18GrcG0ImDgV0zPLCTPqmQ0TXlqq9qRMeV-Q",
+          "mode": "list",
+          "cachedResultName": "ads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1-ocB5pV18GrcG0ImDgV0zPLCTPqmQ0TXlqq9qRMeV-Q/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1-ocB5pV18GrcG0ImDgV0zPLCTPqmQ0TXlqq9qRMeV-Q/edit#gid=0"
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -1408,
+        2672
+      ],
+      "id": "95ea5362-57b7-412f-8fe5-903b1527a3b2",
+      "name": "Delete rows or columns from sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "mpU6VEyOLq9unvk4",
+          "name": "Google Sheets account 4"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1n1uzgtYwdBflwp4htiE7aAqV-_F7lWivI57BIK0buzU",
+          "mode": "list",
+          "cachedResultName": "newsletter",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1n1uzgtYwdBflwp4htiE7aAqV-_F7lWivI57BIK0buzU/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1n1uzgtYwdBflwp4htiE7aAqV-_F7lWivI57BIK0buzU/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "row_number": "=",
+            "email": "={{ $('Webhook1').item.json.query.email }}",
+            "status": "unsubscribed"
+          },
+          "matchingColumns": [
+            "email"
+          ],
+          "schema": [
+            {
+              "id": "name ",
+              "displayName": "name ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -2304,
+        1392
+      ],
+      "id": "70730153-eee6-405f-a23a-0a41984eaa0c",
+      "name": "Update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "mpU6VEyOLq9unvk4",
+          "name": "Google Sheets account 4"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1n1uzgtYwdBflwp4htiE7aAqV-_F7lWivI57BIK0buzU",
+          "mode": "list",
+          "cachedResultName": "newsletter",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1n1uzgtYwdBflwp4htiE7aAqV-_F7lWivI57BIK0buzU/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1n1uzgtYwdBflwp4htiE7aAqV-_F7lWivI57BIK0buzU/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -2528,
+        1392
+      ],
+      "id": "bfefd612-6e97-4107-97d2-d9199c9d5b53",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "mpU6VEyOLq9unvk4",
+          "name": "Google Sheets account 4"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1-ocB5pV18GrcG0ImDgV0zPLCTPqmQ0TXlqq9qRMeV-Q",
+          "mode": "list",
+          "cachedResultName": "ads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1-ocB5pV18GrcG0ImDgV0zPLCTPqmQ0TXlqq9qRMeV-Q/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1-ocB5pV18GrcG0ImDgV0zPLCTPqmQ0TXlqq9qRMeV-Q/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "link ": "={{ $json.img_url }}"
+          },
+          "matchingColumns": [
+            "link "
+          ],
+          "schema": [
+            {
+              "id": "link ",
+              "displayName": "link ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -1632,
+        2576
+      ],
+      "id": "458e4c10-8c39-486b-b1c3-9929d236bcb4",
+      "name": "Append row in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "mpU6VEyOLq9unvk4",
+          "name": "Google Sheets account 4"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "/sendNewsletter",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -2768,
+        944
+      ],
+      "id": "f2a6a800-63a5-40da-b3e7-cca6e56fd7ca",
+      "name": "Webhook2",
+      "webhookId": "312b261d-3479-41d5-9226-a05c904c9b96"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1QWnwBw70UGRHIch-ZDvk9cH-R_6T0XVXkJ_4NbVzUcE/edit?gid=0#gid=0",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1QWnwBw70UGRHIch-ZDvk9cH-R_6T0XVXkJ_4NbVzUcE/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "html": "={{ $('email sender').item.json.output }}"
+          },
+          "matchingColumns": [
+            "html"
+          ],
+          "schema": [
+            {
+              "id": "html",
+              "displayName": "html",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        352,
+        704
+      ],
+      "id": "6b525924-5651-4f51-93b1-8fda8ab2a4d0",
+      "name": "Append row in sheet2",
+      "executeOnce": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "ZpyGoS1Noq5m57yE",
+          "name": "Google Sheets account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "path": "/recent",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -2752,
+        3120
+      ],
+      "id": "652dca1f-f1a0-45c9-b40b-b630554975f5",
+      "name": "Webhook3",
+      "webhookId": "55bc0598-a949-422e-9a6e-4eb4cf20e09c"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1QWnwBw70UGRHIch-ZDvk9cH-R_6T0XVXkJ_4NbVzUcE",
+          "mode": "list",
+          "cachedResultName": "newsletter recent",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1QWnwBw70UGRHIch-ZDvk9cH-R_6T0XVXkJ_4NbVzUcE/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1QWnwBw70UGRHIch-ZDvk9cH-R_6T0XVXkJ_4NbVzUcE/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -2528,
+        3120
+      ],
+      "id": "bbf7f6b7-706c-48df-be05-f36c4a9ffeda",
+      "name": "Get row(s) in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "mpU6VEyOLq9unvk4",
+          "name": "Google Sheets account 4"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "allIncomingItems",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        -2304,
+        3120
+      ],
+      "id": "c495c79d-a011-42e4-93d1-ed23000840d6",
+      "name": "Respond to Webhook1"
+    },
+    {
+      "parameters": {
+        "path": "/unsubscribe",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -2752,
+        1392
+      ],
+      "id": "5fcdecc4-5161-4b11-b01a-d47a2117c71d",
+      "name": "Webhook1",
+      "webhookId": "357b45cc-2db8-442e-bf68-dc460cf89394"
+    },
+    {
+      "parameters": {
+        "path": "/subscribers",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -2752,
+        2896
+      ],
+      "id": "193b2b64-edfd-495f-b397-133b88cc6752",
+      "name": "Webhook4",
+      "webhookId": "73f74230-beeb-4678-85bc-99eb47058890"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1n1uzgtYwdBflwp4htiE7aAqV-_F7lWivI57BIK0buzU/edit?usp=sharing",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1n1uzgtYwdBflwp4htiE7aAqV-_F7lWivI57BIK0buzU/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -2528,
+        2896
+      ],
+      "id": "e3062fd7-25f6-4805-ba04-a01884f6a781",
+      "name": "Get row(s) in sheet2",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "mpU6VEyOLq9unvk4",
+          "name": "Google Sheets account 4"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "allIncomingItems",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        -2304,
+        2896
+      ],
+      "id": "69ea9da1-0e06-4e3a-aea0-11db29521b77",
+      "name": "Respond to Webhook2"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1n1uzgtYwdBflwp4htiE7aAqV-_F7lWivI57BIK0buzU",
+          "mode": "list",
+          "cachedResultName": "newsletter",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1n1uzgtYwdBflwp4htiE7aAqV-_F7lWivI57BIK0buzU/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1n1uzgtYwdBflwp4htiE7aAqV-_F7lWivI57BIK0buzU/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "row_number": "=",
+            "email": "={{ $('Webhook5').item.json.query.email }}",
+            "status": "connected"
+          },
+          "matchingColumns": [
+            "email"
+          ],
+          "schema": [
+            {
+              "id": "name ",
+              "displayName": "name ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -2304,
+        1616
+      ],
+      "id": "341cf3c4-875e-4afc-9d90-a36f9fe509a3",
+      "name": "Update row in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "mpU6VEyOLq9unvk4",
+          "name": "Google Sheets account 4"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1n1uzgtYwdBflwp4htiE7aAqV-_F7lWivI57BIK0buzU",
+          "mode": "list",
+          "cachedResultName": "newsletter",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1n1uzgtYwdBflwp4htiE7aAqV-_F7lWivI57BIK0buzU/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1n1uzgtYwdBflwp4htiE7aAqV-_F7lWivI57BIK0buzU/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -2528,
+        1616
+      ],
+      "id": "6edc0ccc-1ab2-46f6-b270-faf15acba0ce",
+      "name": "Get row(s) in sheet3",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "mpU6VEyOLq9unvk4",
+          "name": "Google Sheets account 4"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "path": "/sub",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -2752,
+        1616
+      ],
+      "id": "3c1c07c0-dd6c-479a-873f-fdc5822a3736",
+      "name": "Webhook5",
+      "webhookId": "357b45cc-2db8-442e-bf68-dc460cf89394"
+    },
+    {
+      "parameters": {
+        "path": "/ads",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -2752,
+        2576
+      ],
+      "id": "959ecfb2-ca15-42e5-bf75-f70026a42e66",
+      "name": "Webhook6",
+      "webhookId": "c41973e1-d0b7-4df2-92f0-e21343a9ffd1"
+    },
+    {
+      "parameters": {
+        "respondWith": "allIncomingItems",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        -1408,
+        2480
+      ],
+      "id": "832b300f-f080-4d00-a537-8116bcc29ceb",
+      "name": "Respond to Webhook3"
+    },
+    {
+      "parameters": {
+        "respondWith": "allIncomingItems",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        -416,
+        1168
+      ],
+      "id": "1d537aa3-b38b-4a00-befd-954dc3c3be78",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1-ocB5pV18GrcG0ImDgV0zPLCTPqmQ0TXlqq9qRMeV-Q",
+          "mode": "list",
+          "cachedResultName": "ads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1-ocB5pV18GrcG0ImDgV0zPLCTPqmQ0TXlqq9qRMeV-Q/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1-ocB5pV18GrcG0ImDgV0zPLCTPqmQ0TXlqq9qRMeV-Q/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -2176,
+        1072
+      ],
+      "id": "e26f248c-f15c-4b00-bd9c-7acb15dcde9f",
+      "name": "adsheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "ZpyGoS1Noq5m57yE",
+          "name": "Google Sheets account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1n1uzgtYwdBflwp4htiE7aAqV-_F7lWivI57BIK0buzU",
+          "mode": "list",
+          "cachedResultName": "newsletter",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1n1uzgtYwdBflwp4htiE7aAqV-_F7lWivI57BIK0buzU/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1n1uzgtYwdBflwp4htiE7aAqV-_F7lWivI57BIK0buzU/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -1952,
+        1072
+      ],
+      "id": "36b34bd1-4318-4203-86da-1707a282ebe9",
+      "name": "subscribersheet",
+      "executeOnce": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "ZpyGoS1Noq5m57yE",
+          "name": "Google Sheets account 3"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -2784,
+        688
+      ],
+      "id": "1680ddbf-446c-4a4c-9775-f27eb66265f0",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "e2c884cf-6239-48bc-9e22-9a33f4d109da",
+              "leftValue": "={{ $json['status'] }}",
+              "rightValue": "connected",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -1728,
+        1072
+      ],
+      "id": "dc6c2740-70d4-4702-b0e3-681104812e05",
+      "name": "If",
+      "executeOnce": false
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('If').item.json.email }}",
+        "subject": "\"Healthy Living\" With Jallas Pharmacy (Newsletter) , 311-313,  Horn Lane, London",
+        "message": "={{ $json.output }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        16,
+        704
+      ],
+      "id": "eda4a364-e223-44a6-93cc-8c337ea99d3d",
+      "name": "Send a message1",
+      "webhookId": "0a5dbc1d-30a1-4f80-9f92-1ec79974ced1",
+      "executeOnce": false,
+      "alwaysOutputData": true,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "IBVE5hr63zpO6LxM",
+          "name": "Gmail account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## NEWSLETTER FRONT END DRIVEN AUTOMATION",
+        "width": 272
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -3632,
+        912
+      ],
+      "typeVersion": 1,
+      "id": "26285591-8b27-4750-bcc7-6ef5d3238bfc",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## MAIN AUTOMATION.",
+        "height": 80,
+        "width": 272
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -2144,
+        816
+      ],
+      "typeVersion": 1,
+      "id": "b01f35e2-8dda-454d-9ebc-f807fdea8fff",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## DEATILS AND FUNCTIONALITY",
+        "height": 96,
+        "width": 224
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -2016,
+        1936
+      ],
+      "typeVersion": 1,
+      "id": "a89bdbd0-d680-41d9-b31d-eb037e3af543",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>Thank You</title>\n  <style>\n    body {\n      margin: 0;\n      height: 100vh;\n      background: radial-gradient(circle at center, #0d1117, #000);\n      overflow: hidden;\n      display: flex;\n      justify-content: center;\n      align-items: center;\n      font-family: \"Segoe UI\", sans-serif;\n      color: #c9d1d9;\n    }\n\n    /* Particle background */\n    .particle {\n      position: absolute;\n      border-radius: 50%;\n      background: #58a6ff;\n      opacity: 0.7;\n      animation: float linear infinite;\n    }\n\n    @keyframes float {\n      from { transform: translateY(110vh); opacity: 0; }\n      10% { opacity: 1; }\n      90% { opacity: 1; }\n      to { transform: translateY(-10vh); opacity: 0; }\n    }\n\n    /* Center card */\n    .card {\n      text-align: center;\n      padding: 2rem 3rem;\n      border-radius: 20px;\n      background: rgba(22, 27, 34, 0.8);\n      box-shadow: 0 0 40px rgba(88, 166, 255, 0.5);\n      animation: fadeIn 2s ease-in-out;\n      z-index: 1;\n    }\n\n    @keyframes fadeIn {\n      from { opacity: 0; transform: scale(0.95); }\n      to { opacity: 1; transform: scale(1); }\n    }\n\n    h1 {\n      font-size: 3rem;\n      margin: 0 0 1rem 0;\n      color: #58a6ff;\n      text-shadow: 0 0 20px #58a6ff, 0 0 40px #58a6ff;\n      position: relative;\n      display: inline-block;\n      overflow: hidden;\n    }\n\n    h1::after {\n      content: \"\";\n      position: absolute;\n      top: 0;\n      left: -100%;\n      width: 100%;\n      height: 100%;\n      background: linear-gradient(120deg, transparent, #f778ba, transparent);\n      animation: shine 2.5s infinite;\n    }\n\n    @keyframes shine {\n      0% { left: -100%; }\n      50% { left: 100%; }\n      100% { left: 100%; }\n    }\n\n    p {\n      font-size: 1.3rem;\n      color: #8b949e;\n      margin: 0;\n      animation: fadeUp 2s ease-in-out;\n    }\n\n    @keyframes fadeUp {\n      from { opacity: 0; transform: translateY(20px); }\n      to { opacity: 1; transform: translateY(0); }\n    }\n  </style>\n</head>\n<body>\n  <!-- Particles -->\n  <script>\n    for (let i = 0; i < 50; i++) {\n      const particle = document.createElement('div');\n      const size = Math.random() * 4 + 2;\n      particle.className = 'particle';\n      particle.style.width = `${size}px`;\n      particle.style.height = `${size}px`;\n      particle.style.left = `${Math.random() * 100}vw`;\n      particle.style.animationDuration = `${5 + Math.random() * 10}s`;\n      document.body.appendChild(particle);\n    }\n  </script>\n\n  <!-- Main card -->\n  <div class=\"card\">\n    <h1>THANK YOU!</h1>\n    <p>✨ Your request has been processed successfully.</p>\n  </div>\n</body>\n</html>\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        -2096,
+        1392
+      ],
+      "id": "b8d7096b-6421-4ec8-8ed0-3d641192ee30",
+      "name": "Respond to Webhook4"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "/newsletterlogin",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -2768,
+        3536
+      ],
+      "id": "3e43b20c-2b3f-4c9f-89eb-8af94ede6dd5",
+      "name": "Webhook7",
+      "webhookId": "4ef16b00-682a-4511-926c-aaa4d39532db"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1lGy-DodNPrD-ekRxm2xCgqFx0syjE1liIjlTjWKC5og/edit?gid=0#gid=0",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1lGy-DodNPrD-ekRxm2xCgqFx0syjE1liIjlTjWKC5og/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -2528,
+        3536
+      ],
+      "id": "82607912-9ab1-46dd-9a4d-b5b9ba3fb418",
+      "name": "Get row(s) in sheet4",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "mpU6VEyOLq9unvk4",
+          "name": "Google Sheets account 4"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "1b7da6b7-94e9-4c16-a5c2-8026760efea6",
+              "leftValue": "={{ $('Webhook7').item.json.body.email }}",
+              "rightValue": "={{ $json.gmail }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "a39e54a2-e599-41b4-8e39-78006a764c67",
+              "leftValue": "={{ $('Webhook7').item.json.body.password }}",
+              "rightValue": "={{ $json.password }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -2320,
+        3536
+      ],
+      "id": "6333f57f-7e22-4b3a-b5fd-f601d1157226",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        -1920,
+        3408
+      ],
+      "id": "ce727113-0758-4a27-8f6e-135751add96c",
+      "name": "Respond to Webhook5"
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "INVALID CREDENTIALS",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        -1936,
+        3664
+      ],
+      "id": "0834a5b1-c308-4f34-9194-5eb30ee05548",
+      "name": "Respond to Webhook6"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1n1uzgtYwdBflwp4htiE7aAqV-_F7lWivI57BIK0buzU",
+          "mode": "list",
+          "cachedResultName": "newsletter",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1n1uzgtYwdBflwp4htiE7aAqV-_F7lWivI57BIK0buzU/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1n1uzgtYwdBflwp4htiE7aAqV-_F7lWivI57BIK0buzU/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "row_number": "=",
+            "email": "={{ $('Webhook8').item.json.query.email }}",
+            "status": "unsubscribed"
+          },
+          "matchingColumns": [
+            "email"
+          ],
+          "schema": [
+            {
+              "id": "name ",
+              "displayName": "name ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -2320,
+        1840
+      ],
+      "id": "b924fc54-a5ad-4d6c-85ef-86becf478e31",
+      "name": "Update row in sheet2",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "mpU6VEyOLq9unvk4",
+          "name": "Google Sheets account 4"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1n1uzgtYwdBflwp4htiE7aAqV-_F7lWivI57BIK0buzU",
+          "mode": "list",
+          "cachedResultName": "newsletter",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1n1uzgtYwdBflwp4htiE7aAqV-_F7lWivI57BIK0buzU/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1n1uzgtYwdBflwp4htiE7aAqV-_F7lWivI57BIK0buzU/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -2544,
+        1840
+      ],
+      "id": "c265b4b3-df60-489e-92fb-9ce3be27ff86",
+      "name": "Get row(s) in sheet5",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "mpU6VEyOLq9unvk4",
+          "name": "Google Sheets account 4"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "path": "/unsub",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -2768,
+        1840
+      ],
+      "id": "1056b1f6-bba2-48a3-a886-8e4b9b836076",
+      "name": "Webhook8",
+      "webhookId": "357b45cc-2db8-442e-bf68-dc460cf89394"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "DESIGN",
+        "contextWindowLength": 1
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -208,
+        1616
+      ],
+      "id": "9ab443f9-51f1-4b34-bb99-cdb2335fcb64",
+      "name": "Simple Memory"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        []
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "news finder",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "email sender",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Think": {
+      "ai_tool": [
+        [
+          {
+            "node": "news finder",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet in Google Sheets": {
+      "ai_tool": [
+        [
+          {
+            "node": "news finder",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "news finder": {
+      "main": [
+        [
+          {
+            "node": "adsheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message in Gmail": {
+      "ai_tool": [
+        []
+      ]
+    },
+    "Generate an image": {
+      "main": [
+        [
+          {
+            "node": "Upload file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload file": {
+      "main": [
+        [
+          {
+            "node": "Share file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Share file": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet1": {
+      "main": [
+        [
+          {
+            "node": "Delete rows or columns from sheet",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Respond to Webhook3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook2": {
+      "main": [
+        [
+          {
+            "node": "news finder",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "email sender": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send a message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet2": {
+      "main": [
+        []
+      ]
+    },
+    "Webhook3": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet1": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook1": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook4": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet2": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet3": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook5": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook6": {
+      "main": [
+        [
+          {
+            "node": "Generate an image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Delete rows or columns from sheet": {
+      "main": [
+        []
+      ]
+    },
+    "adsheet": {
+      "main": [
+        [
+          {
+            "node": "subscribersheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "subscribersheet": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "news finder",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "email sender",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message1": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook7": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet4": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook5",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond to Webhook6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet5": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook8": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        []
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "c51682f0-225b-4c20-b72a-df8af09c32a3",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "30e8840a5d55d1e1b6af4c778e833f7fe652325f38939676863a8cb542d69c34"
+  },
+  "id": "nv9ZbHOWK7hnNWYt",
+  "tags": []
+}
