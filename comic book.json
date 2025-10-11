@@ -1,0 +1,1712 @@
+{
+  "name": "comic book",
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "you are a comic book story writer, Your Niche Is Old Indian Stories Action, Crime, Suspense. you need to write the story of a 7 page comic book with visuals. in ur output always include visuals .\n\n{\n  \"nodes\": [\n    {\n      \"parameters\": {\n        \"fieldToSplitOut\": \"output\",\n        \"options\": {}\n      },\n      \"type\": \"n8n-nodes-base.splitOut\",\n      \"typeVersion\": 1,\n      \"position\": [\n        144,\n        -32\n      ],\n      \"id\": \"3236e8f0-75aa-4b7d-8ea6-dd632e3ebce8\",\n      \"name\": \"Split Out\"\n    },\n    {\n      \"parameters\": {\n        \"operation\": \"download\",\n        \"fileId\": {\n          \"__rl\": true,\n          \"value\": \"https://drive.google.com/file/d/1zjjX2VqsRNrX2LxPMbKDfX3moyll7LV5/view?usp=sharing\",\n          \"mode\": \"url\"\n        },\n        \"options\": {}\n      },\n      \"type\": \"n8n-nodes-base.googleDrive\",\n      \"typeVersion\": 3,\n      \"position\": [\n        592,\n        0\n      ],\n      \"id\": \"06ec4339-0a77-4b2e-9fed-822dbe326a28\",\n      \"name\": \"Download file\",\n      \"credentials\": {\n        \"googleDriveOAuth2Api\": {\n          \"id\": \"CiHyPJWsxJHlKfyv\",\n          \"name\": \"Google Drive account 3\"\n        }\n      }\n    },\n    {\n      \"parameters\": {\n        \"options\": {}\n      },\n      \"type\": \"n8n-nodes-base.splitInBatches\",\n      \"typeVersion\": 3,\n      \"position\": [\n        368,\n        -16\n      ],\n      \"id\": \"83032319-5c82-4e8b-a902-2c74f5a4f1b0\",\n      \"name\": \"Loop Over Items\"\n    },\n    {\n      \"parameters\": {\n        \"resource\": \"image\",\n        \"modelId\": {\n          \"__rl\": true,\n          \"value\": \"models/gemini-2.0-flash-preview-image-generation\",\n          \"mode\": \"list\",\n          \"cachedResultName\": \"models/gemini-2.0-flash-preview-image-generation\"\n        },\n        \"prompt\": \"=reference image(characters,style,environment)={{ $binary['data'] }},\\nprompt={{ $json.output }}\\njob=create a cartoon type image for the visual and add only the material in'Text'section in the image(no spelling mistakes).you are designing pages of my comic book. so make sure no mistakes. you are the best. if there is any spelling mistakes in the reference image fix it. you can do it.\",\n        \"options\": {}\n      },\n      \"type\": \"@n8n/n8n-nodes-langchain.googleGemini\",\n      \"typeVersion\": 1,\n      \"position\": [\n        800,\n        0\n      ],\n      \"id\": \"b6e9282c-8099-4211-a54e-21bd1a3eb394\",\n      \"name\": \"Generate an image\",\n      \"credentials\": {\n        \"googlePalmApi\": {\n          \"id\": \"uzMkmT4lwbtW8syc\",\n          \"name\": \"Google Gemini(PaLM) Api account 2\"\n        }\n      }\n    },\n    {\n      \"parameters\": {\n        \"method\": \"POST\",\n        \"url\": \"https://freeimage.host/api/1/upload\",\n        \"sendBody\": true,\n        \"contentType\": \"multipart-form-data\",\n        \"bodyParameters\": {\n          \"parameters\": [\n            {\n              \"name\": \"key\",\n              \"value\": \"6d207e02198a847aa98d0a2a901485a5\"\n            },\n            {\n              \"name\": \"action\",\n              \"value\": \"upload\"\n            },\n            {\n              \"parameterType\": \"formBinaryData\",\n              \"name\": \"source\",\n              \"inputDataFieldName\": \"data\"\n            },\n            {\n              \"name\": \"format\",\n              \"value\": \"json\"\n            }\n          ]\n        },\n        \"options\": {}\n      },\n      \"type\": \"n8n-nodes-base.httpRequest\",\n      \"typeVersion\": 4.2,\n      \"position\": [\n        1056,\n        0\n      ],\n      \"id\": \"7c527a11-b8d2-440b-91a5-3217c59fecdc\",\n      \"name\": \"HTTP Request\"\n    },\n    {\n      \"parameters\": {\n        \"assignments\": {\n          \"assignments\": [\n            {\n              \"id\": \"013dd101-78ec-4ca7-ae52-1ee9b9e2fdfc\",\n              \"name\": \"link\",\n              \"value\": \"={{ $json.image.url }}\",\n              \"type\": \"string\"\n            }\n          ]\n        },\n        \"options\": {}\n      },\n      \"type\": \"n8n-nodes-base.set\",\n      \"typeVersion\": 3.4,\n      \"position\": [\n        1264,\n        0\n      ],\n      \"id\": \"fe9cdd7c-c60a-40c3-a595-b2ab6bf9cb57\",\n      \"name\": \"Edit Fields\"\n    },\n    {\n      \"parameters\": {\n        \"aggregate\": \"aggregateAllItemData\",\n        \"destinationFieldName\": \"links\",\n        \"options\": {}\n      },\n      \"type\": \"n8n-nodes-base.aggregate\",\n      \"typeVersion\": 1,\n      \"position\": [\n        544,\n        -304\n      ],\n      \"id\": \"301f8617-f078-4076-bfc5-10e39b875a7d\",\n      \"name\": \"Aggregate\"\n    },\n    {\n      \"parameters\": {\n        \"html\": \"<!doctype html>\\n<html lang=\\\"en\\\">\\n<head>\\n  <meta charset=\\\"utf-8\\\" />\\n  <meta name=\\\"viewport\\\" content=\\\"width=device-width,initial-scale=1\\\" />\\n  <title>Super-Fun Dark Comic — Dynamic Viewer</title>\\n  <style>\\n    :root{\\n      --bg:#0b0b0f; --panel:#13131a; --accent:#ff5bd1; --accent2:#7afcff; --muted:#9aa0a6;\\n      --glass: rgba(255,255,255,0.03);\\n    }\\n    *{box-sizing:border-box}\\n    html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,\\\"Helvetica Neue\\\",Arial; background: radial-gradient(1200px 600px at 10% 10%, rgba(122,252,255,0.03), transparent), radial-gradient(900px 400px at 90% 90%, rgba(255,91,209,0.03), transparent), var(--bg); color:#e6eef6}\\n\\n    header{display:flex;align-items:center;justify-content:space-between;padding:18px 28px;border-bottom:1px solid rgba(255,255,255,0.03)}\\n    .brand{display:flex;gap:14px;align-items:center}\\n    .logo{width:52px;height:52px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-weight:700;color:#0b0b0f;font-size:20px;box-shadow:0 6px 20px rgba(122,252,255,0.06)}\\n    h1{font-size:18px;margin:0}\\n    p.lead{margin:0;color:var(--muted);font-size:13px}\\n\\n    .controls{display:flex;gap:10px;align-items:center}\\n    .btn{background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);border:1px solid rgba(255,255,255,0.04);padding:8px 12px;border-radius:10px;color:var(--muted);cursor:pointer;font-weight:600}\\n    .btn.primary{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#081219;border:none}\\n\\n    main{padding:28px;max-width:1200px;margin:0 auto}\\n    .panel-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}\\n\\n    .panel{background:linear-gradient(180deg,var(--panel),#0f0f12);border-radius:14px;padding:12px;position:relative;overflow:hidden;cursor:grab;transition:transform .28s ease, box-shadow .28s ease}\\n    .panel:active{cursor:grabbing}\\n    .panel:hover{transform:translateY(-6px);box-shadow:0 18px 40px rgba(0,0,0,0.6)}\\n    .comic-img{width:100%;height:320px;object-fit:cover;border-radius:10px;display:block;box-shadow:inset 0 -40px 80px rgba(0,0,0,0.45)}\\n\\n    /* speech bubble */\\n    .bubble{position:absolute;left:14px;top:12px;background:linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0.01));backdrop-filter:blur(6px);padding:10px 14px;border-radius:18px;border:1px solid rgba(255,255,255,0.04);font-weight:700;font-size:13px;color:#fff}\\n    .bubble::after{content:'';position:absolute;left:18px;bottom:-12px;border-width:12px 10px 0 10px;border-style:solid;border-color:rgba(255,255,255,0.03) transparent transparent transparent}\\n\\n    .meta{display:flex;justify-content:space-between;align-items:center;margin-top:10px}\\n    .meta .title{font-weight:800}\\n    .meta .index{color:var(--muted);font-size:12px}\\n\\n    /* modal viewer */\\n    .viewer{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:linear-gradient(180deg,rgba(3,3,7,0.6),rgba(3,3,7,0.9));backdrop-filter:blur(6px);z-index:60}\\n    .viewer.open{display:flex}\\n    .viewer-inner{max-width:1100px;width:92%;background:linear-gradient(180deg,#0c0c10,#0a0a0d);border-radius:16px;padding:18px;display:flex;gap:18px;align-items:center}\\n    .viewer-img{max-height:80vh;width:auto;max-width:78%;border-radius:10px;box-shadow:0 40px 120px rgba(0,0,0,0.7)}\\n    .viewer-side{width:32%;display:flex;flex-direction:column;gap:12px}\\n    .close{align-self:flex-end;background:transparent;border:none;color:var(--muted);font-weight:700;cursor:pointer}\\n    .nav{display:flex;gap:8px}\\n    .nav button{padding:8px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:var(--muted);cursor:pointer}\\n    .caption{background:var(--glass);padding:12px;border-radius:10px;color:var(--muted);font-size:13px;flex:1;overflow:auto}\\n\\n    footer{padding:18px 28px;color:var(--muted);font-size:13px;text-align:center;border-top:1px solid rgba(255,255,255,0.02)}\\n\\n    /* small helpers */\\n    .badge{background:linear-gradient(90deg,var(--accent),var(--accent2));padding:6px 10px;border-radius:999px;color:#081219;font-weight:800}\\n    .actions{display:flex;gap:8px;align-items:center}\\n\\n    /* responsive tweaks */\\n    @media (max-width:720px){.viewer-inner{flex-direction:column}.viewer-img{max-width:100%}.viewer-side{width:100%}}\\n  </style>\\n</head>\\n<body>\\n  <header>\\n    <div class=\\\"brand\\\">\\n      <div class=\\\"logo\\\">CB</div>\\n      <div>\\n        <h1>Night Panels — SuperFun Comic Viewer</h1>\\n        <p class=\\\"lead\\\">Dark mode, draggable panels, and an immersive fullscreen viewer.</p>\\n      </div>\\n    </div>\\n    <div class=\\\"controls\\\">\\n      <div class=\\\"badge\\\">Dynamic</div>\\n      <div class=\\\"actions\\\">\\n        <button id=\\\"shuffle\\\" class=\\\"btn\\\">Shuffle</button>\\n        <button id=\\\"exportJson\\\" class=\\\"btn\\\">Export JSON</button>\\n        <button id=\\\"toggleOrder\\\" class=\\\"btn\\\">Toggle Grid/List</button>\\n      </div>\\n    </div>\\n  </header>\\n\\n  <main>\\n    <section id=\\\"grid\\\" class=\\\"panel-grid\\\"></section>\\n  </main>\\n\\n  <div id=\\\"viewer\\\" class=\\\"viewer\\\" aria-hidden=\\\"true\\\">\\n    <div class=\\\"viewer-inner\\\" role=\\\"dialog\\\" aria-modal=\\\"true\\\">\\n      <div style=\\\"display:flex;flex-direction:column;align-items:flex-start;gap:10px;width:72%\\\">\\n        <button id=\\\"closeViewer\\\" class=\\\"close\\\">✕ CLOSE</button>\\n        <img id=\\\"viewerImg\\\" class=\\\"viewer-img\\\" src=\\\"\\\" alt=\\\"comic page\\\" />\\n      </div>\\n      <div class=\\\"viewer-side\\\">\\n        <div class=\\\"nav\\\">\\n          <button id=\\\"prev\\\">◀ Prev</button>\\n          <button id=\\\"next\\\">Next ▶</button>\\n          <button id=\\\"zoomIn\\\">Zoom +</button>\\n          <button id=\\\"zoomOut\\\">Zoom -</button>\\n        </div>\\n        <div class=\\\"caption\\\" id=\\\"viewerCaption\\\">Caption</div>\\n        <div style=\\\"display:flex;gap:8px;justify-content:flex-end\\\">\\n          <button id=\\\"downloadImg\\\" class=\\\"btn primary\\\">Download</button>\\n        </div>\\n      </div>\\n    </div>\\n  </div>\\n\\n  <footer>Tip: Drag panels to reorder. Click any panel to open the fullscreen comic viewer. </footer>\\n\\n  <script>\\n    // === DYNAMIC IMAGE LIST (replace with your aggregated links) ===\\n    const images = [\\n      \\\"{{ $json.links[0].link }}\\\",\\n      \\\"{{ $json.links[1].link }}\\\",\\n      \\\"{{ $json.links[2].link }}\\\",\\n      \\\"{{ $json.links[3].link }}\\\",\\n      \\\"{{ $json.links[4].link }}\\\"\\n    ];\\n\\n    // Optional captions for each panel (keeps things fun)\\n    const captions = [\\n      \\\"Page 1 — The City that Never Sleeps\\\",\\n      \\\"Page 2 — Neon Rooftop Chase\\\",\\n      \\\"Page 3 — Secret Doorway\\\",\\n      \\\"Page 4 — The Reveal\\\",\\n      \\\"Page 5 — Dawn and Promise\\\"\\n    ];\\n\\n    const grid = document.getElementById('grid');\\n\\n    // create panels\\n    function render() {\\n      grid.innerHTML = '';\\n      images.forEach((src, i) => {\\n        const panel = document.createElement('article');\\n        panel.className = 'panel';\\n        panel.draggable = true;\\n        panel.dataset.index = i;\\n\\n        panel.innerHTML = `\\n          <div class=\\\"bubble\\\">PAGE ${i+1}</div>\\n          <img class=\\\"comic-img\\\" src=\\\"${src}\\\" alt=\\\"comic ${i+1}\\\" />\\n          <div class=\\\"meta\\\">\\n            <div class=\\\"title\\\">Scene ${i+1}</div>\\n            <div class=\\\"index\\\">${i+1} / ${images.length}</div>\\n          </div>\\n        `;\\n\\n        // open viewer on click\\n        panel.addEventListener('click', (e)=>{\\n          if(e.target.tagName.toLowerCase()==='button') return;\\n          openViewer(i);\\n        });\\n\\n        // setup drag handlers\\n        panel.addEventListener('dragstart', onDragStart);\\n        panel.addEventListener('dragover', onDragOver);\\n        panel.addEventListener('drop', onDrop);\\n        panel.addEventListener('dragend', onDragEnd);\\n\\n        grid.appendChild(panel);\\n      });\\n    }\\n\\n    // Drag & drop reordering\\n    let dragSrcIndex = null;\\n    function onDragStart(e){\\n      dragSrcIndex = +this.dataset.index;\\n      this.style.opacity = '0.6';\\n      e.dataTransfer.effectAllowed = 'move';\\n    }\\n    function onDragOver(e){\\n      e.preventDefault();\\n      e.dataTransfer.dropEffect = 'move';\\n    }\\n    function onDrop(e){\\n      e.stopPropagation();\\n      const dst = +this.dataset.index;\\n      if(dragSrcIndex===null || dst===dragSrcIndex) return;\\n      // reorder array\\n      const item = images.splice(dragSrcIndex,1)[0];\\n      const cap = captions.splice(dragSrcIndex,1)[0];\\n      images.splice(dst,0,item);\\n      captions.splice(dst,0,cap);\\n      render();\\n    }\\n    function onDragEnd(){\\n      dragSrcIndex = null;\\n      Array.from(document.querySelectorAll('.panel')).forEach(p=>p.style.opacity='1');\\n    }\\n\\n    // Viewer\\n    const viewer = document.getElementById('viewer');\\n    const viewerImg = document.getElementById('viewerImg');\\n    const viewerCaption = document.getElementById('viewerCaption');\\n    let current = 0, zoom = 1;\\n\\n    function openViewer(index){\\n      current = index;\\n      viewer.classList.add('open');\\n      viewer.setAttribute('aria-hidden','false');\\n      loadViewerImage();\\n    }\\n    function closeViewer(){\\n      viewer.classList.remove('open');\\n      viewer.setAttribute('aria-hidden','true');\\n      viewerImg.style.transform = 'scale(1)'; zoom = 1;\\n    }\\n\\n    function loadViewerImage(){\\n      viewerImg.src = images[current];\\n      viewerCaption.textContent = captions[current] || `Page ${current+1}`;\\n      viewerImg.onload = ()=> viewerImg.style.opacity = 1;\\n    }\\n\\n    document.getElementById('closeViewer').addEventListener('click', closeViewer);\\n    document.getElementById('next').addEventListener('click', ()=>{ current = (current+1)%images.length; loadViewerImage(); });\\n    document.getElementById('prev').addEventListener('click', ()=>{ current = (current-1+images.length)%images.length; loadViewerImage(); });\\n    document.getElementById('zoomIn').addEventListener('click', ()=>{ zoom = Math.min(3, zoom+0.25); viewerImg.style.transform = `scale(${zoom})`; });\\n    document.getElementById('zoomOut').addEventListener('click', ()=>{ zoom = Math.max(0.5, zoom-0.25); viewerImg.style.transform = `scale(${zoom})`; });\\n\\n    // Keyboard nav\\n    window.addEventListener('keydown',(e)=>{\\n      if(!viewer.classList.contains('open')) return;\\n      if(e.key==='ArrowRight') document.getElementById('next').click();\\n      if(e.key==='ArrowLeft') document.getElementById('prev').click();\\n      if(e.key==='Escape') closeViewer();\\n    });\\n\\n    // Shuffle\\n    document.getElementById('shuffle').addEventListener('click', ()=>{\\n      for(let i=images.length-1;i>0;i--){\\n        const j = Math.floor(Math.random()*(i+1));\\n        [images[i],images[j]] = [images[j],images[i]];\\n        [captions[i],captions[j]] = [captions[j],captions[i]];\\n      }\\n      render();\\n    });\\n\\n    // Export JSON\\n    document.getElementById('exportJson').addEventListener('click', ()=>{\\n      const data = images.map((src,i)=>({src,caption:captions[i]||null}));\\n      const blob = new Blob([JSON.stringify(data,null,2)],{type:'application/json'});\\n      const url = URL.createObjectURL(blob);\\n      const a = document.createElement('a'); a.href = url; a.download = 'comic_links.json'; a.click();\\n      URL.revokeObjectURL(url);\\n    });\\n\\n    // Toggle layout\\n    let isGrid = true;\\n    document.getElementById('toggleOrder').addEventListener('click', ()=>{\\n      isGrid = !isGrid;\\n      grid.style.display = isGrid ? 'grid' : 'block';\\n      Array.from(document.querySelectorAll('.panel')).forEach(p=>p.style.marginBottom = isGrid ? '0' : '18px');\\n    });\\n\\n    // Download current image\\n    document.getElementById('downloadImg').addEventListener('click', ()=>{\\n      const link = document.createElement('a'); link.href = images[current]; link.download = `page-${current+1}.png`; document.body.appendChild(link); link.click(); link.remove();\\n    });\\n\\n    // Init\\n    render();\\n  </script>\\n</body>\\n</html>\"\n      },\n      \"type\": \"n8n-nodes-base.html\",\n      \"typeVersion\": 1.2,\n      \"position\": [\n        752,\n        -304\n      ],\n      \"id\": \"7e4009a8-4541-4c0f-809e-33a79cd3befc\",\n      \"name\": \"HTML\"\n    }\n  ],\n  \"connections\": {\n    \"Split Out\": {\n      \"main\": [\n        [\n          {\n            \"node\": \"Loop Over Items\",\n            \"type\": \"main\",\n            \"index\": 0\n          }\n        ]\n      ]\n    },\n    \"Download file\": {\n      \"main\": [\n        [\n          {\n            \"node\": \"Generate an image\",\n            \"type\": \"main\",\n            \"index\": 0\n          }\n        ]\n      ]\n    },\n    \"Loop Over Items\": {\n      \"main\": [\n        [\n          {\n            \"node\": \"Aggregate\",\n            \"type\": \"main\",\n            \"index\": 0\n          }\n        ],\n        [\n          {\n            \"node\": \"Download file\",\n            \"type\": \"main\",\n            \"index\": 0\n          }\n        ]\n      ]\n    },\n    \"Generate an image\": {\n      \"main\": [\n        [\n          {\n            \"node\": \"HTTP Request\",\n            \"type\": \"main\",\n            \"index\": 0\n          }\n        ]\n      ]\n    },\n    \"HTTP Request\": {\n      \"main\": [\n        [\n          {\n            \"node\": \"Edit Fields\",\n            \"type\": \"main\",\n            \"index\": 0\n          }\n        ]\n      ]\n    },\n    \"Edit Fields\": {\n      \"main\": [\n        [\n          {\n            \"node\": \"Loop Over Items\",\n            \"type\": \"main\",\n            \"index\": 0\n          }\n        ]\n      ]\n    },\n    \"Aggregate\": {\n      \"main\": [\n        [\n          {\n            \"node\": \"HTML\",\n            \"type\": \"main\",\n            \"index\": 0\n          }\n        ]\n      ]\n    }\n  },\n  \"pinData\": {\n    \"Aggregate\": [\n      {\n        \"links\": [\n          {\n            \"link\": \"https://iili.io/Kj1hDzX.png\"\n          },\n          {\n            \"link\": \"https://iili.io/Kj1Nux1.png\"\n          },\n          {\n            \"link\": \"https://iili.io/Kj1OMkQ.png\"\n          },\n          {\n            \"link\": \"https://iili.io/Kj1kZml.png\"\n          },\n          {\n            \"link\": \"https://iili.io/Kj1Svmx.png\"\n          }\n        ]\n      }\n    ]\n  },\n  \"meta\": {\n    \"templateCredsSetupCompleted\": true,\n    \"instanceId\": \"30e8840a5d55d1e1b6af4c778e833f7fe652325f38939676863a8cb542d69c34\"\n  }\n}\nThis is Whats Going To Happen In Front Of You. So make sure that the visuals include hints Of previous Scenes.(No Texts Required ONLY VISUALS)",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -208,
+        -32
+      ],
+      "id": "aa6fdc39-9690-43be-ae0f-0e259f59853e",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n\t\"scene1\": \"scene1\",\n   \n    \"scene2\": \"scene2\",\n  \n  \"scene3\": \"scene3\",\n  \n  \"scene4\": \"scene4\",\n  \n  \"scene5\": \"scene5\",\n  \"scene6\": \"scene6\",\n  \"scene7\": \"scene7\"\n  \n\n\t\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        -48,
+        176
+      ],
+      "id": "bab6fb7f-a0b6-474a-be2f-6609e0141a00",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -352,
+        176
+      ],
+      "id": "b0618940-56b7-4230-bcda-dc784cc4dc27",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "6ddgcVkIDrwcw2PU",
+          "name": "Google Gemini(PaLM) Api account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "output",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        352,
+        -32
+      ],
+      "id": "3236e8f0-75aa-4b7d-8ea6-dd632e3ebce8",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "https://drive.google.com/file/d/1zjjX2VqsRNrX2LxPMbKDfX3moyll7LV5/view?usp=sharing",
+          "mode": "url"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1568,
+        0
+      ],
+      "id": "06ec4339-0a77-4b2e-9fed-822dbe326a28",
+      "name": "Download file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "CiHyPJWsxJHlKfyv",
+          "name": "Google Drive account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        784,
+        -16
+      ],
+      "id": "83032319-5c82-4e8b-a902-2c74f5a4f1b0",
+      "name": "Loop Over Items",
+      "executeOnce": false
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.0-flash-preview-image-generation",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.0-flash-preview-image-generation"
+        },
+        "prompt": "=reference image(characters,style,environment)={{ $binary['data'] }},\nprompt={{ $json.output }}\njob=create a cartoon type image(modern indian style) for the visuals ONLY(NO TEXT)(single visual dont split in panels)",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        1840,
+        0
+      ],
+      "id": "b6e9282c-8099-4211-a54e-21bd1a3eb394",
+      "name": "Generate an image",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "6ddgcVkIDrwcw2PU",
+          "name": "Google Gemini(PaLM) Api account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "fileId": {
+          "__rl": true,
+          "value": "https://drive.google.com/file/d/1zjjX2VqsRNrX2LxPMbKDfX3moyll7LV5/view?usp=sharing",
+          "mode": "url"
+        },
+        "changeFileContent": true,
+        "newUpdatedFileName": "image",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1984,
+        -144
+      ],
+      "id": "ed549952-6990-408a-9fc9-a2df3110d6ed",
+      "name": "Update file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "CiHyPJWsxJHlKfyv",
+          "name": "Google Drive account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://freeimage.host/api/1/upload",
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "key",
+              "value": "6d207e02198a847aa98d0a2a901485a5"
+            },
+            {
+              "name": "action",
+              "value": "upload"
+            },
+            {
+              "parameterType": "formBinaryData",
+              "name": "source",
+              "inputDataFieldName": "data"
+            },
+            {
+              "name": "format",
+              "value": "json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2112,
+        16
+      ],
+      "id": "7c527a11-b8d2-440b-91a5-3217c59fecdc",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "013dd101-78ec-4ca7-ae52-1ee9b9e2fdfc",
+              "name": "link",
+              "value": "={{ $json.image.url }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2352,
+        16
+      ],
+      "id": "fe9cdd7c-c60a-40c3-a595-b2ab6bf9cb57",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1ioeBrMnXbCVj8EIvnlujg4YTNaqsOO0jFzTpw2v8Nfo",
+          "mode": "list",
+          "cachedResultName": "ComicPages",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ioeBrMnXbCVj8EIvnlujg4YTNaqsOO0jFzTpw2v8Nfo/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1ioeBrMnXbCVj8EIvnlujg4YTNaqsOO0jFzTpw2v8Nfo/edit?gid=0#gid=0",
+          "mode": "url"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "link": "={{ $json.link }}"
+          },
+          "matchingColumns": [
+            "link"
+          ],
+          "schema": [
+            {
+              "id": "link",
+              "displayName": "link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        3408,
+        -1152
+      ],
+      "id": "994302f0-cf7d-432b-8e13-aef954c8be63",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "ZpyGoS1Noq5m57yE",
+          "name": "Google Sheets account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1312,
+        320
+      ],
+      "id": "6f18aeb6-94f5-4e1f-910d-2aec2a9c307e",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "6ddgcVkIDrwcw2PU",
+          "name": "Google Gemini(PaLM) Api account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "rounak153d@gmail.com",
+        "subject": "Comic",
+        "message": "={{ $json.html }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        4304,
+        -256
+      ],
+      "id": "5b5b1dd7-fb4d-475b-9f12-57dde9bd53e5",
+      "name": "Send a message",
+      "webhookId": "72741ffa-0549-4910-bd45-8e645f69318c",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "IBVE5hr63zpO6LxM",
+          "name": "Gmail account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "path": "/comic",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -608,
+        -32
+      ],
+      "id": "b1473e74-dae3-46f0-8249-442ecd0ef559",
+      "name": "Webhook",
+      "webhookId": "0996a14b-8e12-4f54-8a77-a77da09fe1d7"
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "={{ $json.html }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        3840,
+        -704
+      ],
+      "id": "502768f8-1927-44e4-bfcc-6dfe1b0d4e85",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.output.scene1 }}{{ $json.output.scene2 }}{{ $json.output.scene3 }}{{ $json.output.scene4 }}{{ $json.output.scene5 }}\n{{ $json.output.scene6 }}{{ $json.output.scene7 }}\n\n\nwrite each scene as a storybook. each page should include dialoges like a normal book and also each page should be 10-15 lines long",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        576,
+        -496
+      ],
+      "id": "06a3e46b-62ad-494b-b0f8-a587b6d5cdd6",
+      "name": "AI Agent1"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        288,
+        -160
+      ],
+      "id": "562aa477-f72a-4f6d-9806-7bc25bed1397",
+      "name": "Google Gemini Chat Model2",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "6ddgcVkIDrwcw2PU",
+          "name": "Google Gemini(PaLM) Api account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n\t\"page1\": \"California\",\n  \"page2\": \"California\",\n  \"page3\": \"California\",\n  \"page4\": \"California\",\n  \"page5\": \"California\",\n  \"page6\": \"california\",\n  \"page7\":\"california\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        608,
+        -192
+      ],
+      "id": "34547857-37d3-458a-b10e-2f43d59c6e01",
+      "name": "Structured Output Parser1"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1552,
+        -320
+      ],
+      "id": "7a4d5fb1-34e6-4938-a74d-0fb1de9cca2c",
+      "name": "Merge",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "destinationFieldName": "link",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        1168,
+        -192
+      ],
+      "id": "7bb27bd6-5c0d-4c4a-a21c-9af1aba1e00b",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -688,
+        -832
+      ],
+      "id": "74b602fe-c322-4512-bdec-47a333a7d5e1",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "html": "<!doctype html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\" />\n  <meta name=\"viewport\" content=\"width=device-width,initial-scale=1\" />\n  <title>Panel Verse — Comic Newsletter</title>\n  <style>\n    body {\n      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, \"Helvetica Neue\", Arial, sans-serif;\n      background: #0b0b0f;\n      color: #e6eef6;\n      margin: 0;\n      padding: 0;\n    }\n    header {\n      text-align: center;\n      padding: 40px 20px 20px 20px;\n      border-bottom: 1px solid rgba(255,255,255,0.03);\n    }\n    header h1 {\n      font-size: 28px;\n      margin-bottom: 5px;\n    }\n    header p {\n      font-size: 14px;\n      color: #9aa0a6;\n    }\n    main {\n      max-width: 700px;\n      margin: 20px auto;\n      padding: 0 15px;\n    }\n    .panel-card {\n      background: #13131a;\n      border-radius: 12px;\n      margin-bottom: 30px;\n      overflow: hidden;\n      box-shadow: 0 4px 20px rgba(0,0,0,0.5);\n    }\n    .panel-card img {\n      width: 100%;\n      display: block;\n      border-bottom: 1px solid rgba(255,255,255,0.05);\n      border-radius: 12px 12px 0 0;\n    }\n    .story-card {\n      padding: 15px 20px;\n      background: #1e1e1e;\n      color: #e6eef6;\n      border-radius: 0 0 12px 12px;\n      line-height: 1.5;\n      font-size: 14px;\n    }\n    footer {\n      text-align: center;\n      padding: 20px;\n      font-size: 12px;\n      color: #9aa0a6;\n      border-top: 1px solid rgba(255,255,255,0.02);\n    }\n  </style>\n</head>\n<body>\n<header>\n  <h1>Panel Verse</h1>\n  <p>Come And Enjoy Stories Prepared Fresh With Human Effort And AI</p>\n</header>\n\n<main id=\"newsletter\">\n  <!-- Panels will render here -->\n</main>\n\n<footer>\n  &copy; 2025 Panel Verse. Created by Rounak Dutta. <br>\n  Contact: <a href=\"mailto:rounak153d@gmail.com\" style=\"color:#7afcff;\">rounak153d@gmail.com</a>\n</footer>\n\n<script>\nconst images = [\n  \"{{ $json.link[0].link }}\",\n  \"{{ $json.link[1].link }}\",\n  \"{{ $json.link[2].link }}\",\n  \"{{ $json.link[3].link }}\",\n  \"{{ $json.link[4].link }}\",\n  \"{{ $json.link[5].link }}\",\n  \"{{ $json.link[6].link }}\"\n];\n\nconst stories = [\n  `{{ $json.output.page1 }}`,\n  `{{ $json.output.page2 }}`,\n  `{{ $json.output.page3 }}`,\n  `{{ $json.output.page4 }}`,\n  `{{ $json.output.page5 }}`,\n  `{{ $json.output.page6 }}`,\n  `{{ $json.output.page7 }}`\n];\n\nconst newsletter = document.getElementById('newsletter');\n\nimages.forEach((src, i) => {\n  const panelCard = document.createElement('div');\n  panelCard.className = 'panel-card';\n  panelCard.innerHTML = `\n    <img src=\"${src}\" alt=\"comic page ${i+1}\" />\n    <div class=\"story-card\">${stories[i]}</div>\n  `;\n  newsletter.appendChild(panelCard);\n});\n</script>\n</body>\n</html>\n"
+      },
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1.2,
+      "position": [
+        3920,
+        -304
+      ],
+      "id": "8375b08a-b3b3-49c7-aecf-0bb907fcfc40",
+      "name": "HTML"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=story={{ $json.output.page1 }}{{ $json.output.page2 }}{{ $json.output.page3 }}{{ $json.output.page4 }}{{ $json.output.page5 }}{{ $json.output.page6 }}{{ $json.output.page7 }}\ngive audio keywords(2) for each scene.",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        2112,
+        -736
+      ],
+      "id": "73bf6011-2d92-46df-80ee-e34da5298d5f",
+      "name": "AI Agent2",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n\t\"scene1\": \"keywords\",\n    \"scene2\": \"keywords\",\n    \"scene3\": \"keywords\",\n    \"scene4\": \"keywords\",\n    \"scene5\":  \"keywords\",\n  \"scene6\":  \"keywords\",\n  \"scene5\":  \"keywords\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        2704,
+        0
+      ],
+      "id": "a687f00c-fa47-4e03-84fd-c6f3210dfee9",
+      "name": "Structured Output Parser2"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        3040,
+        576
+      ],
+      "id": "970ac3b7-81c1-43aa-ac69-1e955ef9524c",
+      "name": "Google Gemini Chat Model3",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "6ddgcVkIDrwcw2PU",
+          "name": "Google Gemini(PaLM) Api account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "output",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        2640,
+        -752
+      ],
+      "id": "ca9e4f9d-26c3-4140-a309-8af4e0522dfb",
+      "name": "Split Out1"
+    },
+    {
+      "parameters": {
+        "url": "=https://freesound.org/apiv2/search/text/\n",
+        "sendQuery": true,
+        "specifyQuery": "json",
+        "jsonQuery": "={\n  \"query\": \"{{ $json.output.split(' ',1) }}\",\n  \"fields\": \"id,name,previews,duration\",\n  \"page_size\": 10\n}\n",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Token VjIcPhblj9FNjyRBgy8XI7n0pY4qkEDMICRZsSiB"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2912,
+        -752
+      ],
+      "id": "106b4768-c530-4f01-b94d-63731e59c502",
+      "name": "HTTP Request2"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.results[0].name }}\n{{ $json.results[0].previews[\"preview-hq-mp3\"] }}\n{{ $json.results[1].name }}\n{{ $json.results[1].previews[\"preview-hq-mp3\"] }}\n{{ $json.results[2].name }}\n{{ $json.results[2].previews[\"preview-hq-mp3\"] }}\n{{ $json.results[3].name }}\n{{ $json.results[3].previews[\"preview-hq-mp3\"] }}\n{{ $json.results[4].name }}\n\n\n{{ $json.results[4].previews[\"preview-hq-mp3\"] }}\nselect one tract which could act as background audio above which a narration would play",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        3408,
+        -752
+      ],
+      "id": "9ba58060-32ec-4de8-844b-92321698f1d0",
+      "name": "AI Agent3"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n\t\"link\": \"California\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        3248,
+        -704
+      ],
+      "id": "77121289-0c78-48e3-8d39-ba3e1e7a34cd",
+      "name": "Structured Output Parser3"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "destinationFieldName": "links",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        3328,
+        -512
+      ],
+      "id": "7473e18d-c002-4a64-add3-176db572fc2a",
+      "name": "Aggregate1",
+      "executeOnce": false
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        3648,
+        -304
+      ],
+      "id": "5c96d950-0fec-4c14-b659-bf635401fc62",
+      "name": "Merge1",
+      "executeOnce": true
+    }
+  ],
+  "pinData": {
+    "AI Agent2": [
+      {
+        "json": {
+          "output": {
+            "scene1": "heavy sigh, pipe tap",
+            "scene2": "market chaos, vendor shriek",
+            "scene3": "magnifying glass scrape, pottery fragment clink",
+            "scene4": "rooftop scramble, jewel shimmer and fall",
+            "scene5": "torch sizzle, echoing silence"
+          }
+        }
+      }
+    ],
+    "Split Out1": [
+      {
+        "json": {
+          "output": "heavy sigh, pipe tap"
+        }
+      },
+      {
+        "json": {
+          "output": "market chaos, vendor shriek"
+        }
+      },
+      {
+        "json": {
+          "output": "magnifying glass scrape, pottery fragment clink"
+        }
+      },
+      {
+        "json": {
+          "output": "rooftop scramble, jewel shimmer and fall"
+        }
+      },
+      {
+        "json": {
+          "output": "torch sizzle, echoing silence"
+        }
+      }
+    ],
+    "HTTP Request2": [
+      {
+        "json": {
+          "count": 9316,
+          "previous": null,
+          "next": "https://freesound.org/apiv2/search/text/?&query=heavy&weights=&page=2&page_size=10&fields=id,name,previews,duration",
+          "results": [
+            {
+              "id": 702378,
+              "name": "HeavyMetalIaSound HeavyMetalGenre 4",
+              "duration": 15.008,
+              "previews": {
+                "preview-hq-mp3": "https://cdn.freesound.org/previews/702/702378_15147295-hq.mp3",
+                "preview-hq-ogg": "https://cdn.freesound.org/previews/702/702378_15147295-hq.ogg",
+                "preview-lq-mp3": "https://cdn.freesound.org/previews/702/702378_15147295-lq.mp3",
+                "preview-lq-ogg": "https://cdn.freesound.org/previews/702/702378_15147295-lq.ogg"
+              }
+            },
+            {
+              "id": 160853,
+              "name": "heavy snare 25.wav",
+              "duration": 0.25,
+              "previews": {
+                "preview-hq-mp3": "https://cdn.freesound.org/previews/160/160853_2262092-hq.mp3",
+                "preview-hq-ogg": "https://cdn.freesound.org/previews/160/160853_2262092-hq.ogg",
+                "preview-lq-mp3": "https://cdn.freesound.org/previews/160/160853_2262092-lq.mp3",
+                "preview-lq-ogg": "https://cdn.freesound.org/previews/160/160853_2262092-lq.ogg"
+              }
+            },
+            {
+              "id": 160835,
+              "name": "heavy snare 13.wav",
+              "duration": 0.25,
+              "previews": {
+                "preview-hq-mp3": "https://cdn.freesound.org/previews/160/160835_2262092-hq.mp3",
+                "preview-hq-ogg": "https://cdn.freesound.org/previews/160/160835_2262092-hq.ogg",
+                "preview-lq-mp3": "https://cdn.freesound.org/previews/160/160835_2262092-lq.mp3",
+                "preview-lq-ogg": "https://cdn.freesound.org/previews/160/160835_2262092-lq.ogg"
+              }
+            },
+            {
+              "id": 160839,
+              "name": "heavy snare 18.wav",
+              "duration": 0.125011,
+              "previews": {
+                "preview-hq-mp3": "https://cdn.freesound.org/previews/160/160839_2262092-hq.mp3",
+                "preview-hq-ogg": "https://cdn.freesound.org/previews/160/160839_2262092-hq.ogg",
+                "preview-lq-mp3": "https://cdn.freesound.org/previews/160/160839_2262092-lq.mp3",
+                "preview-lq-ogg": "https://cdn.freesound.org/previews/160/160839_2262092-lq.ogg"
+              }
+            },
+            {
+              "id": 702376,
+              "name": "HeavyMetalIaSound HeavyMetalGenre 2",
+              "duration": 15.008,
+              "previews": {
+                "preview-hq-mp3": "https://cdn.freesound.org/previews/702/702376_15147295-hq.mp3",
+                "preview-hq-ogg": "https://cdn.freesound.org/previews/702/702376_15147295-hq.ogg",
+                "preview-lq-mp3": "https://cdn.freesound.org/previews/702/702376_15147295-lq.mp3",
+                "preview-lq-ogg": "https://cdn.freesound.org/previews/702/702376_15147295-lq.ogg"
+              }
+            },
+            {
+              "id": 160843,
+              "name": "heavy snare 39.wav",
+              "duration": 0.250023,
+              "previews": {
+                "preview-hq-mp3": "https://cdn.freesound.org/previews/160/160843_2262092-hq.mp3",
+                "preview-hq-ogg": "https://cdn.freesound.org/previews/160/160843_2262092-hq.ogg",
+                "preview-lq-mp3": "https://cdn.freesound.org/previews/160/160843_2262092-lq.mp3",
+                "preview-lq-ogg": "https://cdn.freesound.org/previews/160/160843_2262092-lq.ogg"
+              }
+            },
+            {
+              "id": 160832,
+              "name": "heavy snare 16.wav",
+              "duration": 0.125011,
+              "previews": {
+                "preview-hq-mp3": "https://cdn.freesound.org/previews/160/160832_2262092-hq.mp3",
+                "preview-hq-ogg": "https://cdn.freesound.org/previews/160/160832_2262092-hq.ogg",
+                "preview-lq-mp3": "https://cdn.freesound.org/previews/160/160832_2262092-lq.mp3",
+                "preview-lq-ogg": "https://cdn.freesound.org/previews/160/160832_2262092-lq.ogg"
+              }
+            },
+            {
+              "id": 702377,
+              "name": "HeavyMetalIaSound HeavyMetalGenre 3",
+              "duration": 15.008,
+              "previews": {
+                "preview-hq-mp3": "https://cdn.freesound.org/previews/702/702377_15147295-hq.mp3",
+                "preview-hq-ogg": "https://cdn.freesound.org/previews/702/702377_15147295-hq.ogg",
+                "preview-lq-mp3": "https://cdn.freesound.org/previews/702/702377_15147295-lq.mp3",
+                "preview-lq-ogg": "https://cdn.freesound.org/previews/702/702377_15147295-lq.ogg"
+              }
+            },
+            {
+              "id": 160862,
+              "name": "heavy snare 3.wav",
+              "duration": 0.5,
+              "previews": {
+                "preview-hq-mp3": "https://cdn.freesound.org/previews/160/160862_2262092-hq.mp3",
+                "preview-hq-ogg": "https://cdn.freesound.org/previews/160/160862_2262092-hq.ogg",
+                "preview-lq-mp3": "https://cdn.freesound.org/previews/160/160862_2262092-lq.mp3",
+                "preview-lq-ogg": "https://cdn.freesound.org/previews/160/160862_2262092-lq.ogg"
+              }
+            },
+            {
+              "id": 160854,
+              "name": "heavy snare 24.wav",
+              "duration": 0.5,
+              "previews": {
+                "preview-hq-mp3": "https://cdn.freesound.org/previews/160/160854_2262092-hq.mp3",
+                "preview-hq-ogg": "https://cdn.freesound.org/previews/160/160854_2262092-hq.ogg",
+                "preview-lq-mp3": "https://cdn.freesound.org/previews/160/160854_2262092-lq.mp3",
+                "preview-lq-ogg": "https://cdn.freesound.org/previews/160/160854_2262092-lq.ogg"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "json": {
+          "count": 2258,
+          "previous": null,
+          "next": "https://freesound.org/apiv2/search/text/?&query=market&weights=&page=2&page_size=10&fields=id,name,previews,duration",
+          "results": [
+            {
+              "id": 378804,
+              "name": "asian salesman 01 small market.wav",
+              "duration": 1.5,
+              "previews": {
+                "preview-hq-mp3": "https://cdn.freesound.org/previews/378/378804_6989307-hq.mp3",
+                "preview-hq-ogg": "https://cdn.freesound.org/previews/378/378804_6989307-hq.ogg",
+                "preview-lq-mp3": "https://cdn.freesound.org/previews/378/378804_6989307-lq.mp3",
+                "preview-lq-ogg": "https://cdn.freesound.org/previews/378/378804_6989307-lq.ogg"
+              }
+            },
+            {
+              "id": 335105,
+              "name": "superMarket_Car_2.wav",
+              "duration": 2.56923,
+              "previews": {
+                "preview-hq-mp3": "https://cdn.freesound.org/previews/335/335105_4960771-hq.mp3",
+                "preview-hq-ogg": "https://cdn.freesound.org/previews/335/335105_4960771-hq.ogg",
+                "preview-lq-mp3": "https://cdn.freesound.org/previews/335/335105_4960771-lq.mp3",
+                "preview-lq-ogg": "https://cdn.freesound.org/previews/335/335105_4960771-lq.ogg"
+              }
+            },
+            {
+              "id": 378809,
+              "name": "cash small market.wav",
+              "duration": 2.75,
+              "previews": {
+                "preview-hq-mp3": "https://cdn.freesound.org/previews/378/378809_6989307-hq.mp3",
+                "preview-hq-ogg": "https://cdn.freesound.org/previews/378/378809_6989307-hq.ogg",
+                "preview-lq-mp3": "https://cdn.freesound.org/previews/378/378809_6989307-lq.mp3",
+                "preview-lq-ogg": "https://cdn.freesound.org/previews/378/378809_6989307-lq.ogg"
+              }
+            },
+            {
+              "id": 202594,
+              "name": "calm down-town market 40m NL 131006_02.flac",
+              "duration": 2295.96,
+              "previews": {
+                "preview-hq-mp3": "https://cdn.freesound.org/previews/202/202594_1648170-hq.mp3",
+                "preview-hq-ogg": "https://cdn.freesound.org/previews/202/202594_1648170-hq.ogg",
+                "preview-lq-mp3": "https://cdn.freesound.org/previews/202/202594_1648170-lq.mp3",
+                "preview-lq-ogg": "https://cdn.freesound.org/previews/202/202594_1648170-lq.ogg"
+              }
+            },
+            {
+              "id": 378817,
+              "name": "cashbox small market.wav",
+              "duration": 3,
+              "previews": {
+                "preview-hq-mp3": "https://cdn.freesound.org/previews/378/378817_6989307-hq.mp3",
+                "preview-hq-ogg": "https://cdn.freesound.org/previews/378/378817_6989307-hq.ogg",
+                "preview-lq-mp3": "https://cdn.freesound.org/previews/378/378817_6989307-lq.mp3",
+                "preview-lq-ogg": "https://cdn.freesound.org/previews/378/378817_6989307-lq.ogg"
+              }
+            },
+            {
+              "id": 378819,
+              "name": "room tone small market.wav",
+              "duration": 24,
+              "previews": {
+                "preview-hq-mp3": "https://cdn.freesound.org/previews/378/378819_6989307-hq.mp3",
+                "preview-hq-ogg": "https://cdn.freesound.org/previews/378/378819_6989307-hq.ogg",
+                "preview-lq-mp3": "https://cdn.freesound.org/previews/378/378819_6989307-lq.mp3",
+                "preview-lq-ogg": "https://cdn.freesound.org/previews/378/378819_6989307-lq.ogg"
+              }
+            },
+            {
+              "id": 378802,
+              "name": "asian salesman, open cash box 02 small market.wav",
+              "duration": 2.5,
+              "previews": {
+                "preview-hq-mp3": "https://cdn.freesound.org/previews/378/378802_6989307-hq.mp3",
+                "preview-hq-ogg": "https://cdn.freesound.org/previews/378/378802_6989307-hq.ogg",
+                "preview-lq-mp3": "https://cdn.freesound.org/previews/378/378802_6989307-lq.mp3",
+                "preview-lq-ogg": "https://cdn.freesound.org/previews/378/378802_6989307-lq.ogg"
+              }
+            },
+            {
+              "id": 378820,
+              "name": "cashbox small market.aif",
+              "duration": 3,
+              "previews": {
+                "preview-hq-mp3": "https://cdn.freesound.org/previews/378/378820_6989307-hq.mp3",
+                "preview-hq-ogg": "https://cdn.freesound.org/previews/378/378820_6989307-hq.ogg",
+                "preview-lq-mp3": "https://cdn.freesound.org/previews/378/378820_6989307-lq.mp3",
+                "preview-lq-ogg": "https://cdn.freesound.org/previews/378/378820_6989307-lq.ogg"
+              }
+            },
+            {
+              "id": 533845,
+              "name": "green market NL 160409_10.flac",
+              "duration": 595.957,
+              "previews": {
+                "preview-hq-mp3": "https://cdn.freesound.org/previews/533/533845_1648170-hq.mp3",
+                "preview-hq-ogg": "https://cdn.freesound.org/previews/533/533845_1648170-hq.ogg",
+                "preview-lq-mp3": "https://cdn.freesound.org/previews/533/533845_1648170-lq.mp3",
+                "preview-lq-ogg": "https://cdn.freesound.org/previews/533/533845_1648170-lq.ogg"
+              }
+            },
+            {
+              "id": 378818,
+              "name": "cashmachine 02 small market.wav",
+              "duration": 2.25,
+              "previews": {
+                "preview-hq-mp3": "https://cdn.freesound.org/previews/378/378818_6989307-hq.mp3",
+                "preview-hq-ogg": "https://cdn.freesound.org/previews/378/378818_6989307-hq.ogg",
+                "preview-lq-mp3": "https://cdn.freesound.org/previews/378/378818_6989307-lq.mp3",
+                "preview-lq-ogg": "https://cdn.freesound.org/previews/378/378818_6989307-lq.ogg"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "json": {
+          "count": 10,
+          "previous": null,
+          "next": null,
+          "results": [
+            {
+              "id": 126303,
+              "name": "CR ExplodingAnts.wav",
+              "duration": 18,
+              "previews": {
+                "preview-hq-mp3": "https://cdn.freesound.org/previews/126/126303_1059930-hq.mp3",
+                "preview-hq-ogg": "https://cdn.freesound.org/previews/126/126303_1059930-hq.ogg",
+                "preview-lq-mp3": "https://cdn.freesound.org/previews/126/126303_1059930-lq.mp3",
+                "preview-lq-ogg": "https://cdn.freesound.org/previews/126/126303_1059930-lq.ogg"
+              }
+            },
+            {
+              "id": 53428,
+              "name": "Close_Mic_Shore.wav",
+              "duration": 176.335,
+              "previews": {
+                "preview-hq-mp3": "https://cdn.freesound.org/previews/53/53428_29541-hq.mp3",
+                "preview-hq-ogg": "https://cdn.freesound.org/previews/53/53428_29541-hq.ogg",
+                "preview-lq-mp3": "https://cdn.freesound.org/previews/53/53428_29541-lq.mp3",
+                "preview-lq-ogg": "https://cdn.freesound.org/previews/53/53428_29541-lq.ogg"
+              }
+            },
+            {
+              "id": 465793,
+              "name": "terminal.life-lastday.mp3",
+              "duration": 516.048,
+              "previews": {
+                "preview-hq-mp3": "https://cdn.freesound.org/previews/465/465793_1809686-hq.mp3",
+                "preview-hq-ogg": "https://cdn.freesound.org/previews/465/465793_1809686-hq.ogg",
+                "preview-lq-mp3": "https://cdn.freesound.org/previews/465/465793_1809686-lq.mp3",
+                "preview-lq-ogg": "https://cdn.freesound.org/previews/465/465793_1809686-lq.ogg"
+              }
+            },
+            {
+              "id": 42237,
+              "name": "voyagerimage.WAV",
+              "duration": 44.9989,
+              "previews": {
+                "preview-hq-mp3": "https://cdn.freesound.org/previews/42/42237_4948-hq.mp3",
+                "preview-hq-ogg": "https://cdn.freesound.org/previews/42/42237_4948-hq.ogg",
+                "preview-lq-mp3": "https://cdn.freesound.org/previews/42/42237_4948-lq.mp3",
+                "preview-lq-ogg": "https://cdn.freesound.org/previews/42/42237_4948-lq.ogg"
+              }
+            },
+            {
+              "id": 271207,
+              "name": "4-19-15 Amtrak 171.wav",
+              "duration": 29.0743,
+              "previews": {
+                "preview-hq-mp3": "https://cdn.freesound.org/previews/271/271207_5149512-hq.mp3",
+                "preview-hq-ogg": "https://cdn.freesound.org/previews/271/271207_5149512-hq.ogg",
+                "preview-lq-mp3": "https://cdn.freesound.org/previews/271/271207_5149512-lq.mp3",
+                "preview-lq-ogg": "https://cdn.freesound.org/previews/271/271207_5149512-lq.ogg"
+              }
+            },
+            {
+              "id": 664911,
+              "name": "006A_170327_0554_FR_Gospel.mp3",
+              "duration": 277.995,
+              "previews": {
+                "preview-hq-mp3": "https://cdn.freesound.org/previews/664/664911_9034501-hq.mp3",
+                "preview-hq-ogg": "https://cdn.freesound.org/previews/664/664911_9034501-hq.ogg",
+                "preview-lq-mp3": "https://cdn.freesound.org/previews/664/664911_9034501-lq.mp3",
+                "preview-lq-ogg": "https://cdn.freesound.org/previews/664/664911_9034501-lq.ogg"
+              }
+            },
+            {
+              "id": 349350,
+              "name": "Internal Computer Hum",
+              "duration": 39.9817,
+              "previews": {
+                "preview-hq-mp3": "https://cdn.freesound.org/previews/349/349350_4357738-hq.mp3",
+                "preview-hq-ogg": "https://cdn.freesound.org/previews/349/349350_4357738-hq.ogg",
+                "preview-lq-mp3": "https://cdn.freesound.org/previews/349/349350_4357738-lq.mp3",
+                "preview-lq-ogg": "https://cdn.freesound.org/previews/349/349350_4357738-lq.ogg"
+              }
+            },
+            {
+              "id": 720049,
+              "name": "Transformed wind chimes: Nature-Symphony 31",
+              "duration": 1098.45,
+              "previews": {
+                "preview-hq-mp3": "https://cdn.freesound.org/previews/720/720049_1531809-hq.mp3",
+                "preview-hq-ogg": "https://cdn.freesound.org/previews/720/720049_1531809-hq.ogg",
+                "preview-lq-mp3": "https://cdn.freesound.org/previews/720/720049_1531809-lq.mp3",
+                "preview-lq-ogg": "https://cdn.freesound.org/previews/720/720049_1531809-lq.ogg"
+              }
+            },
+            {
+              "id": 236951,
+              "name": "computer-noise_dell_d505_newerhdd_charger_2004.wav",
+              "duration": 633.542,
+              "previews": {
+                "preview-hq-mp3": "https://cdn.freesound.org/previews/236/236951_739478-hq.mp3",
+                "preview-hq-ogg": "https://cdn.freesound.org/previews/236/236951_739478-hq.ogg",
+                "preview-lq-mp3": "https://cdn.freesound.org/previews/236/236951_739478-lq.mp3",
+                "preview-lq-ogg": "https://cdn.freesound.org/previews/236/236951_739478-lq.ogg"
+              }
+            },
+            {
+              "id": 13543,
+              "name": "MidwifeToads3.wav",
+              "duration": 42.2122,
+              "previews": {
+                "preview-hq-mp3": "https://cdn.freesound.org/previews/13/13543_37876-hq.mp3",
+                "preview-hq-ogg": "https://cdn.freesound.org/previews/13/13543_37876-hq.ogg",
+                "preview-lq-mp3": "https://cdn.freesound.org/previews/13/13543_37876-lq.mp3",
+                "preview-lq-ogg": "https://cdn.freesound.org/previews/13/13543_37876-lq.ogg"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "json": {
+          "count": 191,
+          "previous": null,
+          "next": "https://freesound.org/apiv2/search/text/?&query=rooftop&weights=&page=2&page_size=10&fields=id,name,previews,duration",
+          "results": [
+            {
+              "id": 407067,
+              "name": "rooftop 2nd floor morning light distant traffic a bit right heavy with motorcycles nearby road and some people activity echo things rooster less rumble could be small town Mbale, Uganda, Africa 2016.wav",
+              "duration": 285.702,
+              "previews": {
+                "preview-hq-mp3": "https://cdn.freesound.org/previews/407/407067_612689-hq.mp3",
+                "preview-hq-ogg": "https://cdn.freesound.org/previews/407/407067_612689-hq.ogg",
+                "preview-lq-mp3": "https://cdn.freesound.org/previews/407/407067_612689-lq.mp3",
+                "preview-lq-ogg": "https://cdn.freesound.org/previews/407/407067_612689-lq.ogg"
+              }
+            },
+            {
+              "id": 407070,
+              "name": "rooftop 2nd floor early morning nearby rooster traffic and voices calm no rumble could be small town or village Mbale, Uganda, Africa 2016.wav",
+              "duration": 214.464,
+              "previews": {
+                "preview-hq-mp3": "https://cdn.freesound.org/previews/407/407070_612689-hq.mp3",
+                "preview-hq-ogg": "https://cdn.freesound.org/previews/407/407070_612689-hq.ogg",
+                "preview-lq-mp3": "https://cdn.freesound.org/previews/407/407070_612689-lq.mp3",
+                "preview-lq-ogg": "https://cdn.freesound.org/previews/407/407070_612689-lq.ogg"
+              }
+            },
+            {
+              "id": 450710,
+              "name": "skyline rooftop with traffic, sheep bahhing, distant prayer from mosque +men voices int enter room and talk behind mic Dakar, Senegal, Africa.flac",
+              "duration": 83.2078,
+              "previews": {
+                "preview-hq-mp3": "https://cdn.freesound.org/previews/450/450710_612689-hq.mp3",
+                "preview-hq-ogg": "https://cdn.freesound.org/previews/450/450710_612689-hq.ogg",
+                "preview-lq-mp3": "https://cdn.freesound.org/previews/450/450710_612689-lq.mp3",
+                "preview-lq-ogg": "https://cdn.freesound.org/previews/450/450710_612689-lq.ogg"
+              }
+            },
+            {
+              "id": 407069,
+              "name": "rooftop 2nd floor early morning skyline nearby rooster traffic and voices with distant traffic rumble Mbale, Uganda, Africa 2016.wav",
+              "duration": 214.464,
+              "previews": {
+                "preview-hq-mp3": "https://cdn.freesound.org/previews/407/407069_612689-hq.mp3",
+                "preview-hq-ogg": "https://cdn.freesound.org/previews/407/407069_612689-hq.ogg",
+                "preview-lq-mp3": "https://cdn.freesound.org/previews/407/407069_612689-lq.mp3",
+                "preview-lq-ogg": "https://cdn.freesound.org/previews/407/407069_612689-lq.ogg"
+              }
+            },
+            {
+              "id": 688064,
+              "name": "Rainy Rooftop in Venice",
+              "duration": 1958.56,
+              "previews": {
+                "preview-hq-mp3": "https://cdn.freesound.org/previews/688/688064_11405584-hq.mp3",
+                "preview-hq-ogg": "https://cdn.freesound.org/previews/688/688064_11405584-hq.ogg",
+                "preview-lq-mp3": "https://cdn.freesound.org/previews/688/688064_11405584-lq.mp3",
+                "preview-lq-ogg": "https://cdn.freesound.org/previews/688/688064_11405584-lq.ogg"
+              }
+            },
+            {
+              "id": 730931,
+              "name": "Rooftop City Sound",
+              "duration": 861.347,
+              "previews": {
+                "preview-hq-mp3": "https://cdn.freesound.org/previews/730/730931_4630301-hq.mp3",
+                "preview-hq-ogg": "https://cdn.freesound.org/previews/730/730931_4630301-hq.ogg",
+                "preview-lq-mp3": "https://cdn.freesound.org/previews/730/730931_4630301-lq.mp3",
+                "preview-lq-ogg": "https://cdn.freesound.org/previews/730/730931_4630301-lq.ogg"
+              }
+            },
+            {
+              "id": 808198,
+              "name": "Rooftop Rain",
+              "duration": 120,
+              "previews": {
+                "preview-hq-mp3": "https://cdn.freesound.org/previews/808/808198_16786392-hq.mp3",
+                "preview-hq-ogg": "https://cdn.freesound.org/previews/808/808198_16786392-hq.ogg",
+                "preview-lq-mp3": "https://cdn.freesound.org/previews/808/808198_16786392-lq.mp3",
+                "preview-lq-ogg": "https://cdn.freesound.org/previews/808/808198_16786392-lq.ogg"
+              }
+            },
+            {
+              "id": 371259,
+              "name": "Rooftop city neighbourhood morning, distant traffic, residents activity.wav",
+              "duration": 601.6,
+              "previews": {
+                "preview-hq-mp3": "https://cdn.freesound.org/previews/371/371259_2138324-hq.mp3",
+                "preview-hq-ogg": "https://cdn.freesound.org/previews/371/371259_2138324-hq.ogg",
+                "preview-lq-mp3": "https://cdn.freesound.org/previews/371/371259_2138324-lq.mp3",
+                "preview-lq-ogg": "https://cdn.freesound.org/previews/371/371259_2138324-lq.ogg"
+              }
+            },
+            {
+              "id": 407076,
+              "name": "rooftop 2nd floor night crickets and distant traffic and people activity Mbale, Uganda, Africa 2016.wav",
+              "duration": 465.924,
+              "previews": {
+                "preview-hq-mp3": "https://cdn.freesound.org/previews/407/407076_612689-hq.mp3",
+                "preview-hq-ogg": "https://cdn.freesound.org/previews/407/407076_612689-hq.ogg",
+                "preview-lq-mp3": "https://cdn.freesound.org/previews/407/407076_612689-lq.mp3",
+                "preview-lq-ogg": "https://cdn.freesound.org/previews/407/407076_612689-lq.ogg"
+              }
+            },
+            {
+              "id": 686013,
+              "name": "Rooftop ambience morning city",
+              "duration": 136.937,
+              "previews": {
+                "preview-hq-mp3": "https://cdn.freesound.org/previews/686/686013_3234379-hq.mp3",
+                "preview-hq-ogg": "https://cdn.freesound.org/previews/686/686013_3234379-hq.ogg",
+                "preview-lq-mp3": "https://cdn.freesound.org/previews/686/686013_3234379-lq.mp3",
+                "preview-lq-ogg": "https://cdn.freesound.org/previews/686/686013_3234379-lq.ogg"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "json": {
+          "count": 169,
+          "previous": null,
+          "next": "https://freesound.org/apiv2/search/text/?&query=torch&weights=&page=2&page_size=10&fields=id,name,previews,duration",
+          "results": [
+            {
+              "id": 386383,
+              "name": "Torch - Ignite flame bang short",
+              "duration": 1.5,
+              "previews": {
+                "preview-hq-mp3": "https://cdn.freesound.org/previews/386/386383_1655965-hq.mp3",
+                "preview-hq-ogg": "https://cdn.freesound.org/previews/386/386383_1655965-hq.ogg",
+                "preview-lq-mp3": "https://cdn.freesound.org/previews/386/386383_1655965-lq.mp3",
+                "preview-lq-ogg": "https://cdn.freesound.org/previews/386/386383_1655965-lq.ogg"
+              }
+            },
+            {
+              "id": 386381,
+              "name": "Torch - Ignition tool scratch",
+              "duration": 0.75,
+              "previews": {
+                "preview-hq-mp3": "https://cdn.freesound.org/previews/386/386381_1655965-hq.mp3",
+                "preview-hq-ogg": "https://cdn.freesound.org/previews/386/386381_1655965-hq.ogg",
+                "preview-lq-mp3": "https://cdn.freesound.org/previews/386/386381_1655965-lq.mp3",
+                "preview-lq-ogg": "https://cdn.freesound.org/previews/386/386381_1655965-lq.ogg"
+              }
+            },
+            {
+              "id": 386380,
+              "name": "Torch - Ignite flame bang",
+              "duration": 0.75,
+              "previews": {
+                "preview-hq-mp3": "https://cdn.freesound.org/previews/386/386380_1655965-hq.mp3",
+                "preview-hq-ogg": "https://cdn.freesound.org/previews/386/386380_1655965-hq.ogg",
+                "preview-lq-mp3": "https://cdn.freesound.org/previews/386/386380_1655965-lq.mp3",
+                "preview-lq-ogg": "https://cdn.freesound.org/previews/386/386380_1655965-lq.ogg"
+              }
+            },
+            {
+              "id": 654359,
+              "name": "Propane_Torch_2.mp3",
+              "duration": 104.197,
+              "previews": {
+                "preview-hq-mp3": "https://cdn.freesound.org/previews/654/654359_9065739-hq.mp3",
+                "preview-hq-ogg": "https://cdn.freesound.org/previews/654/654359_9065739-hq.ogg",
+                "preview-lq-mp3": "https://cdn.freesound.org/previews/654/654359_9065739-lq.mp3",
+                "preview-lq-ogg": "https://cdn.freesound.org/previews/654/654359_9065739-lq.ogg"
+              }
+            },
+            {
+              "id": 386379,
+              "name": "Torch - Ignite flame on",
+              "duration": 0.75,
+              "previews": {
+                "preview-hq-mp3": "https://cdn.freesound.org/previews/386/386379_1655965-hq.mp3",
+                "preview-hq-ogg": "https://cdn.freesound.org/previews/386/386379_1655965-hq.ogg",
+                "preview-lq-mp3": "https://cdn.freesound.org/previews/386/386379_1655965-lq.mp3",
+                "preview-lq-ogg": "https://cdn.freesound.org/previews/386/386379_1655965-lq.ogg"
+              }
+            },
+            {
+              "id": 410360,
+              "name": "Torch Click 2",
+              "duration": 0.336689,
+              "previews": {
+                "preview-hq-mp3": "https://cdn.freesound.org/previews/410/410360_1196020-hq.mp3",
+                "preview-hq-ogg": "https://cdn.freesound.org/previews/410/410360_1196020-hq.ogg",
+                "preview-lq-mp3": "https://cdn.freesound.org/previews/410/410360_1196020-lq.mp3",
+                "preview-lq-ogg": "https://cdn.freesound.org/previews/410/410360_1196020-lq.ogg"
+              }
+            },
+            {
+              "id": 386385,
+              "name": "Torch - Ignite flame on soft",
+              "duration": 0.75,
+              "previews": {
+                "preview-hq-mp3": "https://cdn.freesound.org/previews/386/386385_1655965-hq.mp3",
+                "preview-hq-ogg": "https://cdn.freesound.org/previews/386/386385_1655965-hq.ogg",
+                "preview-lq-mp3": "https://cdn.freesound.org/previews/386/386385_1655965-lq.mp3",
+                "preview-lq-ogg": "https://cdn.freesound.org/previews/386/386385_1655965-lq.ogg"
+              }
+            },
+            {
+              "id": 386384,
+              "name": "Torch - Gas flow",
+              "duration": 1.47903,
+              "previews": {
+                "preview-hq-mp3": "https://cdn.freesound.org/previews/386/386384_1655965-hq.mp3",
+                "preview-hq-ogg": "https://cdn.freesound.org/previews/386/386384_1655965-hq.ogg",
+                "preview-lq-mp3": "https://cdn.freesound.org/previews/386/386384_1655965-lq.mp3",
+                "preview-lq-ogg": "https://cdn.freesound.org/previews/386/386384_1655965-lq.ogg"
+              }
+            },
+            {
+              "id": 386382,
+              "name": "Torch - Full work cycle of cutting metal",
+              "duration": 87,
+              "previews": {
+                "preview-hq-mp3": "https://cdn.freesound.org/previews/386/386382_1655965-hq.mp3",
+                "preview-hq-ogg": "https://cdn.freesound.org/previews/386/386382_1655965-hq.ogg",
+                "preview-lq-mp3": "https://cdn.freesound.org/previews/386/386382_1655965-lq.mp3",
+                "preview-lq-ogg": "https://cdn.freesound.org/previews/386/386382_1655965-lq.ogg"
+              }
+            },
+            {
+              "id": 410359,
+              "name": "Torch Click 1",
+              "duration": 0.417959,
+              "previews": {
+                "preview-hq-mp3": "https://cdn.freesound.org/previews/410/410359_1196020-hq.mp3",
+                "preview-hq-ogg": "https://cdn.freesound.org/previews/410/410359_1196020-hq.ogg",
+                "preview-lq-mp3": "https://cdn.freesound.org/previews/410/410359_1196020-lq.mp3",
+                "preview-lq-ogg": "https://cdn.freesound.org/previews/410/410359_1196020-lq.ogg"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "AI Agent3": [
+      {
+        "json": {
+          "output": {
+            "link": "https://cdn.freesound.org/previews/702/702378_15147295-hq.mp3"
+          }
+        }
+      },
+      {
+        "json": {
+          "output": {
+            "link": "https://cdn.freesound.org/previews/202/202594_1648170-hq.mp3"
+          }
+        }
+      },
+      {
+        "json": {
+          "output": {
+            "link": "https://cdn.freesound.org/previews/53/53428_29541-hq.mp3"
+          }
+        }
+      },
+      {
+        "json": {
+          "output": {
+            "link": "https://cdn.freesound.org/previews/688/688064_11405584-hq.mp3"
+          }
+        }
+      },
+      {
+        "json": {
+          "output": {
+            "link": "https://cdn.freesound.org/previews/654/654359_9065739-hq.mp3"
+          }
+        }
+      }
+    ],
+    "Aggregate1": [
+      {
+        "json": {
+          "links": [
+            {
+              "output": {
+                "link": "https://cdn.freesound.org/previews/702/702378_15147295-hq.mp3"
+              }
+            },
+            {
+              "output": {
+                "link": "https://cdn.freesound.org/previews/202/202594_1648170-hq.mp3"
+              }
+            },
+            {
+              "output": {
+                "link": "https://cdn.freesound.org/previews/53/53428_29541-hq.mp3"
+              }
+            },
+            {
+              "output": {
+                "link": "https://cdn.freesound.org/previews/688/688064_11405584-hq.mp3"
+              }
+            },
+            {
+              "output": {
+                "link": "https://cdn.freesound.org/previews/654/654359_9065739-hq.mp3"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "HTML": [
+      {
+        "json": {
+          "html": "<!doctype html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\" />\n  <meta name=\"viewport\" content=\"width=device-width,initial-scale=1\" />\n  <title>Panel Verse — Comic Newsletter</title>\n  <style>\n    body {\n      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, \"Helvetica Neue\", Arial, sans-serif;\n      background: #0b0b0f;\n      color: #e6eef6;\n      margin: 0;\n      padding: 0;\n    }\n    header {\n      text-align: center;\n      padding: 40px 20px 20px 20px;\n      border-bottom: 1px solid rgba(255,255,255,0.03);\n    }\n    header h1 {\n      font-size: 28px;\n      margin-bottom: 5px;\n    }\n    header p {\n      font-size: 14px;\n      color: #9aa0a6;\n    }\n    main {\n      max-width: 700px;\n      margin: 20px auto;\n      padding: 0 15px;\n    }\n    .panel-card {\n      background: #13131a;\n      border-radius: 12px;\n      margin-bottom: 30px;\n      overflow: hidden;\n      box-shadow: 0 4px 20px rgba(0,0,0,0.5);\n    }\n    .panel-card img {\n      width: 100%;\n      display: block;\n      border-bottom: 1px solid rgba(255,255,255,0.05);\n      border-radius: 12px 12px 0 0;\n    }\n    .story-card {\n      padding: 15px 20px;\n      background: #1e1e1e;\n      color: #e6eef6;\n      border-radius: 0 0 12px 12px;\n      line-height: 1.5;\n      font-size: 14px;\n    }\n    footer {\n      text-align: center;\n      padding: 20px;\n      font-size: 12px;\n      color: #9aa0a6;\n      border-top: 1px solid rgba(255,255,255,0.02);\n    }\n  </style>\n</head>\n<body>\n<header>\n  <h1>Panel Verse</h1>\n  <p>Come And Enjoy Stories Prepared Fresh With Human Effort And AI</p>\n</header>\n\n<main id=\"newsletter\">\n  <!-- Panels will render here -->\n</main>\n\n<footer>\n  &copy; 2025 Panel Verse. Created by Rounak Dutta. <br>\n  Contact: <a href=\"mailto:rounak153d@gmail.com\" style=\"color:#7afcff;\">rounak153d@gmail.com</a>\n</footer>\n\n<script>\nconst images = [\n  \"https://iili.io/Kwg1jP2.png\",\n  \"https://iili.io/KwgEqDG.png\",\n  \"https://iili.io/KwgEE0B.png\",\n  \"https://iili.io/KwgGCkF.png\",\n  \"https://iili.io/KwgGY7t.png\",\n  \"https://iili.io/KwgGh2S.png\",\n  \"https://iili.io/KwgG6YP.png\"\n];\n\nconst stories = [\n  `The last rays of the setting sun painted the ancient marketplace in hues of orange and purple. Cobblestone streets, worn smooth by centuries of footsteps, teemed with life. Amidst the clamor of vendors and the chatter of shoppers, Professor Rao, his thick spectacles perched on his nose, stood transfixed. In his hand, a small, intricately carved stone tablet pulsed with a faint, almost imperceptible glow.\n\n\"Remarkable,\" he murmured to himself, his fingers tracing the ancient script. \"Truly remarkable.\"\nA nearby spice merchant, fanning himself with a palm leaf, called out, \"Find anything good today, Professor? Something to spice up history?\"\nProfessor Rao merely smiled, his gaze never leaving the tablet. \"More than good, my friend. This... this could change everything.\"\nThe glow intensified for a fleeting moment, a secret whispered in the twilight. Rao clutched it tighter, a thrill of discovery running through him.`,\n  `Back in his cluttered study, a sanctuary of ancient knowledge, Professor Rao was a man possessed. Scrolls, maps, and artifacts spilled from every surface, silent witnesses to his tireless pursuit. Under the beam of his magnifying glass, the stone tablet now pulsed with a distinct, rhythmic glow, casting ethereal shadows on the walls.\n\n\"It resonates,\" he whispered, his voice hoarse from hours of study. \"A dormant energy, now awakened. But what awakens it?\"\nHe flipped through a crumbling tome, muttering, \"The Prophecy of the Luminous Heart... could it be true?\"\nOutside, on a neighboring rooftop, a lone, silhouetted figure watched. Intense, piercing eyes followed every move of the professor, glinting in the faint light of the distant city.\nThe figure shifted, a silent predator observing its prey. The city lights twinkled, unaware of the ancient power stirring below.`,\n  `A chilling silence now hung heavy in Professor Rao's study. The room, once a haven of order, was a scene of violent disruption. Books lay strewn across the floor, their pages splayed open, and a heavy wooden chair lay overturned, its legs pointing accusingly at the shattered window. Shards of glass glittered maliciously on the floorboards, reflecting the cold moonlight.\n\nProfessor Rao lay motionless, his spectacles askew, a silent testament to the struggle. The air still thrummed with a faint, ghostly luminescence, a spectral echo of the tablet's vanished glow.\nA close-up view revealed a distinct, muddy footprint on the polished wood, stark against the chaos. It was a mark of intrusion, a signature left by a desperate hand.\n\"No,\" the wind seemed to whisper through the broken pane. \"Not like this.\" The silence was deafening, a heavy shroud draped over a broken dream.`,\n  `The crime scene buzzed with a different kind of intensity now. Inspector Arjun, a man whose sharp gaze missed nothing, knelt beside the muddy footprint. His forensic kit lay open, its tools glinting in the lantern light. He carefully measured and photographed the impression, his brow furrowed in concentration.\n\n\"A clean break, Lieutenant,\" he observed, not looking up. \"Professional, but with a surprising haste. See the scuff marks here?\"\nLieutenant Sharma, a younger officer, nodded. \"The window, Inspector. Smashed from the outside. They wanted in, and they took the tablet.\"\n\"Indeed,\" Arjun replied, rising slowly. \"And our Professor... a terrible loss. This footprint, however, tells a story. A very specific story.\"\nHe turned to his men. \"Secure the perimeter. I want every inch of this study documented. This is no ordinary theft. This is something far more dangerous.\" The hunt had begun.`,\n  `The chase was a blur of motion across the ancient rooftops of the city. Inspector Arjun, his police uniform surprisingly agile, leaped from one ornate haveli balcony to another, his determined gaze fixed on the shadowy figure ahead. The figure, swift and silent, clutched the glowing stone tablet, its light a beacon in the night.\n\n\"Stop! In the name of the law!\" Arjun bellowed, his voice echoing across the tiled roofs.\nThe figure merely glanced back, a flash of defiance in its eyes, and accelerated, disappearing into the labyrinthine alleys.\nArjun pushed harder, his breath coming in ragged gasps. \"He knows these streets too well,\" he muttered, vaulting over a parapet.\nThe glowing tablet pulsed erratically, as if urging its bearer onward. This was not just a chase; it was a desperate race against time for a power that could alter destinies.`,\n  `The pursuit culminated in the echoing depths of a vast, dimly lit warehouse. Arjun finally cornered the shadowy figure amidst crates and forgotten machinery. A fierce hand-to-hand struggle erupted, the sounds of their blows reverberating through the cavernous space. The glowing tablet, dislodged during the fight, tumbled to the ground, casting an eerie, pulsating light on their sweat-streaked faces.\n\nWith a final, desperate shove, Arjun tore at the figure's mask. It ripped away, revealing the shocked face of a young man, undeniably familiar.\n\"Vikram?\" Arjun gasped, stumbling back. \"Professor Rao's apprentice? It was you all along?\"\nVikram's eyes were a mix of desperation and urgency, not malice. \"Inspector, you don't understand! I had to! It's not what you think!\"\n\"Then explain yourself, boy! The Professor is unconscious, and this tablet...\" Arjun gestured to the glowing artifact.\n\"It's not just a tablet, Inspector,\" Vikram pleaded. \"It's a warning. And we're out of time.\"`,\n  `Before Arjun could demand an explanation, the warehouse doors groaned open, revealing a new, more sinister threat. A group of heavily armed cultists, their faces obscured by dark hoods, strode into the eerie light cast by the glowing tablet. At their head stood a menacing, scarred figure, brandishing an ancient, wickedly curved weapon.\n\n\"So, the apprentice returns to the fold,\" the scarred leader sneered, his voice a gravelly rasp. \"And he brings us the Inspector. A convenient delivery.\"\nVikram instinctively moved closer to Arjun, his expression hardened. \"These are the Guardians of the Luminous Heart, Inspector. They believe the tablet is theirs, and they will stop at nothing.\"\n\"Indeed,\" the leader hissed, his eyes fixed on the pulsating tablet. \"The true power must be returned to its rightful masters.\"\nArjun drew his sidearm, standing shoulder to shoulder with Vikram. \"Not on my watch. This tablet, whatever its power, will not fall into your hands.\"\nThe air crackled with tension, the glowing tablet a silent, powerful arbiter between good and evil, its ancient light illuminating the impending battle.`\n];\n\nconst newsletter = document.getElementById('newsletter');\n\nimages.forEach((src, i) => {\n  const panelCard = document.createElement('div');\n  panelCard.className = 'panel-card';\n  panelCard.innerHTML = `\n    <img src=\"${src}\" alt=\"comic page ${i+1}\" />\n    <div class=\"story-card\">${stories[i]}</div>\n  `;\n  newsletter.appendChild(panelCard);\n});\n</script>\n</body>\n</html>\n"
+        }
+      }
+    ],
+    "Merge1": [
+      {
+        "json": {
+          "links": [
+            {
+              "output": {
+                "link": "https://cdn.freesound.org/previews/702/702378_15147295-hq.mp3"
+              }
+            },
+            {
+              "output": {
+                "link": "https://cdn.freesound.org/previews/202/202594_1648170-hq.mp3"
+              }
+            },
+            {
+              "output": {
+                "link": "https://cdn.freesound.org/previews/53/53428_29541-hq.mp3"
+              }
+            },
+            {
+              "output": {
+                "link": "https://cdn.freesound.org/previews/688/688064_11405584-hq.mp3"
+              }
+            },
+            {
+              "output": {
+                "link": "https://cdn.freesound.org/previews/654/654359_9065739-hq.mp3"
+              }
+            }
+          ],
+          "output": {
+            "page1": "The last rays of the setting sun painted the ancient marketplace in hues of orange and purple. Cobblestone streets, worn smooth by centuries of footsteps, teemed with life. Amidst the clamor of vendors and the chatter of shoppers, Professor Rao, his thick spectacles perched on his nose, stood transfixed. In his hand, a small, intricately carved stone tablet pulsed with a faint, almost imperceptible glow.\n\n\"Remarkable,\" he murmured to himself, his fingers tracing the ancient script. \"Truly remarkable.\"\nA nearby spice merchant, fanning himself with a palm leaf, called out, \"Find anything good today, Professor? Something to spice up history?\"\nProfessor Rao merely smiled, his gaze never leaving the tablet. \"More than good, my friend. This... this could change everything.\"\nThe glow intensified for a fleeting moment, a secret whispered in the twilight. Rao clutched it tighter, a thrill of discovery running through him.",
+            "page2": "Back in his cluttered study, a sanctuary of ancient knowledge, Professor Rao was a man possessed. Scrolls, maps, and artifacts spilled from every surface, silent witnesses to his tireless pursuit. Under the beam of his magnifying glass, the stone tablet now pulsed with a distinct, rhythmic glow, casting ethereal shadows on the walls.\n\n\"It resonates,\" he whispered, his voice hoarse from hours of study. \"A dormant energy, now awakened. But what awakens it?\"\nHe flipped through a crumbling tome, muttering, \"The Prophecy of the Luminous Heart... could it be true?\"\nOutside, on a neighboring rooftop, a lone, silhouetted figure watched. Intense, piercing eyes followed every move of the professor, glinting in the faint light of the distant city.\nThe figure shifted, a silent predator observing its prey. The city lights twinkled, unaware of the ancient power stirring below.",
+            "page3": "A chilling silence now hung heavy in Professor Rao's study. The room, once a haven of order, was a scene of violent disruption. Books lay strewn across the floor, their pages splayed open, and a heavy wooden chair lay overturned, its legs pointing accusingly at the shattered window. Shards of glass glittered maliciously on the floorboards, reflecting the cold moonlight.\n\nProfessor Rao lay motionless, his spectacles askew, a silent testament to the struggle. The air still thrummed with a faint, ghostly luminescence, a spectral echo of the tablet's vanished glow.\nA close-up view revealed a distinct, muddy footprint on the polished wood, stark against the chaos. It was a mark of intrusion, a signature left by a desperate hand.\n\"No,\" the wind seemed to whisper through the broken pane. \"Not like this.\" The silence was deafening, a heavy shroud draped over a broken dream.",
+            "page4": "The crime scene buzzed with a different kind of intensity now. Inspector Arjun, a man whose sharp gaze missed nothing, knelt beside the muddy footprint. His forensic kit lay open, its tools glinting in the lantern light. He carefully measured and photographed the impression, his brow furrowed in concentration.\n\n\"A clean break, Lieutenant,\" he observed, not looking up. \"Professional, but with a surprising haste. See the scuff marks here?\"\nLieutenant Sharma, a younger officer, nodded. \"The window, Inspector. Smashed from the outside. They wanted in, and they took the tablet.\"\n\"Indeed,\" Arjun replied, rising slowly. \"And our Professor... a terrible loss. This footprint, however, tells a story. A very specific story.\"\nHe turned to his men. \"Secure the perimeter. I want every inch of this study documented. This is no ordinary theft. This is something far more dangerous.\" The hunt had begun.",
+            "page5": "The chase was a blur of motion across the ancient rooftops of the city. Inspector Arjun, his police uniform surprisingly agile, leaped from one ornate haveli balcony to another, his determined gaze fixed on the shadowy figure ahead. The figure, swift and silent, clutched the glowing stone tablet, its light a beacon in the night.\n\n\"Stop! In the name of the law!\" Arjun bellowed, his voice echoing across the tiled roofs.\nThe figure merely glanced back, a flash of defiance in its eyes, and accelerated, disappearing into the labyrinthine alleys.\nArjun pushed harder, his breath coming in ragged gasps. \"He knows these streets too well,\" he muttered, vaulting over a parapet.\nThe glowing tablet pulsed erratically, as if urging its bearer onward. This was not just a chase; it was a desperate race against time for a power that could alter destinies.",
+            "page6": "The pursuit culminated in the echoing depths of a vast, dimly lit warehouse. Arjun finally cornered the shadowy figure amidst crates and forgotten machinery. A fierce hand-to-hand struggle erupted, the sounds of their blows reverberating through the cavernous space. The glowing tablet, dislodged during the fight, tumbled to the ground, casting an eerie, pulsating light on their sweat-streaked faces.\n\nWith a final, desperate shove, Arjun tore at the figure's mask. It ripped away, revealing the shocked face of a young man, undeniably familiar.\n\"Vikram?\" Arjun gasped, stumbling back. \"Professor Rao's apprentice? It was you all along?\"\nVikram's eyes were a mix of desperation and urgency, not malice. \"Inspector, you don't understand! I had to! It's not what you think!\"\n\"Then explain yourself, boy! The Professor is unconscious, and this tablet...\" Arjun gestured to the glowing artifact.\n\"It's not just a tablet, Inspector,\" Vikram pleaded. \"It's a warning. And we're out of time.\"",
+            "page7": "Before Arjun could demand an explanation, the warehouse doors groaned open, revealing a new, more sinister threat. A group of heavily armed cultists, their faces obscured by dark hoods, strode into the eerie light cast by the glowing tablet. At their head stood a menacing, scarred figure, brandishing an ancient, wickedly curved weapon.\n\n\"So, the apprentice returns to the fold,\" the scarred leader sneered, his voice a gravelly rasp. \"And he brings us the Inspector. A convenient delivery.\"\nVikram instinctively moved closer to Arjun, his expression hardened. \"These are the Guardians of the Luminous Heart, Inspector. They believe the tablet is theirs, and they will stop at nothing.\"\n\"Indeed,\" the leader hissed, his eyes fixed on the pulsating tablet. \"The true power must be returned to its rightful masters.\"\nArjun drew his sidearm, standing shoulder to shoulder with Vikram. \"Not on my watch. This tablet, whatever its power, will not fall into your hands.\"\nThe air crackled with tension, the glowing tablet a silent, powerful arbiter between good and evil, its ancient light illuminating the impending battle."
+          },
+          "link": [
+            {
+              "link": "https://iili.io/Kwg1jP2.png"
+            },
+            {
+              "link": "https://iili.io/KwgEqDG.png"
+            },
+            {
+              "link": "https://iili.io/KwgEE0B.png"
+            },
+            {
+              "link": "https://iili.io/KwgGCkF.png"
+            },
+            {
+              "link": "https://iili.io/KwgGY7t.png"
+            },
+            {
+              "link": "https://iili.io/KwgGh2S.png"
+            },
+            {
+              "link": "https://iili.io/KwgG6YP.png"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Download file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download file": {
+      "main": [
+        [
+          {
+            "node": "Generate an image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate an image": {
+      "main": [
+        [
+          {
+            "node": "Update file",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update file": {
+      "main": [
+        []
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        []
+      ]
+    },
+    "Webhook": {
+      "main": [
+        []
+      ]
+    },
+    "Google Gemini Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser1": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "AI Agent2",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTML": {
+      "main": [
+        []
+      ]
+    },
+    "AI Agent2": {
+      "main": [
+        [
+          {
+            "node": "Split Out1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser2": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model3": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "AI Agent3",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request2": {
+      "main": [
+        [
+          {
+            "node": "AI Agent3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser3": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent3",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent3": {
+      "main": [
+        [
+          {
+            "node": "Aggregate1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate1": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "e9d57dd2-824c-4beb-abda-cad804dda5e0",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "30e8840a5d55d1e1b6af4c778e833f7fe652325f38939676863a8cb542d69c34"
+  },
+  "id": "UdSYSqhEOiGvMiaU",
+  "tags": []
+}
