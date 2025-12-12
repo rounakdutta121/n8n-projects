@@ -1,0 +1,640 @@
+{
+  "name": "podcast(rounak)",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -3680,
+        560
+      ],
+      "id": "d407a5b2-8eeb-4e46-b7c1-454b103a2e7e",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "url": "https://electrical-engineering-portal.com/feed",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        -3392,
+        576
+      ],
+      "id": "fb976c3d-5de9-465d-a565-1a93be628fdf",
+      "name": "RSS Read1"
+    },
+    {
+      "parameters": {
+        "jsCode": "return items.map(item => {\n  return {\n    json: {\n      title: item.json.title,\n      description: item.json.contentSnippet\n    }\n  };\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -3168,
+        576
+      ],
+      "id": "84e1dcf1-d1fc-4db4-a2c7-6379032a2a64",
+      "name": "Code2"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        -2896,
+        576
+      ],
+      "id": "fd6806e9-ab85-4ac6-bf14-a971aaf9faf5",
+      "name": "Aggregate1"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are writing a 1-minute conversational news podcast between two hosts: Steve (host) and Angel (co-host).\nUse the following news items (title = description):\n1. {{ $json.output[0].title }} = {{ $json.output[0].description }}\n2.  {{ $json.output[1].title }} =  {{ $json.output[1].description }}\n3. {{ $json.output[2].title }} = {{ $json.output[2].description }}\n4. {{ $json.output[3].title }} = {{ $json.output[3].description }}\n5.  {{ $json.output[4].title }} =  {{ $json.output[4].description }}\n\n\nRequirements:\n- Output must be VALID JSON: an array of objects.\n- Each object must have: \"speaker\" (either \"Steve\" or \"Angel\"), \"text\" (the line they speak), and \"pause\" (a number in seconds for a short pause after the line),  \"filenames\" for each(!important)(should be character name the number of his dialoge for example angel_1.mp3, steve_1.mp3,angel_2.mp3,etc).\n- Keep the whole dialogue ~240–250 words total (so TTS outputs ~1 minute).\n- Make lines short and conversational and funny. Include natural back-and-forth, short interruptions, and small reactions (\"yeah\", \"right\", \"wow\") to sound lively.\n- Begin with an intro by Angel (include welcome to one minute Compliance by DamnArts. ) and close with an outro line by Steve.\nReturn ONLY the JSON array and nothing else. \n- Add An Integration In Between Like An Add For ITCINDIA.(https://itcindia.org)\n-always different not same to your last_script",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -2384,
+        592
+      ],
+      "id": "2fda5abb-d44b-4c3f-bceb-fc0f351d87aa",
+      "name": "AI Agent1",
+      "retryOnFail": true,
+      "maxTries": 5
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "[\n  {\"speaker\":\"Steve\",\"text\":\"Hello everyone and welcome to Quick Byte! ...\", \"pause\":0.4 , \"filename\": \"filename.mp3\"},\n  {\"speaker\":\"Angel\",\"text\":\"Thanks Riya — today we have ...\", \"pause\":0.2 , \"filename\":\"filename.mp3\"}\n\n]"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        -2080,
+        896
+      ],
+      "id": "6543d566-0b59-448e-9469-020e9b29f046",
+      "name": "Structured Output Parser1"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "output",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        -2032,
+        592
+      ],
+      "id": "6fd1d2ea-c7c8-4813-bcac-6ace1e03d024",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -1824,
+        592
+      ],
+      "id": "6574c0b1-ff20-4163-ba80-f77b80621d1d",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.elevenlabs.io/v1/text-to-speech/TVtDNgumMv4lb9zzFzA2",
+        "sendHeaders": true,
+        "specifyHeaders": "json",
+        "jsonHeaders": "{\n  \"xi-api-key\": \"sk_19e859edce58ae1b9274930622d051bcbe996c0479f106f1\",\n  \"Content-Type\": \"application/json\"\n}\n",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"text\": \"{{ $json.text.replace(/(\\\\r\\\\n|\\\\n|\\\\r)/gm, ' ') }}\",\n  \"format\": \"mp3\"\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1360,
+        512
+      ],
+      "id": "568da950-24c3-40d5-8a85-eebe7685169e",
+      "name": "HTTP Request1",
+      "retryOnFail": true,
+      "maxTries": 3
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "f8974be1-2de7-4a79-8f18-d5631f43fdfa",
+              "leftValue": "Steve",
+              "rightValue": "={{ $json.speaker }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -1584,
+        608
+      ],
+      "id": "15cd3745-106b-4cd8-87c4-25391fbcd7c5",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.elevenlabs.io/v1/text-to-speech/EIsgvJT3rwoPvRFG6c4n",
+        "sendHeaders": true,
+        "specifyHeaders": "json",
+        "jsonHeaders": "{\n  \"xi-api-key\": \"sk_19e859edce58ae1b9274930622d051bcbe996c0479f106f1\",\n  \"Content-Type\": \"application/json\"\n}\n",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"text\": \"{{ $json.text.replace(/(\\\\r\\\\n|\\\\n|\\\\r)/gm, ' ') }}\",\n  \"format\": \"mp3\"\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1344,
+        720
+      ],
+      "id": "dc37c9b5-8909-4b1e-ab2d-54c3fe8d96ca",
+      "name": "HTTP Request2"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": []
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -848,
+        752
+      ],
+      "id": "a7d2b306-f134-413e-be22-332194ce5238",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {
+          "includeBinaries": true
+        }
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        -1520,
+        320
+      ],
+      "id": "ee1deb30-e8db-4f47-90fb-c6e7ded26d42",
+      "name": "Aggregate2"
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "=C:\\Users\\Admin\\Documents\\podcast\\podcast1.mp3",
+        "options": {
+          "append": true
+        }
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        -1104,
+        736
+      ],
+      "id": "5c15c65a-8b95-4703-8428-23373f8ee3b8",
+      "name": "Read/Write Files from Disk1"
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "=C:\\Users\\Admin\\Documents\\podcast\\podcast1.mp3",
+        "options": {
+          "append": true
+        }
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        -1120,
+        512
+      ],
+      "id": "38157fc5-aa7b-445c-896b-0287ee662461",
+      "name": "Read/Write Files from Disk2"
+    },
+    {
+      "parameters": {
+        "command": "ffmpeg -loop 1 -i \"C:\\Users\\Admin\\Documents\\podcast\\cover1.png\" -i \"C:\\Users\\Admin\\Documents\\podcast\\podcast1.mp3\" -c:v libx264 -tune stillimage -c:a aac -b:a 192k -pix_fmt yuv420p -shortest \"C:\\Users\\Admin\\Documents\\podcast\\final_podcast1.mp4\"\n"
+      },
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        -1296,
+        160
+      ],
+      "id": "a8f29e5a-4141-473e-8177-8b8784fb062d",
+      "name": "Execute Command1"
+    },
+    {
+      "parameters": {
+        "command": "ffmpeg -stream_loop -1 -i C:\\Users\\Admin\\Documents\\podcast\\bg.mp3 -i C:\\Users\\Admin\\Documents\\podcast\\final_podcast1.mp4 -shortest -filter_complex \"[0:a]volume=0.05[a1];[1:a][a1]amix=inputs=2:duration=shortest[a]\" -map 1:v -map \"[a]\" -c:v copy -y C:\\Users\\Admin\\Documents\\podcast\\final_podcast_withbg.mp4\n"
+      },
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        -576,
+        -48
+      ],
+      "id": "b2c42650-6f3a-49ea-ba36-6173c59e80e4",
+      "name": "Execute Command2"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=1. {{ $json.data[0].title }} = {{ $json.data[0].description }}\n2. {{ $json.data[1].title }} = {{ $json.data[1].description }}\n3. {{ $json.data[2].title }} = {{ $json.data[2].description }}\n4. {{ $json.data[3].title }} = {{ $json.data[3].description }}\n5. {{ $json.data[4].title }} = {{ $json.data[4].description }}\n6. {{ $json.data[5].title }} = {{ $json.data[5].description }}\n7. {{ $json.data[6].title }} = {{ $json.data[6].description }}\n8. {{ $json.data[7].title }} = {{ $json.data[7].description }}\n9. {{ $json.data[8].title }} = {{ $json.data[8].description }}\nyour job is to select 10 news only. if it does not match ur requirement then generate news from the sheets topics. make them sound like real news/tips.\n\nrequirement\nyou will come accross the news title and description. use the sheet tool for allowed topics. you can only return the news if it is according to the topics of the sheet.\nshould never be equal to the last_news",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -2704,
+        592
+      ],
+      "id": "b710cc93-87ff-4ca6-ad04-124363d95716",
+      "name": "AI Agent2",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "[\n  {\n\"title\": \"\",\n\"description\": \"\"\n}\n]"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        -2432,
+        848
+      ],
+      "id": "0ca0fdf8-b849-432d-8007-43fca759c69b",
+      "name": "Structured Output Parser2"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1Zhz2AG9H-ioNuzrYvvU6JbqXHAsfKujf_qd-kh9Ppjw/edit?gid=0#gid=0",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Zhz2AG9H-ioNuzrYvvU6JbqXHAsfKujf_qd-kh9Ppjw/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        -2752,
+        880
+      ],
+      "id": "67059ff6-f4b7-4765-8293-1b13ada84acb",
+      "name": "Get row(s) in sheet in Google Sheets"
+    },
+    {
+      "parameters": {
+        "content": "## ITCINDIA"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -4208,
+        272
+      ],
+      "typeVersion": 1,
+      "id": "76c08397-7011-4bd8-a37b-3ef0cb1580ea",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "=last_script"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -2240,
+        896
+      ],
+      "id": "00a80051-b110-481d-8ce4-dd809c63968f",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "last_news"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -2976,
+        816
+      ],
+      "id": "50535e95-a39d-4303-97e5-e51cdee978f8",
+      "name": "Simple Memory1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "RSS Read1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RSS Read1": {
+      "main": [
+        [
+          {
+            "node": "Code2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code2": {
+      "main": [
+        [
+          {
+            "node": "Aggregate1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate1": {
+      "main": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser1": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "Aggregate2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "Read/Write Files from Disk2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP Request2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request2": {
+      "main": [
+        [
+          {
+            "node": "Read/Write Files from Disk1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate2": {
+      "main": [
+        [
+          {
+            "node": "Execute Command1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read/Write Files from Disk1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read/Write Files from Disk2": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Command1": {
+      "main": [
+        [
+          {
+            "node": "Execute Command2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent2": {
+      "main": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser2": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet in Google Sheets": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory1": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "618bdb2e-2846-4dbe-a736-d7964e1018bf",
+  "meta": {
+    "instanceId": "016f33cfb69682da79a74d5b5c0d603d8bd995f5cf038e80d9cd477f63235f24"
+  },
+  "id": "Oj9tC0SLmdCaVNM4",
+  "tags": []
+}
