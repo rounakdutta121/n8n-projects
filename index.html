@@ -8,11 +8,10 @@
     <style>
         /* Global Styles */
         :root {
-            --navy: #0a2463;
-            --teal: #3a8b8b;
+            --navy: #0a1a2f;
+            --teal: #008080;
             --white: #ffffff;
             --gold: #ffd700;
-            --dark: #1a1a1a;
         }
 
         * {
@@ -23,14 +22,14 @@
 
         body {
             font-family: 'Arial', sans-serif;
-            background-color: var(--white);
-            color: var(--dark);
+            background-color: var(--navy);
+            color: var(--white);
             line-height: 1.6;
         }
 
         a {
             text-decoration: none;
-            color: inherit;
+            color: var(--gold);
         }
 
         ul {
@@ -46,36 +45,27 @@
         /* Header */
         header {
             background-color: var(--navy);
-            color: var(--white);
             padding: 20px 0;
             position: fixed;
             width: 100%;
             top: 0;
             z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .header-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
         }
 
         .logo {
             font-size: 24px;
             font-weight: bold;
-        }
-
-        .logo span {
             color: var(--gold);
         }
 
         nav ul {
             display: flex;
+            justify-content: center;
         }
 
         nav ul li {
-            margin-left: 30px;
+            margin: 0 15px;
         }
 
         nav ul li a {
@@ -87,35 +77,26 @@
             color: var(--gold);
         }
 
-        .mobile-menu-btn {
-            display: none;
-            background: none;
-            border: none;
-            color: var(--white);
-            font-size: 24px;
-            cursor: pointer;
-        }
-
         /* Hero Section */
         .hero {
-            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
-            background-size: cover;
-            background-position: center;
             height: 100vh;
             display: flex;
             align-items: center;
-            color: var(--white);
+            justify-content: center;
             text-align: center;
-            padding-top: 80px;
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1556761175-b413da4baf72?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            color: var(--white);
         }
 
-        .hero-content h1 {
+        .hero h1 {
             font-size: 48px;
             margin-bottom: 20px;
             animation: fadeInDown 1s ease-in-out;
         }
 
-        .hero-content p {
+        .hero p {
             font-size: 20px;
             margin-bottom: 30px;
             animation: fadeInUp 1s ease-in-out;
@@ -128,27 +109,26 @@
             padding: 12px 30px;
             border-radius: 5px;
             font-weight: bold;
-            transition: background-color 0.3s, transform 0.3s;
+            transition: background-color 0.3s;
             animation: fadeIn 1.5s ease-in-out;
         }
 
         .btn:hover {
             background-color: var(--teal);
             color: var(--white);
-            transform: translateY(-3px);
         }
 
         /* Services Section */
         .services {
             padding: 100px 0;
             background-color: var(--white);
+            color: var(--navy);
         }
 
         .services h2 {
             text-align: center;
-            font-size: 36px;
             margin-bottom: 50px;
-            color: var(--navy);
+            font-size: 36px;
         }
 
         .services-grid {
@@ -158,20 +138,20 @@
         }
 
         .service-card {
-            background-color: var(--white);
-            border-radius: 10px;
+            background-color: var(--navy);
             padding: 30px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s, box-shadow 0.3s;
+            border-radius: 10px;
             text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            animation: fadeIn 1.5s ease-in-out;
         }
 
         .service-card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
         }
 
-        .service-icon {
+        .service-card i {
             font-size: 40px;
             color: var(--gold);
             margin-bottom: 20px;
@@ -180,20 +160,18 @@
         .service-card h3 {
             font-size: 24px;
             margin-bottom: 15px;
-            color: var(--navy);
         }
 
         /* Portfolio Section */
         .portfolio {
             padding: 100px 0;
             background-color: var(--navy);
-            color: var(--white);
         }
 
         .portfolio h2 {
             text-align: center;
-            font-size: 36px;
             margin-bottom: 50px;
+            font-size: 36px;
         }
 
         .portfolio-grid {
@@ -206,26 +184,27 @@
             background-color: var(--white);
             border-radius: 10px;
             overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s;
+            transition: transform 0.3s, box-shadow 0.3s;
+            animation: fadeIn 1.5s ease-in-out;
         }
 
         .portfolio-item:hover {
             transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
         }
 
-        .portfolio-img {
+        .portfolio-item img {
+            width: 100%;
             height: 200px;
-            background-size: cover;
-            background-position: center;
+            object-fit: cover;
         }
 
-        .portfolio-info {
+        .portfolio-item-content {
             padding: 20px;
-            color: var(--dark);
+            color: var(--navy);
         }
 
-        .portfolio-info h3 {
+        .portfolio-item-content h3 {
             font-size: 20px;
             margin-bottom: 10px;
         }
@@ -234,54 +213,62 @@
         .testimonials {
             padding: 100px 0;
             background-color: var(--white);
+            color: var(--navy);
         }
 
         .testimonials h2 {
             text-align: center;
-            font-size: 36px;
             margin-bottom: 50px;
-            color: var(--navy);
+            font-size: 36px;
         }
 
-        .testimonial-slider {
-            display: flex;
-            overflow-x: auto;
-            scroll-snap-type: x mandatory;
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 30px;
-            padding-bottom: 20px;
         }
 
         .testimonial-card {
-            flex: 0 0 300px;
-            background-color: var(--white);
-            border-radius: 10px;
+            background-color: var(--navy);
             padding: 30px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            scroll-snap-align: start;
+            border-radius: 10px;
             text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            animation: fadeIn 1.5s ease-in-out;
         }
 
-        .testimonial-text {
+        .testimonial-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .testimonial-card img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin-bottom: 20px;
+        }
+
+        .testimonial-card p {
             font-style: italic;
             margin-bottom: 20px;
         }
 
-        .testimonial-author {
-            font-weight: bold;
-            color: var(--gold);
+        .testimonial-card h4 {
+            font-size: 18px;
+            margin-bottom: 5px;
         }
 
         /* Blog Section */
         .blog {
             padding: 100px 0;
             background-color: var(--navy);
-            color: var(--white);
         }
 
         .blog h2 {
             text-align: center;
-            font-size: 36px;
             margin-bottom: 50px;
+            font-size: 36px;
         }
 
         .blog-grid {
@@ -294,27 +281,32 @@
             background-color: var(--white);
             border-radius: 10px;
             overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            color: var(--dark);
+            transition: transform 0.3s, box-shadow 0.3s;
+            animation: fadeIn 1.5s ease-in-out;
         }
 
-        .blog-img {
+        .blog-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .blog-card img {
+            width: 100%;
             height: 200px;
-            background-size: cover;
-            background-position: center;
+            object-fit: cover;
         }
 
-        .blog-info {
+        .blog-card-content {
             padding: 20px;
+            color: var(--navy);
         }
 
-        .blog-info h3 {
+        .blog-card-content h3 {
             font-size: 20px;
             margin-bottom: 10px;
         }
 
-        .blog-info p {
-            color: #666;
+        .blog-card-content p {
             margin-bottom: 15px;
         }
 
@@ -322,83 +314,59 @@
         .contact {
             padding: 100px 0;
             background-color: var(--white);
+            color: var(--navy);
         }
 
         .contact h2 {
             text-align: center;
-            font-size: 36px;
             margin-bottom: 50px;
-            color: var(--navy);
+            font-size: 36px;
         }
 
         .contact-form {
             max-width: 600px;
             margin: 0 auto;
-            background-color: var(--white);
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
 
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-
-        .form-group input,
-        .form-group textarea {
+        .contact-form input,
+        .contact-form textarea {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
             border-radius: 5px;
             font-size: 16px;
         }
 
-        .form-group textarea {
+        .contact-form textarea {
             height: 150px;
         }
 
         /* Footer */
         footer {
             background-color: var(--navy);
-            color: var(--white);
-            padding: 50px 0 20px;
+            padding: 50px 0;
             text-align: center;
         }
 
-        .footer-links {
+        footer p {
+            margin-bottom: 20px;
+        }
+
+        .social-links {
             display: flex;
             justify-content: center;
             margin-bottom: 20px;
         }
 
-        .footer-links a {
-            margin: 0 15px;
+        .social-links a {
             color: var(--white);
-            transition: color 0.3s;
-        }
-
-        .footer-links a:hover {
-            color: var(--gold);
-        }
-
-        .social-icons {
-            margin-bottom: 20px;
-        }
-
-        .social-icons a {
+            font-size: 24px;
             margin: 0 10px;
-            color: var(--white);
-            font-size: 20px;
             transition: color 0.3s;
         }
 
-        .social-icons a:hover {
+        .social-links a:hover {
             color: var(--gold);
         }
 
@@ -436,82 +404,31 @@
 
         /* Responsive Design */
         @media (max-width: 768px) {
-            .header-container {
-                flex-direction: column;
-            }
-
-            nav ul {
-                margin-top: 20px;
-            }
-
-            nav ul li {
-                margin: 0 10px;
-            }
-
-            .hero-content h1 {
+            .hero h1 {
                 font-size: 36px;
             }
 
-            .hero-content p {
+            .hero p {
                 font-size: 18px;
             }
 
-            .mobile-menu-btn {
-                display: block;
-            }
-
-            nav {
-                display: none;
-            }
-
-            nav.active {
-                display: flex;
+            nav ul {
                 flex-direction: column;
-                text-align: center;
+                align-items: center;
             }
 
             nav ul li {
                 margin: 10px 0;
             }
         }
-
-        /* Glowing Effects */
-        .glow {
-            position: relative;
-        }
-
-        .glow::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            border-radius: 10px;
-            background: inherit;
-            z-index: -1;
-            filter: blur(10px);
-            opacity: 0.7;
-            transition: opacity 0.3s;
-        }
-
-        .service-card:hover::after,
-        .portfolio-item:hover::after,
-        .testimonial-card:hover::after,
-        .blog-card:hover::after {
-            opacity: 1;
-        }
     </style>
 </head>
 <body>
     <!-- Header -->
     <header>
-        <div class="container header-container">
-            <div class="logo">Damn<span>Art</span></div>
-            <button class="mobile-menu-btn" id="mobile-menu-btn">
-                <i class="fas fa-bars"></i>
-            </button>
-            <nav id="nav">
+        <div class="container">
+            <div class="logo">DamnArt</div>
+            <nav>
                 <ul>
                     <li><a href="#hero">Home</a></li>
                     <li><a href="#services">Services</a></li>
@@ -525,89 +442,62 @@
     </header>
 
     <!-- Hero Section -->
-    <section class="hero" id="hero">
-        <div class="container hero-content">
-            <h1>Transform Your Brand with <span style="color: var(--gold);">DamnArt</span></h1>
+    <section id="hero" class="hero">
+        <div class="container">
+            <h1>Transform Your Brand with DamnArt</h1>
             <p>We are a digital marketing agency based in Chandigarh, India, specializing in creating impactful digital experiences.</p>
             <a href="#contact" class="btn">Get Started</a>
         </div>
     </section>
 
     <!-- Services Section -->
-    <section class="services" id="services">
+    <section id="services" class="services">
         <div class="container">
             <h2>Our Services</h2>
             <div class="services-grid">
-                <div class="service-card glow">
-                    <div class="service-icon">
-                        <i class="fas fa-paint-brush"></i>
-                    </div>
-                    <h3>Web Design</h3>
-                    <p>We create visually stunning and user-friendly websites that captivate your audience and drive conversions.</p>
-                </div>
-                <div class="service-card glow">
-                    <div class="service-icon">
-                        <i class="fas fa-code"></i>
-                    </div>
-                    <h3>Web Development</h3>
-                    <p>Our development team builds robust and scalable web applications tailored to your business needs.</p>
-                </div>
-                <div class="service-card glow">
-                    <div class="service-icon">
-                        <i class="fas fa-bullhorn"></i>
-                    </div>
-                    <h3>Digital Marketing</h3>
-                    <p>We offer comprehensive digital marketing strategies to boost your online presence and reach your target audience.</p>
-                </div>
-                <div class="service-card glow">
-                    <div class="service-icon">
-                        <i class="fas fa-search"></i>
-                    </div>
+                <div class="service-card">
+                    <i class="fas fa-search"></i>
                     <h3>SEO</h3>
-                    <p>Our SEO experts optimize your website to rank higher on search engines and drive organic traffic.</p>
+                    <p>Improve your search engine rankings and drive organic traffic to your website.</p>
                 </div>
-                <div class="service-card glow">
-                    <div class="service-icon">
-                        <i class="fas fa-mobile-alt"></i>
-                    </div>
-                    <h3>Mobile App Development</h3>
-                    <p>We design and develop mobile applications that provide seamless user experiences across all devices.</p>
+                <div class="service-card">
+                    <i class="fas fa-paint-brush"></i>
+                    <h3>Web Design</h3>
+                    <p>Create stunning, user-friendly websites that convert visitors into customers.</p>
                 </div>
-                <div class="service-card glow">
-                    <div class="service-icon">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <h3>Analytics</h3>
-                    <p>Our analytics services help you understand your audience and make data-driven decisions.</p>
+                <div class="service-card">
+                    <i class="fas fa-bullhorn"></i>
+                    <h3>Social Media Marketing</h3>
+                    <p>Engage your audience and build your brand on social media platforms.</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Portfolio Section -->
-    <section class="portfolio" id="portfolio">
+    <section id="portfolio" class="portfolio">
         <div class="container">
             <h2>Our Portfolio</h2>
             <div class="portfolio-grid">
-                <div class="portfolio-item glow">
-                    <div class="portfolio-img" style="background-image: url('https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');"></div>
-                    <div class="portfolio-info">
-                        <h3>Project One</h3>
-                        <p>A stunning website design for a leading e-commerce brand.</p>
+                <div class="portfolio-item">
+                    <img src="https://images.unsplash.com/photo-1556761175-b413da4baf72?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Project 1">
+                    <div class="portfolio-item-content">
+                        <h3>Project 1</h3>
+                        <p>A comprehensive digital marketing campaign for a leading e-commerce brand.</p>
                     </div>
                 </div>
-                <div class="portfolio-item glow">
-                    <div class="portfolio-img" style="background-image: url('https://images.unsplash.com/photo-1556761175-4b46a572b786?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');"></div>
-                    <div class="portfolio-info">
-                        <h3>Project Two</h3>
-                        <p>A mobile app that revolutionizes the way users interact with content.</p>
+                <div class="portfolio-item">
+                    <img src="https://images.unsplash.com/photo-1556761175-4b46a572b786?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Project 2">
+                    <div class="portfolio-item-content">
+                        <h3>Project 2</h3>
+                        <p>A responsive website design for a local business.</p>
                     </div>
                 </div>
-                <div class="portfolio-item glow">
-                    <div class="portfolio-img" style="background-image: url('https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');"></div>
-                    <div class="portfolio-info">
-                        <h3>Project Three</h3>
-                        <p>A comprehensive digital marketing campaign that drove significant traffic.</p>
+                <div class="portfolio-item">
+                    <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Project 3">
+                    <div class="portfolio-item-content">
+                        <h3>Project 3</h3>
+                        <p>A social media marketing strategy for a startup.</p>
                     </div>
                 </div>
             </div>
@@ -615,52 +505,58 @@
     </section>
 
     <!-- Testimonials Section -->
-    <section class="testimonials" id="testimonials">
+    <section id="testimonials" class="testimonials">
         <div class="container">
             <h2>What Our Clients Say</h2>
-            <div class="testimonial-slider">
-                <div class="testimonial-card glow">
-                    <p class="testimonial-text">"DamnArt transformed our online presence. Their team is professional, creative, and delivered beyond our expectations."</p>
-                    <p class="testimonial-author">- John Doe, CEO of TechCorp</p>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-1.2.1&auto=format&fit=crop&w=150&q=80" alt="Client 1">
+                    <p>"DamnArt transformed our online presence. Their expertise in SEO and web design is unmatched."</p>
+                    <h4>John Doe</h4>
+                    <p>CEO, Company A</p>
                 </div>
-                <div class="testimonial-card glow">
-                    <p class="testimonial-text">"The website they designed is not only beautiful but also highly functional. We've seen a significant increase in traffic and conversions."</p>
-                    <p class="testimonial-author">- Jane Smith, Marketing Director</p>
+                <div class="testimonial-card">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=150&q=80" alt="Client 2">
+                    <p>"The team at DamnArt is professional and creative. They delivered beyond our expectations."</p>
+                    <h4>Jane Smith</h4>
+                    <p>Marketing Director, Company B</p>
                 </div>
-                <div class="testimonial-card glow">
-                    <p class="testimonial-text">"Working with DamnArt was a pleasure. Their expertise in digital marketing helped us reach our target audience effectively."</p>
-                    <p class="testimonial-author">- Robert Johnson, Founder of StartUp</p>
+                <div class="testimonial-card">
+                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=crop&w=150&q=80" alt="Client 3">
+                    <p>"Their social media strategies have significantly increased our engagement and sales."</p>
+                    <h4>Mike Johnson</h4>
+                    <p>Founder, Company C</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Blog Section -->
-    <section class="blog" id="blog">
+    <section id="blog" class="blog">
         <div class="container">
             <h2>Latest from Our Blog</h2>
             <div class="blog-grid">
-                <div class="blog-card glow">
-                    <div class="blog-img" style="background-image: url('https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');"></div>
-                    <div class="blog-info">
-                        <h3>Top Trends in Digital Marketing for 2023</h3>
-                        <p>Stay ahead of the curve with these digital marketing trends.</p>
+                <div class="blog-card">
+                    <img src="https://images.unsplash.com/photo-1556761175-b413da4baf72?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Blog Post 1">
+                    <div class="blog-card-content">
+                        <h3>Blog Post 1</h3>
+                        <p>Learn about the latest trends in digital marketing and how to leverage them for your business.</p>
                         <a href="#" class="btn">Read More</a>
                     </div>
                 </div>
-                <div class="blog-card glow">
-                    <div class="blog-img" style="background-image: url('https://images.unsplash.com/photo-1556761175-4b46a572b786?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');"></div>
-                    <div class="blog-info">
-                        <h3>How to Improve Your Website's SEO</h3>
-                        <p>Learn the best practices to optimize your website for search engines.</p>
+                <div class="blog-card">
+                    <img src="https://images.unsplash.com/photo-1556761175-4b46a572b786?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Blog Post 2">
+                    <div class="blog-card-content">
+                        <h3>Blog Post 2</h3>
+                        <p>Discover the importance of SEO and how it can drive traffic to your website.</p>
                         <a href="#" class="btn">Read More</a>
                     </div>
                 </div>
-                <div class="blog-card glow">
-                    <div class="blog-img" style="background-image: url('https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');"></div>
-                    <div class="blog-info">
-                        <h3>The Importance of User Experience in Web Design</h3>
-                        <p>Discover why UX is crucial for the success of your website.</p>
+                <div class="blog-card">
+                    <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Blog Post 3">
+                    <div class="blog-card-content">
+                        <h3>Blog Post 3</h3>
+                        <p>Find out how social media marketing can boost your brand's visibility and engagement.</p>
                         <a href="#" class="btn">Read More</a>
                     </div>
                 </div>
@@ -669,26 +565,14 @@
     </section>
 
     <!-- Contact Section -->
-    <section class="contact" id="contact">
+    <section id="contact" class="contact">
         <div class="container">
             <h2>Get In Touch</h2>
             <form class="contact-form">
-                <div class="form-group">
-                    <label for="name">Name</label>
-                    <input type="text" id="name" name="name" required>
-                </div>
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
-                <div class="form-group">
-                    <label for="phone">Phone</label>
-                    <input type="tel" id="phone" name="phone">
-                </div>
-                <div class="form-group">
-                    <label for="message">Message</label>
-                    <textarea id="message" name="message" required></textarea>
-                </div>
+                <input type="text" placeholder="Your Name" required>
+                <input type="email" placeholder="Your Email" required>
+                <input type="text" placeholder="Your Subject" required>
+                <textarea placeholder="Your Message" required></textarea>
                 <button type="submit" class="btn">Send Message</button>
             </form>
         </div>
@@ -697,36 +581,20 @@
     <!-- Footer -->
     <footer>
         <div class="container">
-            <div class="footer-links">
-                <a href="#hero">Home</a>
-                <a href="#services">Services</a>
-                <a href="#portfolio">Portfolio</a>
-                <a href="#testimonials">Testimonials</a>
-                <a href="#blog">Blog</a>
-                <a href="#contact">Contact</a>
-            </div>
-            <div class="social-icons">
+            <p>&copy; 2023 DamnArt. All rights reserved.</p>
+            <div class="social-links">
                 <a href="#"><i class="fab fa-facebook"></i></a>
                 <a href="#"><i class="fab fa-twitter"></i></a>
                 <a href="#"><i class="fab fa-instagram"></i></a>
                 <a href="#"><i class="fab fa-linkedin"></i></a>
             </div>
-            <p>&copy; 2023 DamnArt. All rights reserved.</p>
         </div>
     </footer>
 
     <script>
-        // Mobile Menu Toggle
-        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-        const nav = document.getElementById('nav');
-
-        mobileMenuBtn.addEventListener('click', () => {
-            nav.classList.toggle('active');
-        });
-
-        // Smooth Scrolling for Navigation Links
+        // Smooth scrolling for navigation links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
+            anchor.addEventListener('click', function (e) {
                 e.preventDefault();
                 document.querySelector(this.getAttribute('href')).scrollIntoView({
                     behavior: 'smooth'
@@ -734,12 +602,11 @@
             });
         });
 
-        // Form Submission
-        const contactForm = document.querySelector('.contact-form');
-        contactForm.addEventListener('submit', (e) => {
+        // Form submission
+        document.querySelector('.contact-form').addEventListener('submit', function (e) {
             e.preventDefault();
             alert('Thank you for your message! We will get back to you soon.');
-            contactForm.reset();
+            this.reset();
         });
     </script>
 </body>
