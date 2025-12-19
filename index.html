@@ -3,16 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DamnArt - Digital Marketing Agency</title>
+    <title>Patroda AI - Innovative AI Solutions</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
     <style>
-        /* Global Styles */
         :root {
-            --navy: #0a1a2f;
-            --teal: #008080;
-            --white: #ffffff;
-            --gold: #ffd700;
-            --light-gray: #f5f5f5;
+            --primary: #00ff9d;
+            --dark: #121212;
+            --darker: #0a0a0a;
+            --light: #f5f5f5;
+            --shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            --transition: all 0.4s ease;
         }
 
         * {
@@ -22,65 +23,67 @@
         }
 
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: var(--white);
-            color: var(--navy);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--dark);
+            color: var(--light);
             line-height: 1.6;
             overflow-x: hidden;
         }
 
-        a {
-            text-decoration: none;
-            color: inherit;
-        }
-
-        ul {
-            list-style: none;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
         /* Header */
         header {
-            background-color: var(--navy);
-            color: var(--white);
-            padding: 1rem 0;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .header-container {
+            background-color: var(--darker);
+            padding: 1rem 5%;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: var(--shadow);
         }
 
         .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--gold);
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
         }
 
         nav ul {
             display: flex;
-            gap: 1.5rem;
+            list-style: none;
         }
 
-        nav a {
-            color: var(--white);
-            transition: color 0.3s ease;
+        nav ul li {
+            margin-left: 2rem;
         }
 
-        nav a:hover {
-            color: var(--gold);
+        nav ul li a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        nav ul li a:hover {
+            color: var(--primary);
+        }
+
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary);
+            transition: var(--transition);
+        }
+
+        nav ul li a:hover::after {
+            width: 100%;
         }
 
         .hamburger {
@@ -91,422 +94,261 @@
         /* Hero Section */
         .hero {
             height: 100vh;
-            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1556761175-b413da4baf72?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80');
-            background-size: cover;
-            background-position: center;
             display: flex;
             align-items: center;
-            text-align: center;
-            color: var(--white);
-            position: relative;
+            padding: 0 5%;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1518709268805-4e9042af2176?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            text-align: left;
         }
 
         .hero-content {
             max-width: 800px;
-            margin: 0 auto;
-            padding: 0 20px;
         }
 
         .hero h1 {
-            font-size: 3rem;
+            font-size: 3.5rem;
             margin-bottom: 1rem;
-            animation: fadeInDown 1s ease;
+            color: var(--light);
         }
 
         .hero p {
             font-size: 1.2rem;
             margin-bottom: 2rem;
-            animation: fadeInUp 1s ease;
+            color: #ccc;
         }
 
-        .cta-button {
+        .btn {
             display: inline-block;
-            background-color: var(--gold);
-            color: var(--navy);
-            padding: 0.8rem 1.5rem;
-            border-radius: 5px;
-            font-weight: bold;
-            transition: background-color 0.3s ease, transform 0.3s ease;
-            margin: 0 0.5rem;
-            animation: fadeIn 1.5s ease;
+            padding: 0.8rem 2rem;
+            background-color: var(--primary);
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 50px;
+            transition: var(--transition);
+            box-shadow: 0 0 15px rgba(0, 255, 157, 0.4);
         }
 
-        .cta-button:hover {
-            background-color: var(--white);
+        .btn:hover {
             transform: translateY(-5px);
-        }
-
-        /* About Section */
-        .about {
-            padding: 5rem 0;
-            background-color: var(--light-gray);
-        }
-
-        .about-content {
-            display: flex;
-            align-items: center;
-            gap: 3rem;
-        }
-
-        .about-image {
-            flex: 1;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            animation: fadeInLeft 1s ease;
-        }
-
-        .about-image img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-
-        .about-text {
-            flex: 1;
-            animation: fadeInRight 1s ease;
-        }
-
-        .about-text h2 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            color: var(--navy);
-        }
-
-        .about-text p {
-            margin-bottom: 1rem;
-            color: var(--navy);
+            box-shadow: 0 0 25px rgba(0, 255, 157, 0.6);
         }
 
         /* Services Section */
         .services {
-            padding: 5rem 0;
-            background-color: var(--white);
+            padding: 5rem 5%;
+            text-align: center;
         }
 
         .services h2 {
-            text-align: center;
             font-size: 2.5rem;
             margin-bottom: 3rem;
-            color: var(--navy);
-            animation: fadeIn 1s ease;
+            color: var(--light);
         }
 
-        .services-grid {
+        .services-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
         }
 
         .service-card {
-            background-color: var(--light-gray);
+            background-color: var(--darker);
             padding: 2rem;
             border-radius: 10px;
-            text-align: center;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            animation: fadeInUp 1s ease;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(0, 255, 157, 0.2);
         }
 
         .service-card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            border-color: var(--primary);
         }
 
-        .service-icon {
+        .service-card i {
             font-size: 3rem;
-            color: var(--teal);
+            color: var(--primary);
             margin-bottom: 1rem;
         }
 
         .service-card h3 {
             font-size: 1.5rem;
             margin-bottom: 1rem;
-            color: var(--navy);
+            color: var(--light);
+        }
+
+        .service-card p {
+            color: #ccc;
         }
 
         /* Portfolio Section */
         .portfolio {
-            padding: 5rem 0;
-            background-color: var(--light-gray);
+            padding: 5rem 5%;
+            text-align: center;
+            background-color: var(--darker);
         }
 
         .portfolio h2 {
-            text-align: center;
             font-size: 2.5rem;
             margin-bottom: 3rem;
-            color: var(--navy);
-            animation: fadeIn 1s ease;
+            color: var(--light);
         }
 
-        .portfolio-carousel {
-            display: flex;
-            overflow-x: auto;
-            gap: 1rem;
-            padding-bottom: 1rem;
-            scroll-behavior: smooth;
+        .swiper-container {
+            width: 100%;
+            padding: 2rem 0;
         }
 
-        .portfolio-item {
-            flex: 0 0 300px;
-            background-color: var(--white);
+        .swiper-slide {
+            background-color: var(--dark);
             border-radius: 10px;
             overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
-            animation: fadeInUp 1s ease;
+            box-shadow: var(--shadow);
         }
 
-        .portfolio-item:hover {
-            transform: scale(1.05);
-        }
-
-        .portfolio-item img {
+        .swiper-slide img {
             width: 100%;
-            height: 200px;
+            height: 300px;
             object-fit: cover;
         }
 
-        .portfolio-item-content {
-            padding: 1.5rem;
+        .swiper-pagination-bullet {
+            background-color: var(--primary);
+            opacity: 0.5;
         }
 
-        .portfolio-item-content h3 {
-            font-size: 1.2rem;
-            margin-bottom: 0.5rem;
-            color: var(--navy);
+        .swiper-pagination-bullet-active {
+            opacity: 1;
         }
 
         /* Testimonials Section */
         .testimonials {
-            padding: 5rem 0;
-            background-color: var(--white);
+            padding: 5rem 5%;
+            text-align: center;
         }
 
         .testimonials h2 {
-            text-align: center;
             font-size: 2.5rem;
             margin-bottom: 3rem;
-            color: var(--navy);
-            animation: fadeIn 1s ease;
+            color: var(--light);
         }
 
-        .testimonial-slider {
-            display: flex;
-            overflow-x: auto;
-            gap: 1rem;
-            padding-bottom: 1rem;
-            scroll-behavior: smooth;
-        }
-
-        .testimonial-card {
-            flex: 0 0 300px;
-            background-color: var(--light-gray);
-            padding: 2rem;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            animation: fadeInUp 1s ease;
-        }
-
-        .testimonial-card p {
-            margin-bottom: 1rem;
-            font-style: italic;
-            color: var(--navy);
-        }
-
-        .testimonial-card h4 {
-            font-size: 1.2rem;
-            color: var(--teal);
-        }
-
-        /* Blog Section */
-        .blog {
-            padding: 5rem 0;
-            background-color: var(--light-gray);
-        }
-
-        .blog h2 {
-            text-align: center;
-            font-size: 2.5rem;
-            margin-bottom: 3rem;
-            color: var(--navy);
-            animation: fadeIn 1s ease;
-        }
-
-        .blog-grid {
+        .testimonials-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
         }
 
-        .blog-card {
-            background-color: var(--white);
+        .testimonial-card {
+            background-color: var(--darker);
+            padding: 2rem;
             border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
-            animation: fadeInUp 1s ease;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(0, 255, 157, 0.2);
         }
 
-        .blog-card:hover {
+        .testimonial-card:hover {
             transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            border-color: var(--primary);
         }
 
-        .blog-card img {
-            width: 100%;
-            height: 200px;
+        .testimonial-card img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
             object-fit: cover;
+            margin-bottom: 1rem;
         }
 
-        .blog-card-content {
-            padding: 1.5rem;
-        }
-
-        .blog-card-content h3 {
+        .testimonial-card h3 {
             font-size: 1.2rem;
             margin-bottom: 0.5rem;
-            color: var(--navy);
+            color: var(--light);
+        }
+
+        .testimonial-card p {
+            color: #ccc;
+            font-style: italic;
         }
 
         /* Contact Section */
         .contact {
-            padding: 5rem 0;
-            background-color: var(--white);
+            padding: 5rem 5%;
+            text-align: center;
+            background-color: var(--darker);
         }
 
         .contact h2 {
-            text-align: center;
             font-size: 2.5rem;
             margin-bottom: 3rem;
-            color: var(--navy);
-            animation: fadeIn 1s ease;
-        }
-
-        .contact-content {
-            display: flex;
-            gap: 3rem;
+            color: var(--light);
         }
 
         .contact-form {
-            flex: 1;
-            animation: fadeInLeft 1s ease;
+            max-width: 600px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
         }
 
         .contact-form input,
         .contact-form textarea {
-            width: 100%;
-            padding: 0.8rem;
-            margin-bottom: 1rem;
-            border: 1px solid #ccc;
+            padding: 1rem;
+            border: none;
             border-radius: 5px;
+            background-color: var(--dark);
+            color: var(--light);
+            font-size: 1rem;
+        }
+
+        .contact-form textarea {
+            height: 150px;
         }
 
         .contact-form button {
-            background-color: var(--gold);
-            color: var(--navy);
-            padding: 0.8rem 1.5rem;
+            padding: 1rem;
+            background-color: var(--primary);
+            color: var(--dark);
             border: none;
             border-radius: 5px;
-            font-weight: bold;
+            font-size: 1rem;
+            font-weight: 600;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: var(--transition);
         }
 
         .contact-form button:hover {
-            background-color: var(--teal);
-            color: var(--white);
-        }
-
-        .contact-map {
-            flex: 1;
-            height: 400px;
-            border-radius: 10px;
-            overflow: hidden;
-            animation: fadeInRight 1s ease;
-        }
-
-        .contact-map iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
+            background-color: #00e68a;
         }
 
         /* Footer */
         footer {
-            background-color: var(--navy);
-            color: var(--white);
-            padding: 3rem 0;
+            background-color: var(--dark);
+            padding: 2rem 5%;
             text-align: center;
+            color: #ccc;
         }
 
         .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
             margin-bottom: 1rem;
         }
 
         .social-links a {
+            color: var(--light);
             font-size: 1.5rem;
-            transition: color 0.3s ease;
+            margin: 0 0.5rem;
+            transition: var(--transition);
         }
 
         .social-links a:hover {
-            color: var(--gold);
-        }
-
-        /* Animations */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes fadeInLeft {
-            from {
-                opacity: 0;
-                transform: translateX(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        @keyframes fadeInRight {
-            from {
-                opacity: 0;
-                transform: translateX(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
+            color: var(--primary);
         }
 
         /* Responsive Design */
@@ -515,275 +357,192 @@
                 display: block;
             }
 
-            nav {
+            nav ul {
                 display: none;
-            }
-
-            nav.active {
-                display: block;
+                flex-direction: column;
                 position: absolute;
                 top: 100%;
                 left: 0;
                 width: 100%;
-                background-color: var(--navy);
-                padding: 1rem 0;
+                background-color: var(--darker);
+                padding: 1rem;
             }
 
-            nav ul {
-                flex-direction: column;
-                align-items: center;
-                gap: 1rem;
+            nav ul li {
+                margin: 0;
+                padding: 0.5rem 0;
+            }
+
+            nav ul.active {
+                display: flex;
             }
 
             .hero h1 {
-                font-size: 2rem;
-            }
-
-            .about-content {
-                flex-direction: column;
-            }
-
-            .contact-content {
-                flex-direction: column;
-            }
-
-            .contact-map {
-                height: 300px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .hero h1 {
-                font-size: 1.5rem;
+                font-size: 2.5rem;
             }
 
             .hero p {
                 font-size: 1rem;
             }
         }
+
+        /* Animations */
+        @keyframes glow {
+            0% {
+                box-shadow: 0 0 10px rgba(0, 255, 157, 0.4);
+            }
+            50% {
+                box-shadow: 0 0 20px rgba(0, 255, 157, 0.6);
+            }
+            100% {
+                box-shadow: 0 0 10px rgba(0, 255, 157, 0.4);
+            }
+        }
+
+        .btn {
+            animation: glow 2s infinite;
+        }
+
+        .service-card:hover {
+            animation: glow 2s infinite;
+        }
+
+        .testimonial-card:hover {
+            animation: glow 2s infinite;
+        }
     </style>
 </head>
 <body>
-    <!-- Header -->
     <header>
-        <div class="header-container container">
-            <div class="logo">DamnArt</div>
-            <nav>
-                <ul>
-                    <li><a href="#hero">Home</a></li>
-                    <li><a href="#about">About</a></li>
-                    <li><a href="#services">Services</a></li>
-                    <li><a href="#portfolio">Portfolio</a></li>
-                    <li><a href="#testimonials">Testimonials</a></li>
-                    <li><a href="#blog">Blog</a></li>
-                    <li><a href="#contact">Contact</a></li>
-                </ul>
-            </nav>
-            <div class="hamburger">
-                <i class="fas fa-bars"></i>
-            </div>
+        <a href="#" class="logo">Patroda AI</a>
+        <nav>
+            <ul id="nav-links">
+                <li><a href="#hero">Home</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#portfolio">Portfolio</a></li>
+                <li><a href="#testimonials">Testimonials</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+        <div class="hamburger" id="hamburger">
+            <i class="fas fa-bars"></i>
         </div>
     </header>
 
-    <!-- Hero Section -->
-    <section id="hero" class="hero">
+    <section class="hero" id="hero">
         <div class="hero-content">
-            <h1>Transform Your Brand with DamnArt</h1>
-            <p>We create digital experiences that drive results and elevate your brand.</p>
-            <a href="#contact" class="cta-button">Get Started</a>
-            <a href="#services" class="cta-button">Our Services</a>
+            <h1>Innovative AI Solutions for Your Business</h1>
+            <p>Transform your business with cutting-edge AI technologies. From digital marketing to automation, we've got you covered.</p>
+            <a href="#contact" class="btn">Get Started</a>
         </div>
     </section>
 
-    <!-- About Section -->
-    <section id="about" class="about">
-        <div class="container">
-            <div class="about-content">
-                <div class="about-image">
-                    <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80" alt="About DamnArt">
-                </div>
-                <div class="about-text">
-                    <h2>About DamnArt</h2>
-                    <p>At DamnArt, we specialize in creating innovative digital marketing strategies tailored to your business needs. Our team of experts is dedicated to helping you achieve your goals and grow your brand online.</p>
-                    <p>With years of experience and a passion for creativity, we deliver results that exceed expectations. Let us help you transform your digital presence and reach new heights.</p>
-                </div>
+    <section class="services" id="services">
+        <h2>Our Services</h2>
+        <div class="services-container">
+            <div class="service-card">
+                <i class="fas fa-chart-line"></i>
+                <h3>Digital Marketing</h3>
+                <p>Boost your online presence with our data-driven digital marketing strategies. Reach your target audience effectively.</p>
+            </div>
+            <div class="service-card">
+                <i class="fas fa-code"></i>
+                <h3>Website Development</h3>
+                <p>Create stunning, responsive websites tailored to your business needs. We ensure a seamless user experience.</p>
+            </div>
+            <div class="service-card">
+                <i class="fas fa-robot"></i>
+                <h3>Chatbot Integration</h3>
+                <p>Enhance customer engagement with AI-powered chatbots. Provide instant support and improve user satisfaction.</p>
+            </div>
+            <div class="service-card">
+                <i class="fas fa-cogs"></i>
+                <h3>Automation Solutions</h3>
+                <p>Streamline your business processes with our automation solutions. Save time and reduce operational costs.</p>
             </div>
         </div>
     </section>
 
-    <!-- Services Section -->
-    <section id="services" class="services">
-        <div class="container">
-            <h2>Our Services</h2>
-            <div class="services-grid">
-                <div class="service-card">
-                    <div class="service-icon">
-                        <i class="fas fa-search"></i>
-                    </div>
-                    <h3>SEO Optimization</h3>
-                    <p>Improve your search engine rankings and drive organic traffic to your website with our expert SEO services.</p>
+    <section class="portfolio" id="portfolio">
+        <h2>Our Portfolio</h2>
+        <div class="swiper-container">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                    <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Project 1">
                 </div>
-                <div class="service-card">
-                    <div class="service-icon">
-                        <i class="fas fa-paint-brush"></i>
-                    </div>
-                    <h3>Web Design</h3>
-                    <p>Create a stunning and user-friendly website that reflects your brand and engages your audience.</p>
+                <div class="swiper-slide">
+                    <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Project 2">
                 </div>
-                <div class="service-card">
-                    <div class="service-icon">
-                        <i class="fas fa-bullhorn"></i>
-                    </div>
-                    <h3>Social Media Marketing</h3>
-                    <p>Leverage the power of social media to connect with your audience and grow your brand.</p>
+                <div class="swiper-slide">
+                    <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Project 3">
                 </div>
-                <div class="service-card">
-                    <div class="service-icon">
-                        <i class="fas fa-envelope"></i>
-                    </div>
-                    <h3>Email Marketing</h3>
-                    <p>Engage your audience with targeted email campaigns that drive conversions and build loyalty.</p>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <h3>Analytics & Reporting</h3>
-                    <p>Gain insights into your digital performance with our comprehensive analytics and reporting services.</p>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon">
-                        <i class="fas fa-mobile-alt"></i>
-                    </div>
-                    <h3>Mobile Marketing</h3>
-                    <p>Reach your audience on the go with mobile-friendly marketing strategies that drive engagement.</p>
-                </div>
+            </div>
+            <div class="swiper-pagination"></div>
+        </div>
+    </section>
+
+    <section class="testimonials" id="testimonials">
+        <h2>Client Testimonials</h2>
+        <div class="testimonials-container">
+            <div class="testimonial-card">
+                <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-1.2.1&auto=format&fit=crop&w=150&q=80" alt="Client 1">
+                <h3>John Doe</h3>
+                <p>"Patroda AI transformed our business with their innovative solutions. Highly recommended!"</p>
+            </div>
+            <div class="testimonial-card">
+                <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-1.2.1&auto=format&fit=crop&w=150&q=80" alt="Client 2">
+                <h3>Jane Smith</h3>
+                <p>"Their digital marketing strategies helped us reach our target audience effectively."</p>
+            </div>
+            <div class="testimonial-card">
+                <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-1.2.1&auto=format&fit=crop&w=150&q=80" alt="Client 3">
+                <h3>Mike Johnson</h3>
+                <p>"The chatbot integration improved our customer support significantly."</p>
             </div>
         </div>
     </section>
 
-    <!-- Portfolio Section -->
-    <section id="portfolio" class="portfolio">
-        <div class="container">
-            <h2>Our Portfolio</h2>
-            <div class="portfolio-carousel">
-                <div class="portfolio-item">
-                    <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80" alt="Portfolio Item 1">
-                    <div class="portfolio-item-content">
-                        <h3>Project One</h3>
-                        <p>A comprehensive digital marketing campaign that increased client engagement by 200%.</p>
-                    </div>
-                </div>
-                <div class="portfolio-item">
-                    <img src="https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80" alt="Portfolio Item 2">
-                    <div class="portfolio-item-content">
-                        <h3>Project Two</h3>
-                        <p>A website redesign that improved user experience and boosted conversions by 150%.</p>
-                    </div>
-                </div>
-                <div class="portfolio-item">
-                    <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80" alt="Portfolio Item 3">
-                    <div class="portfolio-item-content">
-                        <h3>Project Three</h3>
-                        <p>A social media strategy that grew the client's following by 300% in three months.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <section class="contact" id="contact">
+        <h2>Contact Us</h2>
+        <form class="contact-form">
+            <input type="text" placeholder="Your Name" required>
+            <input type="email" placeholder="Your Email" required>
+            <textarea placeholder="Your Message" required></textarea>
+            <button type="submit" class="btn">Send Message</button>
+        </form>
     </section>
 
-    <!-- Testimonials Section -->
-    <section id="testimonials" class="testimonials">
-        <div class="container">
-            <h2>Client Testimonials</h2>
-            <div class="testimonial-slider">
-                <div class="testimonial-card">
-                    <p>"DamnArt transformed our digital presence. Their expertise and creativity exceeded our expectations!"</p>
-                    <h4>- John Doe, CEO of Company A</h4>
-                </div>
-                <div class="testimonial-card">
-                    <p>"The team at DamnArt is professional, responsive, and delivered outstanding results. Highly recommended!"</p>
-                    <h4>- Jane Smith, Marketing Director</h4>
-                </div>
-                <div class="testimonial-card">
-                    <p>"Working with DamnArt was a game-changer for our business. Their strategies drove significant growth."</p>
-                    <h4>- Robert Johnson, Founder of Company B</h4>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Blog Section -->
-    <section id="blog" class="blog">
-        <div class="container">
-            <h2>Latest Blog Posts</h2>
-            <div class="blog-grid">
-                <div class="blog-card">
-                    <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80" alt="Blog Post 1">
-                    <div class="blog-card-content">
-                        <h3>Top SEO Trends for 2023</h3>
-                        <p>Stay ahead of the curve with these essential SEO trends for the upcoming year.</p>
-                    </div>
-                </div>
-                <div class="blog-card">
-                    <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80" alt="Blog Post 2">
-                    <div class="blog-card-content">
-                        <h3>How to Create Engaging Content</h3>
-                        <p>Learn the secrets to crafting content that captivates and converts your audience.</p>
-                    </div>
-                </div>
-                <div class="blog-card">
-                    <img src="https://images.unsplash.com/photo-1559136555-9303baea8ebd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80" alt="Blog Post 3">
-                    <div class="blog-card-content">
-                        <h3>The Power of Social Media</h3>
-                        <p>Discover how to harness the power of social media to grow your brand and engage your audience.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section id="contact" class="contact">
-        <div class="container">
-            <h2>Get In Touch</h2>
-            <div class="contact-content">
-                <div class="contact-form">
-                    <form>
-                        <input type="text" placeholder="Your Name" required>
-                        <input type="email" placeholder="Your Email" required>
-                        <input type="text" placeholder="Subject" required>
-                        <textarea placeholder="Your Message" rows="5" required></textarea>
-                        <button type="submit">Send Message</button>
-                    </form>
-                </div>
-                <div class="contact-map">
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.215374518922!2d-73.9878449241645!3d40.7484409713896!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c259a9b3117469%3A0xd134e199a405a163!2sEmpire%20State%20Building!5e0!3m2!1sen!2sus!4v1689010000000!5m2!1sen!2sus" allowfullscreen="" loading="lazy"></iframe>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
     <footer>
-        <div class="container">
-            <div class="social-links">
-                <a href="#"><i class="fab fa-facebook"></i></a>
-                <a href="#"><i class="fab fa-twitter"></i></a>
-                <a href="#"><i class="fab fa-instagram"></i></a>
-                <a href="#"><i class="fab fa-linkedin"></i></a>
-            </div>
-            <p>&copy; 2023 DamnArt. All rights reserved.</p>
+        <div class="social-links">
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-linkedin"></i></a>
         </div>
+        <p>&copy; 2023 Patroda AI. All rights reserved.</p>
     </footer>
 
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
     <script>
         // Mobile Menu Toggle
-        const hamburger = document.querySelector('.hamburger');
-        const nav = document.querySelector('nav');
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('nav-links');
 
         hamburger.addEventListener('click', () => {
-            nav.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        });
+
+        // Swiper JS for Portfolio Carousel
+        const swiper = new Swiper('.swiper-container', {
+            loop: true,
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+            autoplay: {
+                delay: 3000,
+                disableOnInteraction: false,
+            },
         });
 
         // Smooth Scrolling for Navigation Links
@@ -797,11 +556,11 @@
         });
 
         // Form Submission
-        const form = document.querySelector('form');
-        form.addEventListener('submit', (e) => {
+        const contactForm = document.querySelector('.contact-form');
+        contactForm.addEventListener('submit', (e) => {
             e.preventDefault();
             alert('Thank you for your message! We will get back to you soon.');
-            form.reset();
+            contactForm.reset();
         });
     </script>
 </body>
