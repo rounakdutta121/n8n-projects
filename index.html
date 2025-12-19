@@ -3,413 +3,743 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spice Haven - Indian Restaurant</title>
+    <title>DamnArt - Digital Marketing Agency</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         /* Global Styles */
+        :root {
+            --navy: #0a2463;
+            --teal: #3a8b8b;
+            --white: #ffffff;
+            --gold: #ffd700;
+            --dark: #1a1a1a;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
         }
 
         body {
-            background-color: #f8f4e9;
-            color: #333;
+            font-family: 'Arial', sans-serif;
+            background-color: var(--white);
+            color: var(--dark);
             line-height: 1.6;
         }
 
-        /* Header Styles */
-        header {
-            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.pexels.com/photos/1279330/pexels-photo-1279330.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
-            background-size: cover;
-            background-position: center;
-            color: white;
-            text-align: center;
-            padding: 2rem 0;
-            position: relative;
-        }
-
-        nav {
-            display: flex;
-            justify-content: space-around;
-            background-color: rgba(0, 0, 0, 0.8);
-            padding: 1rem;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        nav a {
-            color: white;
+        a {
             text-decoration: none;
-            font-weight: bold;
-            padding: 0.5rem 1rem;
-            border-radius: 5px;
-            transition: background-color 0.3s;
+            color: inherit;
         }
 
-        nav a:hover {
-            background-color: #ff9900;
+        ul {
+            list-style: none;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background-color: var(--navy);
+            color: var(--white);
+            padding: 20px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .logo span {
+            color: var(--gold);
+        }
+
+        nav ul {
+            display: flex;
+        }
+
+        nav ul li {
+            margin-left: 30px;
+        }
+
+        nav ul li a {
+            color: var(--white);
+            transition: color 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: var(--gold);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--white);
+            font-size: 24px;
+            cursor: pointer;
         }
 
         /* Hero Section */
         .hero {
-            padding: 3rem 1rem;
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            color: var(--white);
             text-align: center;
+            padding-top: 80px;
         }
 
-        .hero h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            animation: glow 2s infinite alternate;
+        .hero-content h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            animation: fadeInDown 1s ease-in-out;
         }
 
-        @keyframes glow {
-            from {
-                text-shadow: 0 0 5px #ff9900;
-            }
-            to {
-                text-shadow: 0 0 20px #ff9900, 0 0 30px #ff9900;
-            }
-        }
-
-        .hero p {
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
+        .hero-content p {
+            font-size: 20px;
+            margin-bottom: 30px;
+            animation: fadeInUp 1s ease-in-out;
         }
 
         .btn {
             display: inline-block;
-            background-color: #ff9900;
-            color: white;
-            padding: 0.8rem 1.5rem;
+            background-color: var(--gold);
+            color: var(--navy);
+            padding: 12px 30px;
             border-radius: 5px;
-            text-decoration: none;
             font-weight: bold;
-            transition: transform 0.3s;
+            transition: background-color 0.3s, transform 0.3s;
+            animation: fadeIn 1.5s ease-in-out;
         }
 
         .btn:hover {
-            transform: scale(1.1);
+            background-color: var(--teal);
+            color: var(--white);
+            transform: translateY(-3px);
         }
 
-        /* About Section */
-        .about {
-            padding: 3rem 1rem;
-            display: flex;
-            align-items: center;
-            background-color: white;
+        /* Services Section */
+        .services {
+            padding: 100px 0;
+            background-color: var(--white);
         }
 
-        .about img {
-            width: 50%;
+        .services h2 {
+            text-align: center;
+            font-size: 36px;
+            margin-bottom: 50px;
+            color: var(--navy);
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .service-card {
+            background-color: var(--white);
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .about-content {
-            width: 50%;
-            padding: 0 2rem;
-        }
-
-        .about-content h2 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            color: #ff9900;
-        }
-
-        /* Menu Section */
-        .menu {
-            padding: 3rem 1rem;
-            background-color: #f8f4e9;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
             text-align: center;
         }
 
-        .menu h2 {
-            font-size: 2.5rem;
-            margin-bottom: 2rem;
-            color: #ff9900;
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
         }
 
-        .menu-grid {
+        .service-icon {
+            font-size: 40px;
+            color: var(--gold);
+            margin-bottom: 20px;
+        }
+
+        .service-card h3 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: var(--navy);
+        }
+
+        /* Portfolio Section */
+        .portfolio {
+            padding: 100px 0;
+            background-color: var(--navy);
+            color: var(--white);
+        }
+
+        .portfolio h2 {
+            text-align: center;
+            font-size: 36px;
+            margin-bottom: 50px;
+        }
+
+        .portfolio-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
         }
 
-        .menu-item {
-            background-color: white;
+        .portfolio-item {
+            background-color: var(--white);
             border-radius: 10px;
             overflow: hidden;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s;
         }
 
-        .menu-item:hover {
+        .portfolio-item:hover {
             transform: translateY(-10px);
         }
 
-        .menu-item img {
-            width: 100%;
+        .portfolio-img {
             height: 200px;
-            object-fit: cover;
+            background-size: cover;
+            background-position: center;
         }
 
-        .menu-item-content {
-            padding: 1rem;
+        .portfolio-info {
+            padding: 20px;
+            color: var(--dark);
         }
 
-        .menu-item-content h3 {
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
+        .portfolio-info h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
         }
 
-        .menu-item-content p {
-            margin-bottom: 1rem;
+        /* Testimonials Section */
+        .testimonials {
+            padding: 100px 0;
+            background-color: var(--white);
         }
 
-        .price {
-            font-weight: bold;
-            color: #ff9900;
+        .testimonials h2 {
+            text-align: center;
+            font-size: 36px;
+            margin-bottom: 50px;
+            color: var(--navy);
         }
 
-        /* Gallery Section */
-        .gallery {
-            padding: 3rem 1rem;
-            background-color: white;
+        .testimonial-slider {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            gap: 30px;
+            padding-bottom: 20px;
+        }
+
+        .testimonial-card {
+            flex: 0 0 300px;
+            background-color: var(--white);
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            scroll-snap-align: start;
             text-align: center;
         }
 
-        .gallery h2 {
-            font-size: 2.5rem;
-            margin-bottom: 2rem;
-            color: #ff9900;
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 20px;
         }
 
-        .gallery-grid {
+        .testimonial-author {
+            font-weight: bold;
+            color: var(--gold);
+        }
+
+        /* Blog Section */
+        .blog {
+            padding: 100px 0;
+            background-color: var(--navy);
+            color: var(--white);
+        }
+
+        .blog h2 {
+            text-align: center;
+            font-size: 36px;
+            margin-bottom: 50px;
+        }
+
+        .blog-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 1rem;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
         }
 
-        .gallery-item {
-            overflow: hidden;
+        .blog-card {
+            background-color: var(--white);
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            color: var(--dark);
         }
 
-        .gallery-item:hover {
-            transform: scale(1.05);
-        }
-
-        .gallery-item img {
-            width: 100%;
+        .blog-img {
             height: 200px;
-            object-fit: cover;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .blog-info {
+            padding: 20px;
+        }
+
+        .blog-info h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .blog-info p {
+            color: #666;
+            margin-bottom: 15px;
         }
 
         /* Contact Section */
         .contact {
-            padding: 3rem 1rem;
-            background-color: #f8f4e9;
-            text-align: center;
+            padding: 100px 0;
+            background-color: var(--white);
         }
 
         .contact h2 {
-            font-size: 2.5rem;
-            margin-bottom: 2rem;
-            color: #ff9900;
+            text-align: center;
+            font-size: 36px;
+            margin-bottom: 50px;
+            color: var(--navy);
         }
 
         .contact-form {
             max-width: 600px;
             margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
+            background-color: var(--white);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
 
-        .contact-form input,
-        .contact-form textarea {
-            padding: 0.8rem;
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
             border: 1px solid #ddd;
             border-radius: 5px;
-            font-size: 1rem;
+            font-size: 16px;
         }
 
-        .contact-form button {
-            background-color: #ff9900;
-            color: white;
-            padding: 0.8rem;
-            border: none;
-            border-radius: 5px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .contact-form button:hover {
-            background-color: #e68a00;
+        .form-group textarea {
+            height: 150px;
         }
 
         /* Footer */
         footer {
-            background-color: #333;
-            color: white;
+            background-color: var(--navy);
+            color: var(--white);
+            padding: 50px 0 20px;
             text-align: center;
-            padding: 2rem 0;
         }
 
-        .social-links {
-            margin-bottom: 1rem;
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
         }
 
-        .social-links a {
-            color: white;
-            margin: 0 0.5rem;
-            font-size: 1.5rem;
+        .footer-links a {
+            margin: 0 15px;
+            color: var(--white);
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--gold);
+        }
+
+        .social-icons {
+            margin-bottom: 20px;
+        }
+
+        .social-icons a {
+            margin: 0 10px;
+            color: var(--white);
+            font-size: 20px;
+            transition: color 0.3s;
+        }
+
+        .social-icons a:hover {
+            color: var(--gold);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* Responsive Design */
         @media (max-width: 768px) {
-            .about {
+            .header-container {
                 flex-direction: column;
             }
 
-            .about img,
-            .about-content {
-                width: 100%;
+            nav ul {
+                margin-top: 20px;
             }
 
-            .hero h1 {
-                font-size: 2rem;
+            nav ul li {
+                margin: 0 10px;
+            }
+
+            .hero-content h1 {
+                font-size: 36px;
+            }
+
+            .hero-content p {
+                font-size: 18px;
+            }
+
+            .mobile-menu-btn {
+                display: block;
             }
 
             nav {
-                flex-direction: column;
-                align-items: center;
+                display: none;
             }
+
+            nav.active {
+                display: flex;
+                flex-direction: column;
+                text-align: center;
+            }
+
+            nav ul li {
+                margin: 10px 0;
+            }
+        }
+
+        /* Glowing Effects */
+        .glow {
+            position: relative;
+        }
+
+        .glow::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 10px;
+            background: inherit;
+            z-index: -1;
+            filter: blur(10px);
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+
+        .service-card:hover::after,
+        .portfolio-item:hover::after,
+        .testimonial-card:hover::after,
+        .blog-card:hover::after {
+            opacity: 1;
         }
     </style>
 </head>
 <body>
     <!-- Header -->
     <header>
-        <nav>
-            <a href="#home">Home</a>
-            <a href="#about">About</a>
-            <a href="#menu">Menu</a>
-            <a href="#gallery">Gallery</a>
-            <a href="#contact">Contact</a>
-        </nav>
-
-        <div class="hero" id="home">
-            <h1>Welcome to Spice Haven</h1>
-            <p>Experience the rich flavors of India</p>
-            <a href="#menu" class="btn">View Menu</a>
+        <div class="container header-container">
+            <div class="logo">Damn<span>Art</span></div>
+            <button class="mobile-menu-btn" id="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </button>
+            <nav id="nav">
+                <ul>
+                    <li><a href="#hero">Home</a></li>
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="#portfolio">Portfolio</a></li>
+                    <li><a href="#testimonials">Testimonials</a></li>
+                    <li><a href="#blog">Blog</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
         </div>
     </header>
 
-    <!-- About Section -->
-    <section class="about" id="about">
-        <img src="https://images.pexels.com/photos/1279330/pexels-photo-1279330.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Indian Cuisine">
-        <div class="about-content">
-            <h2>About Us</h2>
-            <p>At Spice Haven, we bring the authentic flavors of India to your table. Our chefs are dedicated to creating dishes that are not only delicious but also visually stunning. We use only the freshest ingredients and traditional recipes to ensure an unforgettable dining experience.</p>
-            <p>Whether you're a fan of spicy curries, flavorful biryanis, or sweet desserts, we have something for everyone. Join us for a culinary journey through India!</p>
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="container hero-content">
+            <h1>Transform Your Brand with <span style="color: var(--gold);">DamnArt</span></h1>
+            <p>We are a digital marketing agency based in Chandigarh, India, specializing in creating impactful digital experiences.</p>
+            <a href="#contact" class="btn">Get Started</a>
         </div>
     </section>
 
-    <!-- Menu Section -->
-    <section class="menu" id="menu">
-        <h2>Our Menu</h2>
-        <div class="menu-grid">
-            <div class="menu-item">
-                <img src="https://images.pexels.com/photos/1279330/pexels-photo-1279330.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Butter Chicken">
-                <div class="menu-item-content">
-                    <h3>Butter Chicken</h3>
-                    <p>Creamy tomato-based curry with tender chicken pieces.</p>
-                    <span class="price">$12.99</span>
+    <!-- Services Section -->
+    <section class="services" id="services">
+        <div class="container">
+            <h2>Our Services</h2>
+            <div class="services-grid">
+                <div class="service-card glow">
+                    <div class="service-icon">
+                        <i class="fas fa-paint-brush"></i>
+                    </div>
+                    <h3>Web Design</h3>
+                    <p>We create visually stunning and user-friendly websites that captivate your audience and drive conversions.</p>
                 </div>
-            </div>
-            <div class="menu-item">
-                <img src="https://images.pexels.com/photos/1279330/pexels-photo-1279330.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Biryani">
-                <div class="menu-item-content">
-                    <h3>Biryani</h3>
-                    <p>Aromatic rice dish cooked with spices and your choice of meat.</p>
-                    <span class="price">$14.99</span>
+                <div class="service-card glow">
+                    <div class="service-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h3>Web Development</h3>
+                    <p>Our development team builds robust and scalable web applications tailored to your business needs.</p>
                 </div>
-            </div>
-            <div class="menu-item">
-                <img src="https://images.pexels.com/photos/1279330/pexels-photo-1279330.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Samosa">
-                <div class="menu-item-content">
-                    <h3>Samosa</h3>
-                    <p>Crispy pastry filled with spiced potatoes and peas.</p>
-                    <span class="price">$4.99</span>
+                <div class="service-card glow">
+                    <div class="service-icon">
+                        <i class="fas fa-bullhorn"></i>
+                    </div>
+                    <h3>Digital Marketing</h3>
+                    <p>We offer comprehensive digital marketing strategies to boost your online presence and reach your target audience.</p>
                 </div>
-            </div>
-            <div class="menu-item">
-                <img src="https://images.pexels.com/photos/1279330/pexels-photo-1279330.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Gulab Jamun">
-                <div class="menu-item-content">
-                    <h3>Gulab Jamun</h3>
-                    <p>Soft, syrupy sweets made from milk solids.</p>
-                    <span class="price">$5.99</span>
+                <div class="service-card glow">
+                    <div class="service-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3>SEO</h3>
+                    <p>Our SEO experts optimize your website to rank higher on search engines and drive organic traffic.</p>
+                </div>
+                <div class="service-card glow">
+                    <div class="service-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3>Mobile App Development</h3>
+                    <p>We design and develop mobile applications that provide seamless user experiences across all devices.</p>
+                </div>
+                <div class="service-card glow">
+                    <div class="service-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Analytics</h3>
+                    <p>Our analytics services help you understand your audience and make data-driven decisions.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Gallery Section -->
-    <section class="gallery" id="gallery">
-        <h2>Gallery</h2>
-        <div class="gallery-grid">
-            <div class="gallery-item">
-                <img src="https://images.pexels.com/photos/1279330/pexels-photo-1279330.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Dish 1">
+    <!-- Portfolio Section -->
+    <section class="portfolio" id="portfolio">
+        <div class="container">
+            <h2>Our Portfolio</h2>
+            <div class="portfolio-grid">
+                <div class="portfolio-item glow">
+                    <div class="portfolio-img" style="background-image: url('https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');"></div>
+                    <div class="portfolio-info">
+                        <h3>Project One</h3>
+                        <p>A stunning website design for a leading e-commerce brand.</p>
+                    </div>
+                </div>
+                <div class="portfolio-item glow">
+                    <div class="portfolio-img" style="background-image: url('https://images.unsplash.com/photo-1556761175-4b46a572b786?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');"></div>
+                    <div class="portfolio-info">
+                        <h3>Project Two</h3>
+                        <p>A mobile app that revolutionizes the way users interact with content.</p>
+                    </div>
+                </div>
+                <div class="portfolio-item glow">
+                    <div class="portfolio-img" style="background-image: url('https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');"></div>
+                    <div class="portfolio-info">
+                        <h3>Project Three</h3>
+                        <p>A comprehensive digital marketing campaign that drove significant traffic.</p>
+                    </div>
+                </div>
             </div>
-            <div class="gallery-item">
-                <img src="https://images.pexels.com/photos/1279330/pexels-photo-1279330.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Dish 2">
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials" id="testimonials">
+        <div class="container">
+            <h2>What Our Clients Say</h2>
+            <div class="testimonial-slider">
+                <div class="testimonial-card glow">
+                    <p class="testimonial-text">"DamnArt transformed our online presence. Their team is professional, creative, and delivered beyond our expectations."</p>
+                    <p class="testimonial-author">- John Doe, CEO of TechCorp</p>
+                </div>
+                <div class="testimonial-card glow">
+                    <p class="testimonial-text">"The website they designed is not only beautiful but also highly functional. We've seen a significant increase in traffic and conversions."</p>
+                    <p class="testimonial-author">- Jane Smith, Marketing Director</p>
+                </div>
+                <div class="testimonial-card glow">
+                    <p class="testimonial-text">"Working with DamnArt was a pleasure. Their expertise in digital marketing helped us reach our target audience effectively."</p>
+                    <p class="testimonial-author">- Robert Johnson, Founder of StartUp</p>
+                </div>
             </div>
-            <div class="gallery-item">
-                <img src="https://images.pexels.com/photos/1279330/pexels-photo-1279330.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Dish 3">
-            </div>
-            <div class="gallery-item">
-                <img src="https://images.pexels.com/photos/1279330/pexels-photo-1279330.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Dish 4">
+        </div>
+    </section>
+
+    <!-- Blog Section -->
+    <section class="blog" id="blog">
+        <div class="container">
+            <h2>Latest from Our Blog</h2>
+            <div class="blog-grid">
+                <div class="blog-card glow">
+                    <div class="blog-img" style="background-image: url('https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');"></div>
+                    <div class="blog-info">
+                        <h3>Top Trends in Digital Marketing for 2023</h3>
+                        <p>Stay ahead of the curve with these digital marketing trends.</p>
+                        <a href="#" class="btn">Read More</a>
+                    </div>
+                </div>
+                <div class="blog-card glow">
+                    <div class="blog-img" style="background-image: url('https://images.unsplash.com/photo-1556761175-4b46a572b786?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');"></div>
+                    <div class="blog-info">
+                        <h3>How to Improve Your Website's SEO</h3>
+                        <p>Learn the best practices to optimize your website for search engines.</p>
+                        <a href="#" class="btn">Read More</a>
+                    </div>
+                </div>
+                <div class="blog-card glow">
+                    <div class="blog-img" style="background-image: url('https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');"></div>
+                    <div class="blog-info">
+                        <h3>The Importance of User Experience in Web Design</h3>
+                        <p>Discover why UX is crucial for the success of your website.</p>
+                        <a href="#" class="btn">Read More</a>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- Contact Section -->
     <section class="contact" id="contact">
-        <h2>Contact Us</h2>
-        <form class="contact-form">
-            <input type="text" placeholder="Your Name" required>
-            <input type="email" placeholder="Your Email" required>
-            <textarea placeholder="Your Message" rows="5" required></textarea>
-            <button type="submit">Send Message</button>
-        </form>
+        <div class="container">
+            <h2>Get In Touch</h2>
+            <form class="contact-form">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone</label>
+                    <input type="tel" id="phone" name="phone">
+                </div>
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" required></textarea>
+                </div>
+                <button type="submit" class="btn">Send Message</button>
+            </form>
+        </div>
     </section>
 
     <!-- Footer -->
     <footer>
-        <div class="social-links">
-            <a href="#">Facebook</a>
-            <a href="#">Twitter</a>
-            <a href="#">Instagram</a>
+        <div class="container">
+            <div class="footer-links">
+                <a href="#hero">Home</a>
+                <a href="#services">Services</a>
+                <a href="#portfolio">Portfolio</a>
+                <a href="#testimonials">Testimonials</a>
+                <a href="#blog">Blog</a>
+                <a href="#contact">Contact</a>
+            </div>
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+            </div>
+            <p>&copy; 2023 DamnArt. All rights reserved.</p>
         </div>
-        <p>&copy; 2023 Spice Haven. All rights reserved.</p>
     </footer>
 
-    <!-- JavaScript for Smooth Scrolling -->
     <script>
-        document.querySelectorAll('nav a').forEach(anchor => {
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const nav = document.getElementById('nav');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            nav.classList.toggle('active');
+        });
+
+        // Smooth Scrolling for Navigation Links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
                 e.preventDefault();
-                const targetId = this.getAttribute('href');
-                const targetSection = document.querySelector(targetId);
-                targetSection.scrollIntoView({ behavior: 'smooth' });
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
             });
+        });
+
+        // Form Submission
+        const contactForm = document.querySelector('.contact-form');
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Thank you for your message! We will get back to you soon.');
+            contactForm.reset();
         });
     </script>
 </body>
