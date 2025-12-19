@@ -8,11 +8,10 @@
         /* Base Styles */
         :root {
             --primary: #00ff9d;
-            --secondary: #ff00cc;
-            --dark: #121212;
-            --darker: #0a0a0a;
+            --secondary: #ff00aa;
+            --dark: #0a0a1a;
+            --darker: #05050a;
             --light: #f0f0f0;
-            --glow: 0 0 20px rgba(0, 255, 157, 0.5);
         }
 
         * {
@@ -35,16 +34,16 @@
             top: 0;
             width: 100%;
             z-index: 1000;
-            background-color: rgba(18, 18, 18, 0.8);
-            backdrop-filter: blur(10px);
-            padding: 1rem 2rem;
+            padding: 20px 5%;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            background-color: rgba(10, 10, 26, 0.8);
+            backdrop-filter: blur(10px);
         }
 
         .logo {
-            font-size: 1.5rem;
+            font-size: 24px;
             font-weight: bold;
             color: var(--primary);
             text-decoration: none;
@@ -53,12 +52,13 @@
         .nav-links {
             display: flex;
             list-style: none;
-            gap: 2rem;
+            gap: 30px;
         }
 
         .nav-links a {
             color: var(--light);
             text-decoration: none;
+            font-weight: 500;
             transition: color 0.3s ease;
         }
 
@@ -74,166 +74,131 @@
             justify-content: center;
             align-items: center;
             text-align: center;
-            padding: 0 2rem;
+            padding: 0 5%;
+            background: linear-gradient(rgba(10, 10, 26, 0.7), rgba(10, 10, 26, 0.7)), url('https://images.stockcake.com/public/b/2/b/b2b2b744-0331-45a7-a260-cd1c20079b8c_large/neon-space-portal-stockcake.jpg');
+            background-size: cover;
+            background-position: center;
             position: relative;
             overflow: hidden;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, rgba(0, 255, 157, 0.1), rgba(255, 0, 204, 0.1));
-            z-index: -1;
-            animation: gradientShift 10s ease infinite;
-        }
-
-        @keyframes gradientShift {
-            0% { transform: translateX(-20%); }
-            50% { transform: translateX(20%); }
-            100% { transform: translateX(-20%); }
         }
 
         .hero h1 {
             font-size: clamp(3rem, 8vw, 6rem);
             font-weight: 800;
-            margin-bottom: 1rem;
+            margin-bottom: 20px;
             background: linear-gradient(90deg, var(--primary), var(--secondary));
             -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
             background-clip: text;
-            text-shadow: var(--glow);
+            color: transparent;
+            text-shadow: 0 0 10px rgba(0, 255, 157, 0.3);
         }
 
         .hero p {
             font-size: 1.2rem;
-            max-width: 600px;
-            margin-bottom: 2rem;
+            max-width: 700px;
+            margin-bottom: 40px;
         }
 
         .cta-button {
-            padding: 0.8rem 2rem;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-weight: bold;
             color: var(--dark);
+            background: var(--primary);
             border: none;
             border-radius: 50px;
-            font-size: 1rem;
-            font-weight: bold;
             cursor: pointer;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            box-shadow: var(--glow);
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(0, 255, 157, 0.5);
         }
 
         .cta-button:hover {
-            transform: scale(1.05);
+            transform: translateY(-5px);
             box-shadow: 0 0 30px rgba(0, 255, 157, 0.7);
         }
 
         /* About Section */
         .about {
-            padding: 6rem 2rem;
+            padding: 100px 5%;
             background-color: var(--darker);
             position: relative;
         }
 
-        .about::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(0,255,157,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
-            z-index: -1;
-        }
-
         .about-content {
+            display: flex;
+            flex-direction: column;
+            gap: 50px;
             max-width: 1200px;
             margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: center;
+        }
+
+        .about-text {
+            flex: 1;
         }
 
         .about-text h2 {
             font-size: clamp(2rem, 5vw, 3.5rem);
-            margin-bottom: 1rem;
+            margin-bottom: 20px;
             color: var(--primary);
         }
 
         .about-text p {
             font-size: 1.1rem;
-            margin-bottom: 1rem;
+            margin-bottom: 20px;
         }
 
-        .about-visual {
-            position: relative;
-            height: 300px;
-            background: linear-gradient(135deg, rgba(0, 255, 157, 0.2), rgba(255, 0, 204, 0.2));
+        .about-image {
+            flex: 1;
             border-radius: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             overflow: hidden;
+            box-shadow: 0 0 20px rgba(0, 255, 157, 0.2);
         }
 
-        .about-visual::after {
-            content: '';
-            position: absolute;
-            width: 200px;
-            height: 200px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            border-radius: 50%;
-            animation: pulse 3s ease infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); opacity: 0.7; }
-            50% { transform: scale(1.2); opacity: 1; }
-            100% { transform: scale(1); opacity: 0.7; }
+        .about-image img {
+            width: 100%;
+            height: auto;
+            display: block;
         }
 
         /* Services Section */
         .services {
-            padding: 6rem 2rem;
-            background-color: var(--dark);
+            padding: 100px 5%;
+            background: linear-gradient(rgba(10, 10, 26, 0.9), rgba(10, 10, 26, 0.9)), url('https://images.stockcake.com/public/f/e/0/fe0622ee-f13b-41cb-af8a-5f0e76df2911_large/neon-digital-void-stockcake.jpg');
+            background-size: cover;
+            background-position: center;
         }
 
         .services h2 {
             text-align: center;
-            font-size: clamp(2rem, 5vw, 3.5rem);
-            margin-bottom: 3rem;
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            margin-bottom: 50px;
             color: var(--secondary);
         }
 
         .services-grid {
-            max-width: 1200px;
-            margin: 0 auto;
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
         .service-card {
-            background-color: var(--darker);
-            padding: 2rem;
-            border-radius: 20px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background-color: rgba(255, 255, 255, 0.1);
             border: 1px solid rgba(0, 255, 157, 0.2);
+            border-radius: 20px;
+            padding: 30px;
+            transition: all 0.3s ease;
         }
 
         .service-card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 10px 20px rgba(0, 255, 157, 0.2);
+            box-shadow: 0 0 20px rgba(0, 255, 157, 0.3);
         }
 
         .service-card h3 {
             font-size: 1.5rem;
-            margin-bottom: 1rem;
+            margin-bottom: 15px;
             color: var(--primary);
         }
 
@@ -243,48 +208,36 @@
 
         /* Highlights Section */
         .highlights {
-            padding: 6rem 2rem;
-            background-color: var(--darker);
-            position: relative;
-        }
-
-        .highlights::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><defs><pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="2" fill="rgba(255,0,204,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23dots)"/></svg>');
-            z-index: -1;
+            padding: 100px 5%;
+            background-color: var(--dark);
         }
 
         .highlights h2 {
             text-align: center;
-            font-size: clamp(2rem, 5vw, 3.5rem);
-            margin-bottom: 3rem;
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            margin-bottom: 50px;
             color: var(--primary);
         }
 
         .highlights-grid {
-            max-width: 1200px;
-            margin: 0 auto;
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
         .highlight-card {
-            background-color: var(--dark);
-            padding: 2rem;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 0, 170, 0.2);
             border-radius: 20px;
+            padding: 30px;
             text-align: center;
-            border: 1px solid rgba(255, 0, 204, 0.2);
         }
 
         .highlight-card h3 {
             font-size: 2rem;
-            margin-bottom: 1rem;
+            margin-bottom: 10px;
             color: var(--secondary);
         }
 
@@ -294,93 +247,113 @@
 
         /* Process Section */
         .process {
-            padding: 6rem 2rem;
-            background-color: var(--dark);
+            padding: 100px 5%;
+            background: linear-gradient(rgba(10, 10, 26, 0.9), rgba(10, 10, 26, 0.9)), url('https://thumbs.dreamstime.com/b/desolate-room-enveloped-experimental-dark-aesthetic-where-eerie-neon-light-flickers-against-shadowed-walls-dizzying-333707941.jpg');
+            background-size: cover;
+            background-position: center;
         }
 
         .process h2 {
             text-align: center;
-            font-size: clamp(2rem, 5vw, 3.5rem);
-            margin-bottom: 3rem;
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            margin-bottom: 50px;
             color: var(--primary);
         }
 
         .process-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 50px;
             max-width: 1200px;
             margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
         }
 
         .process-step {
-            background-color: var(--darker);
-            padding: 2rem;
-            border-radius: 20px;
-            text-align: center;
-            border: 1px solid rgba(0, 255, 157, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 30px;
         }
 
-        .process-step h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
+        .process-step-number {
+            font-size: 2rem;
+            font-weight: bold;
             color: var(--secondary);
         }
 
-        .process-step p {
-            font-size: 1rem;
+        .process-step-content h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+
+        .process-step-content p {
+            font-size: 1.1rem;
         }
 
         /* CTA Section */
         .cta {
-            padding: 6rem 2rem;
-            background: linear-gradient(135deg, rgba(0, 255, 157, 0.1), rgba(255, 0, 204, 0.1));
+            padding: 100px 5%;
             text-align: center;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
         }
 
         .cta h2 {
-            font-size: clamp(2rem, 5vw, 3.5rem);
-            margin-bottom: 1rem;
-            color: var(--primary);
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            margin-bottom: 20px;
+            color: var(--dark);
         }
 
         .cta p {
             font-size: 1.2rem;
-            max-width: 600px;
-            margin: 0 auto 2rem;
+            max-width: 700px;
+            margin: 0 auto 40px;
+            color: var(--dark);
+        }
+
+        .cta-button-dark {
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--primary);
+            background: var(--dark);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .cta-button-dark:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
         }
 
         /* Footer */
         footer {
-            padding: 3rem 2rem;
-            background-color: var(--darker);
+            padding: 50px 5%;
             text-align: center;
+            background-color: var(--darker);
             border-top: 1px solid rgba(0, 255, 157, 0.2);
         }
 
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
         .footer-logo {
-            font-size: 1.5rem;
+            font-size: 2rem;
             font-weight: bold;
             color: var(--primary);
-            margin-bottom: 1rem;
+            margin-bottom: 20px;
         }
 
         .footer-links {
             display: flex;
             justify-content: center;
-            list-style: none;
-            gap: 2rem;
-            margin-bottom: 1rem;
+            gap: 30px;
+            margin-bottom: 20px;
         }
 
         .footer-links a {
             color: var(--light);
             text-decoration: none;
+            font-weight: 500;
             transition: color 0.3s ease;
         }
 
@@ -388,63 +361,56 @@
             color: var(--primary);
         }
 
-        .footer-social {
+        .footer-socials {
             display: flex;
             justify-content: center;
-            gap: 1rem;
+            gap: 20px;
         }
 
-        .footer-social a {
-            width: 40px;
-            height: 40px;
-            background-color: var(--dark);
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        .footer-socials a {
             color: var(--light);
-            text-decoration: none;
-            transition: background-color 0.3s ease;
+            font-size: 1.5rem;
+            transition: color 0.3s ease;
         }
 
-        .footer-social a:hover {
-            background-color: var(--primary);
-            color: var(--dark);
+        .footer-socials a:hover {
+            color: var(--primary);
         }
 
         .footer-copyright {
-            margin-top: 2rem;
-            color: rgba(240, 240, 240, 0.7);
+            margin-top: 20px;
+            color: rgba(255, 255, 255, 0.7);
             font-size: 0.9rem;
         }
 
         /* Animations */
         @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
         }
 
         .floating {
-            animation: float 3s ease infinite;
+            animation: float 3s ease-in-out infinite;
         }
 
         /* Responsive Adjustments */
         @media (max-width: 768px) {
-            .about-content {
-                grid-template-columns: 1fr;
-            }
-
             .nav-links {
                 display: none;
             }
-        }
 
-        /* Parallax Effect */
-        .parallax {
-            background-attachment: fixed;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-size: cover;
+            .about-content {
+                flex-direction: column;
+            }
+
+            .process-step {
+                flex-direction: column;
+                text-align: center;
+            }
         }
     </style>
 </head>
@@ -457,119 +423,133 @@
             <li><a href="#services">Services</a></li>
             <li><a href="#highlights">Highlights</a></li>
             <li><a href="#process">Process</a></li>
-            <li><a href="#cta">Contact</a></li>
+            <li><a href="#contact">Contact</a></li>
         </ul>
     </nav>
 
     <!-- Hero Section -->
-    <section class="hero parallax">
+    <section class="hero">
         <h1 class="floating">Welcome to PanelVerse</h1>
-        <p>We create immersive digital experiences that captivate and inspire.</p>
-        <button class="cta-button">Explore Our Work</button>
+        <p>We are a creative media company dedicated to delivering high-quality, innovative solutions that elevate your brand.</p>
+        <a href="#contact" class="cta-button">Get Started</a>
     </section>
 
     <!-- About Section -->
-    <section id="about" class="about">
+    <section class="about" id="about">
         <div class="about-content">
             <div class="about-text">
                 <h2>About Us</h2>
-                <p>At PanelVerse, we are a creative media company dedicated to pushing the boundaries of digital storytelling. Our team of experts combines cutting-edge technology with artistic vision to deliver unforgettable experiences.</p>
-                <p>From concept to execution, we ensure every project is a masterpiece.</p>
+                <p>At PanelVerse, we believe in the power of creativity and innovation. Our team of experts is dedicated to pushing the boundaries of what's possible in the digital world.</p>
+                <p>We specialize in creating immersive experiences that captivate audiences and drive results. From cutting-edge design to strategic storytelling, we are here to bring your vision to life.</p>
             </div>
-            <div class="about-visual">
-                <!-- Visual element created via CSS -->
+            <div class="about-image">
+                <img src="https://thumbs.dreamstime.com/b/desolate-room-enveloped-experimental-dark-aesthetic-where-eerie-neon-light-flickers-against-shadowed-walls-dizzying-333707955.jpg" alt="Creative Space">
             </div>
         </div>
     </section>
 
     <!-- Services Section -->
-    <section id="services" class="services">
+    <section class="services" id="services">
         <h2>Our Services</h2>
         <div class="services-grid">
             <div class="service-card">
-                <h3>Digital Strategy</h3>
-                <p>We craft tailored digital strategies that align with your business goals and drive measurable results.</p>
+                <h3>Branding</h3>
+                <p>We create unique and memorable brand identities that resonate with your audience and set you apart from the competition.</p>
             </div>
             <div class="service-card">
                 <h3>Web Design</h3>
-                <p>Our designs are not just visually stunning but also user-friendly and responsive across all devices.</p>
+                <p>Our team designs stunning, user-friendly websites that not only look great but also drive engagement and conversions.</p>
             </div>
             <div class="service-card">
-                <h3>Content Creation</h3>
-                <p>From videos to graphics, we create content that engages and resonates with your audience.</p>
+                <h3>Digital Marketing</h3>
+                <p>From social media campaigns to SEO, we help you reach your target audience and achieve your business goals.</p>
             </div>
         </div>
     </section>
 
     <!-- Highlights Section -->
-    <section id="highlights" class="highlights">
-        <h2>Our Highlights</h2>
+    <section class="highlights" id="highlights">
+        <h2>Why Choose Us</h2>
         <div class="highlights-grid">
             <div class="highlight-card">
-                <h3>50+</h3>
+                <h3>100+</h3>
                 <p>Projects Completed</p>
             </div>
             <div class="highlight-card">
-                <h3>20+</h3>
-                <p>Happy Clients</p>
+                <h3>98%</h3>
+                <p>Client Satisfaction</p>
             </div>
             <div class="highlight-card">
-                <h3>10+</h3>
+                <h3>50+</h3>
                 <p>Awards Won</p>
+            </div>
+            <div class="highlight-card">
+                <h3>24/7</h3>
+                <p>Support Available</p>
             </div>
         </div>
     </section>
 
     <!-- Process Section -->
-    <section id="process" class="process">
+    <section class="process" id="process">
         <h2>Our Process</h2>
         <div class="process-steps">
             <div class="process-step">
-                <h3>Discovery</h3>
-                <p>We start by understanding your needs and goals to craft a tailored strategy.</p>
+                <div class="process-step-number">01</div>
+                <div class="process-step-content">
+                    <h3>Discovery</h3>
+                    <p>We start by understanding your goals, audience, and vision to create a tailored strategy.</p>
+                </div>
             </div>
             <div class="process-step">
-                <h3>Design</h3>
-                <p>Our team creates visually stunning designs that align with your brand identity.</p>
+                <div class="process-step-number">02</div>
+                <div class="process-step-content">
+                    <h3>Design</h3>
+                    <p>Our creative team crafts visually stunning designs that align with your brand and objectives.</p>
+                </div>
             </div>
             <div class="process-step">
-                <h3>Development</h3>
-                <p>We bring designs to life with cutting-edge technology and seamless functionality.</p>
+                <div class="process-step-number">03</div>
+                <div class="process-step-content">
+                    <h3>Development</h3>
+                    <p>We bring the designs to life with cutting-edge technology and seamless functionality.</p>
+                </div>
             </div>
             <div class="process-step">
-                <h3>Launch</h3>
-                <p>After rigorous testing, we launch your project and ensure it reaches your audience.</p>
+                <div class="process-step-number">04</div>
+                <div class="process-step-content">
+                    <h3>Launch</h3>
+                    <p>After rigorous testing, we launch your project and provide ongoing support to ensure success.</p>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- CTA Section -->
-    <section id="cta" class="cta">
+    <section class="cta" id="contact">
         <h2>Ready to Elevate Your Brand?</h2>
-        <p>Let's create something extraordinary together. Reach out to us today!</p>
-        <button class="cta-button">Get in Touch</button>
+        <p>Contact us today to discuss your project and see how we can help you achieve your goals.</p>
+        <a href="#" class="cta-button-dark">Contact Us</a>
     </section>
 
     <!-- Footer -->
     <footer>
-        <div class="footer-content">
-            <div class="footer-logo">PanelVerse</div>
-            <ul class="footer-links">
-                <li><a href="#about">About</a></li>
-                <li><a href="#services">Services</a></li>
-                <li><a href="#highlights">Highlights</a></li>
-                <li><a href="#process">Process</a></li>
-                <li><a href="#cta">Contact</a></li>
-            </ul>
-            <div class="footer-social">
-                <a href="#">FB</a>
-                <a href="#">TW</a>
-                <a href="#">IG</a>
-                <a href="#">LN</a>
-            </div>
-            <div class="footer-copyright">
-                &copy; 2023 PanelVerse. All rights reserved.
-            </div>
+        <div class="footer-logo">PanelVerse</div>
+        <div class="footer-links">
+            <a href="#about">About</a>
+            <a href="#services">Services</a>
+            <a href="#highlights">Highlights</a>
+            <a href="#process">Process</a>
+            <a href="#contact">Contact</a>
+        </div>
+        <div class="footer-socials">
+            <a href="#">FB</a>
+            <a href="#">TW</a>
+            <a href="#">IG</a>
+            <a href="#">LN</a>
+        </div>
+        <div class="footer-copyright">
+            &copy; 2023 PanelVerse. All rights reserved.
         </div>
     </footer>
 
@@ -578,14 +558,9 @@
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
-                const targetId = this.getAttribute('href');
-                const targetElement = document.querySelector(targetId);
-                if (targetElement) {
-                    window.scrollTo({
-                        top: targetElement.offsetTop - 80,
-                        behavior: 'smooth'
-                    });
-                }
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
             });
         });
 
@@ -597,27 +572,78 @@
             parallax.style.transform = `translateY(${speed}px)`;
         });
 
-        // Button Hover Effects
-        const buttons = document.querySelectorAll('.cta-button');
-        buttons.forEach(button => {
-            button.addEventListener('mouseenter', () => {
-                button.style.transform = 'scale(1.05)';
-            });
+        // Animated Background for Services Section
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.style.position = 'absolute';
+        canvas.style.top = '0';
+        canvas.style.left = '0';
+        canvas.style.width = '100%';
+        canvas.style.height = '100%';
+        canvas.style.zIndex = '-1';
+        document.querySelector('.services').appendChild(canvas);
 
-            button.addEventListener('mouseleave', () => {
-                button.style.transform = 'scale(1)';
+        let width, height;
+        function resizeCanvas() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        const particles = [];
+        const particleCount = 100;
+
+        for (let i = 0; i < particleCount; i++) {
+            particles.push({
+                x: Math.random() * width,
+                y: Math.random() * height,
+                size: Math.random() * 3 + 1,
+                speedX: Math.random() * 2 - 1,
+                speedY: Math.random() * 2 - 1,
+                color: `hsl(${Math.random() * 60 + 120}, 100%, 50%)`
             });
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, width, height);
+            particles.forEach(particle => {
+                particle.x += particle.speedX;
+                particle.y += particle.speedY;
+
+                if (particle.x < 0 || particle.x > width) particle.speedX *= -1;
+                if (particle.y < 0 || particle.y > height) particle.speedY *= -1;
+
+                ctx.fillStyle = particle.color;
+                ctx.beginPath();
+                ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                ctx.fill();
+            });
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        // Intersection Observer for Scroll Animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.service-card, .highlight-card, .process-step').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
         });
-
-        // Animated Background for Hero Section
-        const heroSection = document.querySelector('.hero');
-        const colors = ['rgba(0, 255, 157, 0.1)', 'rgba(255, 0, 204, 0.1)', 'rgba(0, 204, 255, 0.1)'];
-        let currentColorIndex = 0;
-
-        setInterval(() => {
-            currentColorIndex = (currentColorIndex + 1) % colors.length;
-            heroSection.style.background = `linear-gradient(45deg, ${colors[currentColorIndex]}, ${colors[(currentColorIndex + 1) % colors.length]})`;
-        }, 5000);
     </script>
 </body>
 </html>
