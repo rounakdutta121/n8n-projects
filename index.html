@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PanelVerse - Creative Media Company</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <style>
+        /* Base Styles */
         :root {
-            --primary-color: #ff00ff;
-            --secondary-color: #00ffff;
-            --dark-color: #121212;
-            --light-color: #f5f5f5;
-            --accent-color: #ff00aa;
+            --primary: #00ff9d;
+            --secondary: #ff00cc;
+            --dark: #121212;
+            --darker: #0a0a0a;
+            --light: #f0f0f0;
+            --glow: 0 0 20px rgba(0, 255, 157, 0.5);
         }
 
         * {
@@ -23,486 +23,419 @@
 
         body {
             font-family: 'Arial', sans-serif;
-            background-color: var(--dark-color);
-            color: var(--light-color);
+            background-color: var(--dark);
+            color: var(--light);
             overflow-x: hidden;
-            scroll-behavior: smooth;
+            line-height: 1.6;
         }
 
-        /* Header */
-        header {
+        /* Navigation */
+        nav {
             position: fixed;
             top: 0;
-            left: 0;
             width: 100%;
             z-index: 1000;
-            background-color: rgba(18, 18, 18, 0.9);
+            background-color: rgba(18, 18, 18, 0.8);
             backdrop-filter: blur(10px);
-            padding: 1rem 5%;
+            padding: 1rem 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
         .logo {
-            font-size: 2rem;
+            font-size: 1.5rem;
             font-weight: bold;
-            color: var(--primary-color);
+            color: var(--primary);
             text-decoration: none;
         }
 
-        nav ul {
+        .nav-links {
             display: flex;
             list-style: none;
+            gap: 2rem;
         }
 
-        nav ul li {
-            margin-left: 2rem;
-        }
-
-        nav ul li a {
-            color: var(--light-color);
+        .nav-links a {
+            color: var(--light);
             text-decoration: none;
-            font-weight: 500;
             transition: color 0.3s ease;
         }
 
-        nav ul li a:hover {
-            color: var(--primary-color);
-        }
-
-        .hamburger {
-            display: none;
-            cursor: pointer;
+        .nav-links a:hover {
+            color: var(--primary);
         }
 
         /* Hero Section */
         .hero {
             height: 100vh;
             display: flex;
-            align-items: center;
+            flex-direction: column;
             justify-content: center;
+            align-items: center;
             text-align: center;
-            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1518709268805-4e9042af2176?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
-            background-size: cover;
-            background-position: center;
+            padding: 0 2rem;
             position: relative;
             overflow: hidden;
         }
 
-        .hero-content {
-            z-index: 1;
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(0, 255, 157, 0.1), rgba(255, 0, 204, 0.1));
+            z-index: -1;
+            animation: gradientShift 10s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { transform: translateX(-20%); }
+            50% { transform: translateX(20%); }
+            100% { transform: translateX(-20%); }
         }
 
         .hero h1 {
-            font-size: 4rem;
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 800;
             margin-bottom: 1rem;
-            color: var(--primary-color);
-            text-shadow: 0 0 10px var(--primary-color);
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: var(--glow);
         }
 
         .hero p {
-            font-size: 1.5rem;
+            font-size: 1.2rem;
+            max-width: 600px;
             margin-bottom: 2rem;
-            color: var(--light-color);
         }
 
-        .btn {
-            display: inline-block;
+        .cta-button {
             padding: 0.8rem 2rem;
-            background-color: var(--primary-color);
-            color: var(--dark-color);
-            text-decoration: none;
-            font-weight: bold;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: var(--dark);
+            border: none;
             border-radius: 50px;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 20px var(--primary-color);
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: var(--glow);
         }
 
-        .btn:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px var(--primary-color);
+        .cta-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(0, 255, 157, 0.7);
         }
 
         /* About Section */
         .about {
-            padding: 5rem 5%;
-            background-color: var(--dark-color);
+            padding: 6rem 2rem;
+            background-color: var(--darker);
+            position: relative;
         }
 
-        .section-title {
-            text-align: center;
-            font-size: 3rem;
-            margin-bottom: 3rem;
-            color: var(--secondary-color);
+        .about::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(0,255,157,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            z-index: -1;
         }
 
         .about-content {
-            display: flex;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
             align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-        }
-
-        .about-text {
-            flex: 1;
-            min-width: 300px;
-            padding-right: 2rem;
         }
 
         .about-text h2 {
-            font-size: 2.5rem;
+            font-size: clamp(2rem, 5vw, 3.5rem);
             margin-bottom: 1rem;
-            color: var(--primary-color);
+            color: var(--primary);
         }
 
         .about-text p {
             font-size: 1.1rem;
-            line-height: 1.8;
             margin-bottom: 1rem;
         }
 
-        .about-image {
-            flex: 1;
-            min-width: 300px;
-            text-align: center;
+        .about-visual {
+            position: relative;
+            height: 300px;
+            background: linear-gradient(135deg, rgba(0, 255, 157, 0.2), rgba(255, 0, 204, 0.2));
+            border-radius: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
         }
 
-        .about-image img {
-            max-width: 100%;
-            border-radius: 10px;
-            box-shadow: 0 0 20px var(--secondary-color);
+        .about-visual::after {
+            content: '';
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            animation: pulse 3s ease infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.7; }
         }
 
         /* Services Section */
         .services {
-            padding: 5rem 5%;
-            background: linear-gradient(135deg, var(--dark-color), #1a1a1a);
+            padding: 6rem 2rem;
+            background-color: var(--dark);
+        }
+
+        .services h2 {
+            text-align: center;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            margin-bottom: 3rem;
+            color: var(--secondary);
         }
 
         .services-grid {
+            max-width: 1200px;
+            margin: 0 auto;
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
         }
 
         .service-card {
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
+            background-color: var(--darker);
             padding: 2rem;
-            text-align: center;
+            border-radius: 20px;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 255, 157, 0.2);
         }
 
         .service-card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 10px 20px var(--accent-color);
-        }
-
-        .service-card i {
-            font-size: 3rem;
-            color: var(--primary-color);
-            margin-bottom: 1rem;
+            box-shadow: 0 10px 20px rgba(0, 255, 157, 0.2);
         }
 
         .service-card h3 {
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             margin-bottom: 1rem;
+            color: var(--primary);
         }
 
         .service-card p {
             font-size: 1rem;
-            line-height: 1.6;
         }
 
-        /* Portfolio Section */
-        .portfolio {
-            padding: 5rem 5%;
-            background-color: var(--dark-color);
-        }
-
-        .portfolio-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-        }
-
-        .portfolio-item {
+        /* Highlights Section */
+        .highlights {
+            padding: 6rem 2rem;
+            background-color: var(--darker);
             position: relative;
-            overflow: hidden;
-            border-radius: 10px;
-            box-shadow: 0 0 20px var(--secondary-color);
-            transition: transform 0.3s ease;
         }
 
-        .portfolio-item:hover {
-            transform: scale(1.05);
-        }
-
-        .portfolio-item img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-        }
-
-        .portfolio-overlay {
+        .highlights::before {
+            content: '';
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transition: opacity 0.3s ease;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><defs><pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="2" fill="rgba(255,0,204,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23dots)"/></svg>');
+            z-index: -1;
         }
 
-        .portfolio-item:hover .portfolio-overlay {
-            opacity: 1;
-        }
-
-        .portfolio-overlay i {
-            font-size: 2rem;
-            color: var(--primary-color);
-            margin: 0 0.5rem;
-        }
-
-        /* Testimonials Section */
-        .testimonials {
-            padding: 5rem 5%;
-            background: linear-gradient(135deg, var(--dark-color), #1a1a1a);
-        }
-
-        .testimonial-slider {
-            max-width: 800px;
-            margin: 0 auto;
-            position: relative;
-        }
-
-        .testimonial {
+        .highlights h2 {
             text-align: center;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            margin-bottom: 3rem;
+            color: var(--primary);
+        }
+
+        .highlights-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .highlight-card {
+            background-color: var(--dark);
             padding: 2rem;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            text-align: center;
+            border: 1px solid rgba(255, 0, 204, 0.2);
         }
 
-        .testimonial img {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            object-fit: cover;
+        .highlight-card h3 {
+            font-size: 2rem;
             margin-bottom: 1rem;
-            border: 3px solid var(--primary-color);
+            color: var(--secondary);
         }
 
-        .testimonial p {
-            font-size: 1.2rem;
-            line-height: 1.8;
-            margin-bottom: 1rem;
+        .highlight-card p {
+            font-size: 1rem;
         }
 
-        .testimonial h4 {
-            font-size: 1.5rem;
-            color: var(--secondary-color);
+        /* Process Section */
+        .process {
+            padding: 6rem 2rem;
+            background-color: var(--dark);
         }
 
-        .slider-nav {
-            display: flex;
-            justify-content: center;
-            margin-top: 2rem;
+        .process h2 {
+            text-align: center;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            margin-bottom: 3rem;
+            color: var(--primary);
         }
 
-        .slider-nav button {
-            background: none;
-            border: none;
-            color: var(--light-color);
-            font-size: 1.5rem;
-            margin: 0 1rem;
-            cursor: pointer;
-            transition: color 0.3s ease;
-        }
-
-        .slider-nav button:hover {
-            color: var(--primary-color);
-        }
-
-        /* Contact Section */
-        .contact {
-            padding: 5rem 5%;
-            background-color: var(--dark-color);
-        }
-
-        .contact-content {
-            max-width: 800px;
+        .process-steps {
+            max-width: 1200px;
             margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .process-step {
+            background-color: var(--darker);
+            padding: 2rem;
+            border-radius: 20px;
+            text-align: center;
+            border: 1px solid rgba(0, 255, 157, 0.2);
+        }
+
+        .process-step h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--secondary);
+        }
+
+        .process-step p {
+            font-size: 1rem;
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 6rem 2rem;
+            background: linear-gradient(135deg, rgba(0, 255, 157, 0.1), rgba(255, 0, 204, 0.1));
             text-align: center;
         }
 
-        .contact h2 {
-            font-size: 2.5rem;
+        .cta h2 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
             margin-bottom: 1rem;
-            color: var(--primary-color);
+            color: var(--primary);
         }
 
-        .contact p {
+        .cta p {
             font-size: 1.2rem;
-            margin-bottom: 2rem;
-        }
-
-        .contact-form {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .contact-form input,
-        .contact-form textarea {
-            padding: 1rem;
-            margin-bottom: 1rem;
-            border: none;
-            border-radius: 5px;
-            background: rgba(255, 255, 255, 0.1);
-            color: var(--light-color);
-            font-size: 1rem;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .contact-form textarea {
-            height: 150px;
-        }
-
-        .contact-form button {
-            padding: 1rem;
-            background-color: var(--primary-color);
-            color: var(--dark-color);
-            border: none;
-            border-radius: 5px;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .contact-form button:hover {
-            background-color: var(--accent-color);
+            max-width: 600px;
+            margin: 0 auto 2rem;
         }
 
         /* Footer */
         footer {
-            padding: 3rem 5%;
-            background-color: rgba(18, 18, 18, 0.9);
+            padding: 3rem 2rem;
+            background-color: var(--darker);
             text-align: center;
+            border-top: 1px solid rgba(0, 255, 157, 0.2);
         }
 
-        .social-links {
-            margin-bottom: 2rem;
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
-        .social-links a {
-            color: var(--light-color);
+        .footer-logo {
             font-size: 1.5rem;
-            margin: 0 1rem;
-            transition: color 0.3s ease;
-        }
-
-        .social-links a:hover {
-            color: var(--primary-color);
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 1rem;
         }
 
         .footer-links {
             display: flex;
             justify-content: center;
-            margin-bottom: 2rem;
+            list-style: none;
+            gap: 2rem;
+            margin-bottom: 1rem;
         }
 
         .footer-links a {
-            color: var(--light-color);
+            color: var(--light);
             text-decoration: none;
-            margin: 0 1rem;
             transition: color 0.3s ease;
         }
 
         .footer-links a:hover {
-            color: var(--primary-color);
+            color: var(--primary);
         }
 
-        .copyright {
-            color: var(--light-color);
+        .footer-social {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .footer-social a {
+            width: 40px;
+            height: 40px;
+            background-color: var(--dark);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--light);
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .footer-social a:hover {
+            background-color: var(--primary);
+            color: var(--dark);
+        }
+
+        .footer-copyright {
+            margin-top: 2rem;
+            color: rgba(240, 240, 240, 0.7);
             font-size: 0.9rem;
         }
 
         /* Animations */
-        .animate__animated {
-            animation-duration: 1s;
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
         }
 
-        /* Responsive Design */
+        .floating {
+            animation: float 3s ease infinite;
+        }
+
+        /* Responsive Adjustments */
         @media (max-width: 768px) {
-            .hamburger {
-                display: block;
-            }
-
-            nav ul {
-                position: fixed;
-                top: 80px;
-                left: -100%;
-                width: 100%;
-                height: calc(100vh - 80px);
-                background-color: var(--dark-color);
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                transition: left 0.3s ease;
-            }
-
-            nav ul.active {
-                left: 0;
-            }
-
-            nav ul li {
-                margin: 1rem 0;
-            }
-
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-
-            .hero p {
-                font-size: 1rem;
-            }
-
             .about-content {
-                flex-direction: column;
+                grid-template-columns: 1fr;
             }
 
-            .about-text {
-                padding-right: 0;
-                margin-bottom: 2rem;
-            }
-
-            .section-title {
-                font-size: 2rem;
-            }
-        }
-
-        /* Glowing Effects */
-        .glow {
-            text-shadow: 0 0 10px var(--primary-color);
-            animation: glow 2s ease-in-out infinite alternate;
-        }
-
-        @keyframes glow {
-            from {
-                text-shadow: 0 0 10px var(--primary-color);
-            }
-            to {
-                text-shadow: 0 0 20px var(--primary-color), 0 0 30px var(--secondary-color);
+            .nav-links {
+                display: none;
             }
         }
 
@@ -516,240 +449,175 @@
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header>
+    <!-- Navigation -->
+    <nav>
         <a href="#" class="logo">PanelVerse</a>
-        <div class="hamburger">
-            <i class="fas fa-bars"></i>
-        </div>
-        <nav>
-            <ul>
-                <li><a href="#home">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#services">Services</a></li>
-                <li><a href="#portfolio">Portfolio</a></li>
-                <li><a href="#testimonials">Testimonials</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-        </nav>
-    </header>
+        <ul class="nav-links">
+            <li><a href="#about">About</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#highlights">Highlights</a></li>
+            <li><a href="#process">Process</a></li>
+            <li><a href="#cta">Contact</a></li>
+        </ul>
+    </nav>
 
     <!-- Hero Section -->
-    <section class="hero parallax" id="home">
-        <div class="hero-content animate__animated animate__fadeInDown">
-            <h1 class="glow">Welcome to PanelVerse</h1>
-            <p>Where creativity meets innovation</p>
-            <a href="#contact" class="btn">Get Started</a>
-        </div>
+    <section class="hero parallax">
+        <h1 class="floating">Welcome to PanelVerse</h1>
+        <p>We create immersive digital experiences that captivate and inspire.</p>
+        <button class="cta-button">Explore Our Work</button>
     </section>
 
     <!-- About Section -->
-    <section class="about" id="about">
-        <h2 class="section-title animate__animated animate__fadeIn">About Us</h2>
-        <div class="about-content animate__animated animate__fadeInUp">
+    <section id="about" class="about">
+        <div class="about-content">
             <div class="about-text">
-                <h2>Who We Are</h2>
-                <p>PanelVerse is a creative media company dedicated to delivering high-quality media products. Our team of experts is passionate about creating visually stunning and engaging content that captivates audiences.</p>
-                <p>With years of experience in the industry, we have honed our skills to provide top-notch services that meet the unique needs of our clients.</p>
+                <h2>About Us</h2>
+                <p>At PanelVerse, we are a creative media company dedicated to pushing the boundaries of digital storytelling. Our team of experts combines cutting-edge technology with artistic vision to deliver unforgettable experiences.</p>
+                <p>From concept to execution, we ensure every project is a masterpiece.</p>
             </div>
-            <div class="about-image">
-                <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="About Us">
+            <div class="about-visual">
+                <!-- Visual element created via CSS -->
             </div>
         </div>
     </section>
 
     <!-- Services Section -->
-    <section class="services" id="services">
-        <h2 class="section-title animate__animated animate__fadeIn">Our Services</h2>
-        <div class="services-grid animate__animated animate__fadeInUp">
+    <section id="services" class="services">
+        <h2>Our Services</h2>
+        <div class="services-grid">
             <div class="service-card">
-                <i class="fas fa-video"></i>
-                <h3>Video Production</h3>
-                <p>From concept to final cut, we create compelling videos that tell your story and engage your audience.</p>
+                <h3>Digital Strategy</h3>
+                <p>We craft tailored digital strategies that align with your business goals and drive measurable results.</p>
             </div>
             <div class="service-card">
-                <i class="fas fa-paint-brush"></i>
-                <h3>Graphic Design</h3>
-                <p>Our designers craft visually stunning graphics that elevate your brand and leave a lasting impression.</p>
+                <h3>Web Design</h3>
+                <p>Our designs are not just visually stunning but also user-friendly and responsive across all devices.</p>
             </div>
             <div class="service-card">
-                <i class="fas fa-code"></i>
-                <h3>Web Development</h3>
-                <p>We build responsive and user-friendly websites that drive traffic and convert visitors into customers.</p>
-            </div>
-            <div class="service-card">
-                <i class="fas fa-photo-video"></i>
-                <h3>Photography</h3>
-                <p>Capture the essence of your brand with our professional photography services.</p>
-            </div>
-            <div class="service-card">
-                <i class="fas fa-bullhorn"></i>
-                <h3>Digital Marketing</h3>
-                <p>Boost your online presence with our strategic digital marketing solutions.</p>
-            </div>
-            <div class="service-card">
-                <i class="fas fa-mobile-alt"></i>
-                <h3>App Development</h3>
-                <p>We create innovative mobile applications that enhance user experience and drive engagement.</p>
+                <h3>Content Creation</h3>
+                <p>From videos to graphics, we create content that engages and resonates with your audience.</p>
             </div>
         </div>
     </section>
 
-    <!-- Portfolio Section -->
-    <section class="portfolio" id="portfolio">
-        <h2 class="section-title animate__animated animate__fadeIn">Our Portfolio</h2>
-        <div class="portfolio-grid animate__animated animate__fadeInUp">
-            <div class="portfolio-item">
-                <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Portfolio 1">
-                <div class="portfolio-overlay">
-                    <i class="fas fa-search"></i>
-                    <i class="fas fa-link"></i>
-                </div>
+    <!-- Highlights Section -->
+    <section id="highlights" class="highlights">
+        <h2>Our Highlights</h2>
+        <div class="highlights-grid">
+            <div class="highlight-card">
+                <h3>50+</h3>
+                <p>Projects Completed</p>
             </div>
-            <div class="portfolio-item">
-                <img src="https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Portfolio 2">
-                <div class="portfolio-overlay">
-                    <i class="fas fa-search"></i>
-                    <i class="fas fa-link"></i>
-                </div>
+            <div class="highlight-card">
+                <h3>20+</h3>
+                <p>Happy Clients</p>
             </div>
-            <div class="portfolio-item">
-                <img src="https://images.unsplash.com/photo-1505761671935-60b3a742765e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Portfolio 3">
-                <div class="portfolio-overlay">
-                    <i class="fas fa-search"></i>
-                    <i class="fas fa-link"></i>
-                </div>
-            </div>
-            <div class="portfolio-item">
-                <img src="https://images.unsplash.com/photo-1516321497487-e288fb19713f?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Portfolio 4">
-                <div class="portfolio-overlay">
-                    <i class="fas fa-search"></i>
-                    <i class="fas fa-link"></i>
-                </div>
-            </div>
-            <div class="portfolio-item">
-                <img src="https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Portfolio 5">
-                <div class="portfolio-overlay">
-                    <i class="fas fa-search"></i>
-                    <i class="fas fa-link"></i>
-                </div>
-            </div>
-            <div class="portfolio-item">
-                <img src="https://images.unsplash.com/photo-1505761671935-60b3a742765e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Portfolio 6">
-                <div class="portfolio-overlay">
-                    <i class="fas fa-search"></i>
-                    <i class="fas fa-link"></i>
-                </div>
+            <div class="highlight-card">
+                <h3>10+</h3>
+                <p>Awards Won</p>
             </div>
         </div>
     </section>
 
-    <!-- Testimonials Section -->
-    <section class="testimonials" id="testimonials">
-        <h2 class="section-title animate__animated animate__fadeIn">What Our Clients Say</h2>
-        <div class="testimonial-slider animate__animated animate__fadeInUp">
-            <div class="testimonial">
-                <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-1.2.1&auto=format&fit=crop&w=150&q=60" alt="Client 1">
-                <p>"PanelVerse transformed our brand with their creative media solutions. Highly recommended!"</p>
-                <h4>John Doe</h4>
+    <!-- Process Section -->
+    <section id="process" class="process">
+        <h2>Our Process</h2>
+        <div class="process-steps">
+            <div class="process-step">
+                <h3>Discovery</h3>
+                <p>We start by understanding your needs and goals to craft a tailored strategy.</p>
             </div>
-            <div class="slider-nav">
-                <button><i class="fas fa-chevron-left"></i></button>
-                <button><i class="fas fa-chevron-right"></i></button>
+            <div class="process-step">
+                <h3>Design</h3>
+                <p>Our team creates visually stunning designs that align with your brand identity.</p>
+            </div>
+            <div class="process-step">
+                <h3>Development</h3>
+                <p>We bring designs to life with cutting-edge technology and seamless functionality.</p>
+            </div>
+            <div class="process-step">
+                <h3>Launch</h3>
+                <p>After rigorous testing, we launch your project and ensure it reaches your audience.</p>
             </div>
         </div>
     </section>
 
-    <!-- Contact Section -->
-    <section class="contact" id="contact">
-        <div class="contact-content animate__animated animate__fadeIn">
-            <h2>Get In Touch</h2>
-            <p>Ready to start your project? Drop us a line and let's create something amazing together.</p>
-            <form class="contact-form">
-                <input type="text" placeholder="Your Name" required>
-                <input type="email" placeholder="Your Email" required>
-                <textarea placeholder="Your Message" required></textarea>
-                <button type="submit">Send Message</button>
-            </form>
-        </div>
+    <!-- CTA Section -->
+    <section id="cta" class="cta">
+        <h2>Ready to Elevate Your Brand?</h2>
+        <p>Let's create something extraordinary together. Reach out to us today!</p>
+        <button class="cta-button">Get in Touch</button>
     </section>
 
     <!-- Footer -->
     <footer>
-        <div class="social-links animate__animated animate__fadeIn">
-            <a href="#"><i class="fab fa-facebook"></i></a>
-            <a href="#"><i class="fab fa-twitter"></i></a>
-            <a href="#"><i class="fab fa-instagram"></i></a>
-            <a href="#"><i class="fab fa-linkedin"></i></a>
+        <div class="footer-content">
+            <div class="footer-logo">PanelVerse</div>
+            <ul class="footer-links">
+                <li><a href="#about">About</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#highlights">Highlights</a></li>
+                <li><a href="#process">Process</a></li>
+                <li><a href="#cta">Contact</a></li>
+            </ul>
+            <div class="footer-social">
+                <a href="#">FB</a>
+                <a href="#">TW</a>
+                <a href="#">IG</a>
+                <a href="#">LN</a>
+            </div>
+            <div class="footer-copyright">
+                &copy; 2023 PanelVerse. All rights reserved.
+            </div>
         </div>
-        <div class="footer-links animate__animated animate__fadeIn">
-            <a href="#home">Home</a>
-            <a href="#about">About</a>
-            <a href="#services">Services</a>
-            <a href="#portfolio">Portfolio</a>
-            <a href="#contact">Contact</a>
-        </div>
-        <p class="copyright animate__animated animate__fadeIn">&copy; 2023 PanelVerse. All Rights Reserved.</p>
     </footer>
 
     <script>
-        // Mobile Navigation
-        const hamburger = document.querySelector('.hamburger');
-        const navUl = document.querySelector('nav ul');
-
-        hamburger.addEventListener('click', () => {
-            navUl.classList.toggle('active');
-        });
-
-        // Smooth Scrolling
+        // Smooth Scrolling for Navigation Links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
+            anchor.addEventListener('click', function (e) {
                 e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
             });
         });
 
-        // Testimonial Slider
-        const testimonials = document.querySelectorAll('.testimonial');
-        const prevBtn = document.querySelector('.slider-nav button:first-child');
-        const nextBtn = document.querySelector('.slider-nav button:last-child');
-        let currentTestimonial = 0;
-
-        function showTestimonial(index) {
-            testimonials.forEach((testimonial, i) => {
-                testimonial.style.display = i === index ? 'block' : 'none';
-            });
-        }
-
-        prevBtn.addEventListener('click', () => {
-            currentTestimonial = currentTestimonial === 0 ? testimonials.length - 1 : currentTestimonial - 1;
-            showTestimonial(currentTestimonial);
-        });
-
-        nextBtn.addEventListener('click', () => {
-            currentTestimonial = currentTestimonial === testimonials.length - 1 ? 0 : currentTestimonial + 1;
-            showTestimonial(currentTestimonial);
-        });
-
-        showTestimonial(currentTestimonial);
-
-        // Form Submission
-        const contactForm = document.querySelector('.contact-form');
-        contactForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            alert('Thank you for your message! We will get back to you soon.');
-            contactForm.reset();
-        });
-
-        // Parallax Effect
+        // Parallax Effect for Hero Section
         window.addEventListener('scroll', () => {
             const scrolled = window.pageYOffset;
-            const parallax = document.querySelector('.parallax');
+            const parallax = document.querySelector('.hero');
             const speed = scrolled * 0.5;
             parallax.style.transform = `translateY(${speed}px)`;
         });
+
+        // Button Hover Effects
+        const buttons = document.querySelectorAll('.cta-button');
+        buttons.forEach(button => {
+            button.addEventListener('mouseenter', () => {
+                button.style.transform = 'scale(1.05)';
+            });
+
+            button.addEventListener('mouseleave', () => {
+                button.style.transform = 'scale(1)';
+            });
+        });
+
+        // Animated Background for Hero Section
+        const heroSection = document.querySelector('.hero');
+        const colors = ['rgba(0, 255, 157, 0.1)', 'rgba(255, 0, 204, 0.1)', 'rgba(0, 204, 255, 0.1)'];
+        let currentColorIndex = 0;
+
+        setInterval(() => {
+            currentColorIndex = (currentColorIndex + 1) % colors.length;
+            heroSection.style.background = `linear-gradient(45deg, ${colors[currentColorIndex]}, ${colors[(currentColorIndex + 1) % colors.length]})`;
+        }, 5000);
     </script>
 </body>
 </html>
