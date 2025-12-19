@@ -3,16 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ITC India - Testing Services & Certifications</title>
+    <title>ITC - Testing Services & Certifications</title>
     <style>
         /* Base Styles */
         :root {
-            --primary-color: #00ff9d;
-            --secondary-color: #00d4ff;
-            --dark-bg: #121212;
-            --light-bg: #1e1e1e;
-            --text-color: #ffffff;
-            --text-secondary: #b0b0b0;
+            --primary: #00ff9d;
+            --secondary: #00d4ff;
+            --dark: #0a0a0a;
+            --light: #f0f0f0;
+            --accent: #ff006e;
         }
 
         * {
@@ -23,54 +22,57 @@
 
         body {
             font-family: 'Arial', sans-serif;
-            background-color: var(--dark-bg);
-            color: var(--text-color);
-            line-height: 1.6;
+            background-color: var(--dark);
+            color: var(--light);
             overflow-x: hidden;
         }
 
-        /* Navigation */
-        nav {
-            background-color: rgba(20, 20, 20, 0.9);
-            backdrop-filter: blur(10px);
+        /* Header */
+        header {
             position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
-            z-index: 1000;
-            padding: 1rem 2rem;
-        }
-
-        .nav-container {
+            padding: 20px 5%;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            max-width: 1200px;
-            margin: 0 auto;
+            z-index: 1000;
+            background-color: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(10px);
         }
 
         .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo img {
             height: 40px;
         }
 
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
+        .logo h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
         }
 
-        .nav-links a {
-            color: var(--text-color);
+        nav ul {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        nav a {
+            color: var(--light);
             text-decoration: none;
             font-weight: 500;
-            transition: color 0.3s ease;
+            transition: color 0.3s;
         }
 
-        .nav-links a:hover {
-            color: var(--primary-color);
-        }
-
-        .hamburger {
-            display: none;
-            cursor: pointer;
+        nav a:hover {
+            color: var(--primary);
         }
 
         /* Hero Section */
@@ -80,42 +82,39 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://market-resized.envatousercontent.com/previews/files/590682547/Screenshots/2.+About+Us.png?w=590&h=300&cf_fit=crop&crop=top&format=auto&q=85&s=2b4d90b8bc2dc1450b0a4fa26f35b56ec79665c3ab0719b121101b70aa13a902');
+            padding: 0 5%;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://vectorseek.com/wp-content/uploads/2022/02/ITC-Limited-Logo-Vector.jpg');
             background-size: cover;
             background-position: center;
-            color: var(--text-color);
         }
 
         .hero-content {
             max-width: 800px;
-            padding: 0 2rem;
         }
 
-        .hero h1 {
-            font-size: clamp(2.5rem, 5vw, 4rem);
-            margin-bottom: 1rem;
-            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+        .hero h2 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
         .hero p {
             font-size: 1.2rem;
-            margin-bottom: 2rem;
-            color: var(--text-secondary);
+            margin-bottom: 30px;
+            color: #ccc;
         }
 
         .btn {
             display: inline-block;
-            padding: 0.8rem 2rem;
-            background-color: var(--primary-color);
-            color: var(--dark-bg);
+            padding: 12px 30px;
+            background-color: var(--primary);
+            color: var(--dark);
             text-decoration: none;
-            border-radius: 50px;
             font-weight: 600;
-            transition: all 0.3s ease;
-            border: none;
-            cursor: pointer;
+            border-radius: 50px;
+            transition: all 0.3s;
         }
 
         .btn:hover {
@@ -123,358 +122,273 @@
             box-shadow: 0 10px 20px rgba(0, 255, 157, 0.3);
         }
 
-        /* Sections */
-        section {
-            padding: 5rem 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
+        /* About Section */
+        .about {
+            padding: 100px 5%;
+            display: flex;
+            align-items: center;
+            gap: 50px;
         }
 
-        .section-title {
-            text-align: center;
-            margin-bottom: 3rem;
-            font-size: clamp(2rem, 4vw, 3rem);
+        .about-image {
+            flex: 1;
         }
 
-        .section-title::after {
-            content: '';
-            display: block;
-            width: 80px;
-            height: 4px;
-            background: var(--primary-color);
-            margin: 1rem auto;
+        .about-image img {
+            width: 100%;
+            border-radius: 20px;
+        }
+
+        .about-content {
+            flex: 1;
+        }
+
+        .about-content h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+
+        .about-content p {
+            margin-bottom: 20px;
+            line-height: 1.6;
         }
 
         /* Services Section */
+        .services {
+            padding: 100px 5%;
+            text-align: center;
+        }
+
+        .services h2 {
+            font-size: 2.5rem;
+            margin-bottom: 50px;
+            color: var(--secondary);
+        }
+
         .services-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
+            gap: 30px;
         }
 
         .service-card {
-            background-color: var(--light-bg);
-            padding: 2rem;
-            border-radius: 10px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border: 1px solid rgba(0, 255, 157, 0.2);
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 20px;
+            transition: transform 0.3s;
         }
 
         .service-card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0, 255, 157, 0.2);
+        }
+
+        .service-card img {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 20px;
         }
 
         .service-card h3 {
-            margin-bottom: 1rem;
-            color: var(--primary-color);
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--primary);
         }
 
-        /* Certifications Section */
-        .certifications-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
+        /* Form Section */
+        .form-section {
+            padding: 100px 5%;
+            background-color: rgba(0, 0, 0, 0.5);
         }
 
-        .certification-card {
-            background-color: var(--light-bg);
-            padding: 2rem;
-            border-radius: 10px;
-            text-align: center;
-            transition: transform 0.3s ease;
-        }
-
-        .certification-card:hover {
-            transform: scale(1.05);
-        }
-
-        .certification-card img {
-            height: 100px;
-            margin-bottom: 1rem;
-        }
-
-        /* Case Studies Section */
-        .case-studies-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2rem;
-        }
-
-        .case-study-card {
-            background-color: var(--light-bg);
-            border-radius: 10px;
-            overflow: hidden;
-            transition: transform 0.3s ease;
-        }
-
-        .case-study-card:hover {
-            transform: translateX(10px);
-        }
-
-        .case-study-card img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-        }
-
-        .case-study-content {
-            padding: 1.5rem;
-        }
-
-        /* Testimonials Section */
-        .testimonials-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .testimonial-card {
-            background-color: var(--light-bg);
-            padding: 2rem;
-            border-radius: 10px;
-            border-left: 4px solid var(--primary-color);
-        }
-
-        .testimonial-card p {
-            font-style: italic;
-            margin-bottom: 1rem;
-        }
-
-        .testimonial-card h4 {
-            margin-bottom: 0.5rem;
-        }
-
-        .testimonial-card span {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        /* Contact Form */
-        .contact-form {
+        .form-container {
             max-width: 600px;
             margin: 0 auto;
-            background-color: var(--light-bg);
-            padding: 2rem;
-            border-radius: 10px;
-            border: 1px solid rgba(0, 255, 157, 0.2);
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 20px;
+        }
+
+        .form-container h2 {
+            font-size: 2rem;
+            margin-bottom: 30px;
+            text-align: center;
+            color: var(--secondary);
         }
 
         .form-group {
-            margin-bottom: 1.5rem;
+            margin-bottom: 20px;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 0.5rem;
+            margin-bottom: 5px;
+            font-weight: 500;
         }
 
         .form-group input,
-        .form-group textarea {
+        .form-group textarea,
+        .form-group select {
             width: 100%;
-            padding: 0.8rem;
-            border-radius: 5px;
-            border: 1px solid #444;
-            background-color: #333;
-            color: var(--text-color);
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: var(--light);
         }
 
-        .form-group textarea {
-            height: 150px;
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: 2px solid var(--primary);
         }
 
         /* Footer */
         footer {
-            background-color: #000;
-            padding: 3rem 2rem;
+            padding: 50px 5%;
             text-align: center;
+            background-color: rgba(0, 0, 0, 0.8);
         }
 
         .footer-logo {
-            height: 50px;
-            margin-bottom: 1rem;
-        }
-
-        .social-links {
             display: flex;
             justify-content: center;
-            gap: 1rem;
-            margin-bottom: 2rem;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
         }
 
-        .social-links a {
-            color: var(--text-color);
+        .footer-logo img {
+            height: 40px;
+        }
+
+        .footer-logo h3 {
             font-size: 1.5rem;
-            transition: color 0.3s ease;
+            color: var(--primary);
         }
 
-        .social-links a:hover {
-            color: var(--primary-color);
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 20px;
         }
 
-        /* Responsive Design */
+        .footer-links a {
+            color: var(--light);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .social-icons a {
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--light);
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .social-icons a:hover {
+            background-color: var(--primary);
+            color: var(--dark);
+        }
+
+        /* Responsive */
         @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
-
-            .hamburger {
-                display: block;
-            }
-
-            .hero h1 {
+            .hero h2 {
                 font-size: 2.5rem;
             }
 
-            .hero p {
-                font-size: 1rem;
+            .about {
+                flex-direction: column;
             }
-        }
 
-        /* Animations */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
+            .services-grid {
+                grid-template-columns: 1fr;
             }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .animate-fadeInUp {
-            animation: fadeInUp 1s ease-out;
-        }
-
-        @keyframes glow {
-            from {
-                box-shadow: 0 0 10px rgba(0, 255, 157, 0.5);
-            }
-            to {
-                box-shadow: 0 0 20px rgba(0, 255, 157, 0.8);
-            }
-        }
-
-        .btn-glow {
-            animation: glow 1.5s infinite alternate;
         }
     </style>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav>
-        <div class="nav-container">
-            <img src="https://itclimited.co.uk/wp-content/uploads/2024/03/Logo.png" alt="ITC Logo" class="logo">
-            <ul class="nav-links">
+    <!-- Header -->
+    <header>
+        <div class="logo">
+            <img src="https://cdn.freebiesupply.com/logos/large/2x/itc-limited-logo-png-transparent.png" alt="ITC Logo">
+            <h1>ITC</h1>
+        </div>
+        <nav>
+            <ul>
                 <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
                 <li><a href="#services">Services</a></li>
-                <li><a href="#certifications">Certifications</a></li>
-                <li><a href="#case-studies">Case Studies</a></li>
-                <li><a href="#testimonials">Testimonials</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
-            <div class="hamburger">
-                <div></div>
-                <div></div>
-                <div></div>
-            </div>
-        </div>
-    </nav>
+        </nav>
+    </header>
 
     <!-- Hero Section -->
-    <section id="home" class="hero">
-        <div class="hero-content animate-fadeInUp">
-            <h1>Empowering Quality Through Testing & Certification</h1>
-            <p>ITC India provides comprehensive testing services and certifications to ensure your products meet global standards.</p>
-            <a href="#contact" class="btn btn-glow">Get Started</a>
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h2>Testing Services & Certifications</h2>
+            <p>Ensuring quality and compliance with industry standards.</p>
+            <a href="#contact" class="btn">Get Started</a>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <div class="about-image">
+            <img src="https://cdn.freebiesupply.com/logos/large/2x/itc-limited-logo-black-and-white.png" alt="About ITC">
+        </div>
+        <div class="about-content">
+            <h2>About ITC</h2>
+            <p>ITC is a leading provider of testing services and certifications, dedicated to ensuring the highest standards of quality and compliance across various industries. Our team of experts is committed to delivering accurate and reliable results.</p>
+            <p>With state-of-the-art facilities and a customer-centric approach, we strive to exceed expectations and drive innovation in testing and certification.</p>
         </div>
     </section>
 
     <!-- Services Section -->
-    <section id="services">
-        <h2 class="section-title">Our Services</h2>
+    <section class="services" id="services">
+        <h2>Our Services</h2>
         <div class="services-grid">
-            <div class="service-card animate-fadeInUp">
+            <div class="service-card">
+                <img src="https://cdn.freebiesupply.com/logos/thumbs/2x/itc-limited-logo.png" alt="Service 1">
                 <h3>Product Testing</h3>
                 <p>Comprehensive testing solutions to ensure your products meet industry standards and regulations.</p>
             </div>
-            <div class="service-card animate-fadeInUp">
+            <div class="service-card">
+                <img src="https://cdn.freebiesupply.com/logos/large/2x/itc-3-logo-black-and-white.png" alt="Service 2">
                 <h3>Certification</h3>
-                <p>Obtain certifications that validate the quality and safety of your products for global markets.</p>
+                <p>Obtain certifications that validate the quality and safety of your products.</p>
             </div>
-            <div class="service-card animate-fadeInUp">
+            <div class="service-card">
+                <img src="https://vectorseek.com/wp-content/uploads/2022/02/ITC-Limited-Logo-Vector.jpg" alt="Service 3">
                 <h3>Consulting</h3>
-                <p>Expert consulting services to guide you through compliance and regulatory requirements.</p>
+                <p>Expert guidance to help you navigate complex regulatory landscapes.</p>
             </div>
         </div>
     </section>
 
-    <!-- Certifications Section -->
-    <section id="certifications">
-        <h2 class="section-title">Certifications</h2>
-        <div class="certifications-grid">
-            <div class="certification-card animate-fadeInUp">
-                <img src="https://cdn11.bigcommerce.com/s-8pfwh2omui/images/stencil/1280x1280/products/2139/4474/FLITC-LEVEL-2-ONLINE__91057.1729728008.png?c=2" alt="Certification 1">
-                <h3>ISO 9001</h3>
-                <p>Quality Management Systems</p>
-            </div>
-            <div class="certification-card animate-fadeInUp">
-                <img src="https://cdn11.bigcommerce.com/s-8pfwh2omui/images/stencil/1280x1280/products/2139/4474/FLITC-LEVEL-2-ONLINE__91057.1729728008.png?c=2" alt="Certification 2">
-                <h3>ISO 14001</h3>
-                <p>Environmental Management Systems</p>
-            </div>
-            <div class="certification-card animate-fadeInUp">
-                <img src="https://cdn11.bigcommerce.com/s-8pfwh2omui/images/stencil/1280x1280/products/2139/4474/FLITC-LEVEL-2-ONLINE__91057.1729728008.png?c=2" alt="Certification 3">
-                <h3>ISO 45001</h3>
-                <p>Occupational Health and Safety</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Case Studies Section -->
-    <section id="case-studies">
-        <h2 class="section-title">Case Studies</h2>
-        <div class="case-studies-grid">
-            <div class="case-study-card animate-fadeInUp">
-                <img src="https://www.ladybugz.com/wp-content/uploads/2022/05/biotech-startup-website-design-berkeley-ca-copy.jpg" alt="Case Study 1">
-                <div class="case-study-content">
-                    <h3>Biotech Product Testing</h3>
-                    <p>Successfully tested and certified a biotech product for global distribution.</p>
-                </div>
-            </div>
-            <div class="case-study-card animate-fadeInUp">
-                <img src="https://www.ladybugz.com/wp-content/uploads/2022/05/biotech-startup-website-design-berkeley-ca-copy.jpg" alt="Case Study 2">
-                <div class="case-study-content">
-                    <h3>Environmental Compliance</h3>
-                    <p>Assisted a manufacturing plant in achieving ISO 14001 certification.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Testimonials Section -->
-    <section id="testimonials">
-        <h2 class="section-title">Testimonials</h2>
-        <div class="testimonials-grid">
-            <div class="testimonial-card animate-fadeInUp">
-                <p>"ITC India provided exceptional service and expertise in certifying our products. Highly recommended!"</p>
-                <h4>John Doe</h4>
-                <span>CEO, Tech Solutions</span>
-            </div>
-            <div class="testimonial-card animate-fadeInUp">
-                <p>"Their team was professional and efficient, ensuring our compliance with global standards."</p>
-                <h4>Jane Smith</h4>
-                <span>Director, Green Energy</span>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section id="contact">
-        <h2 class="section-title">Contact Us</h2>
-        <div class="contact-form animate-fadeInUp">
-            <form>
+    <!-- Form Section -->
+    <section class="form-section" id="contact">
+        <div class="form-container">
+            <h2>Contact Us</h2>
+            <form id="contactForm">
                 <div class="form-group">
                     <label for="name">Name</label>
                     <input type="text" id="name" name="name" required>
@@ -488,8 +402,17 @@
                     <input type="tel" id="phone" name="phone">
                 </div>
                 <div class="form-group">
+                    <label for="service">Service</label>
+                    <select id="service" name="service" required>
+                        <option value="">Select a Service</option>
+                        <option value="testing">Product Testing</option>
+                        <option value="certification">Certification</option>
+                        <option value="consulting">Consulting</option>
+                    </select>
+                </div>
+                <div class="form-group">
                     <label for="message">Message</label>
-                    <textarea id="message" name="message" required></textarea>
+                    <textarea id="message" name="message" rows="5" required></textarea>
                 </div>
                 <button type="submit" class="btn">Submit</button>
             </form>
@@ -498,27 +421,28 @@
 
     <!-- Footer -->
     <footer>
-        <img src="https://itclimited.co.uk/wp-content/uploads/2024/03/Logo.png" alt="ITC Logo" class="footer-logo">
-        <div class="social-links">
-            <a href="#"><i class="fab fa-facebook"></i></a>
-            <a href="#"><i class="fab fa-twitter"></i></a>
-            <a href="#"><i class="fab fa-linkedin"></i></a>
+        <div class="footer-logo">
+            <img src="https://cdn.freebiesupply.com/logos/large/2x/itc-limited-logo-png-transparent.png" alt="ITC Logo">
+            <h3>ITC</h3>
         </div>
-        <p>&copy; 2023 ITC India. All rights reserved.</p>
+        <div class="footer-links">
+            <a href="#home">Home</a>
+            <a href="#about">About</a>
+            <a href="#services">Services</a>
+            <a href="#contact">Contact</a>
+        </div>
+        <div class="social-icons">
+            <a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/></svg></a>
+            <a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.174-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.402.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.357-.629-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24.009 12.017 24.009c6.624 0 11.99-5.367 11.99-11.988C24.007 5.367 18.641.001.012.001z"/></svg></a>
+            <a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
+        </div>
+        <p>&copy; 2023 ITC. All rights reserved.</p>
     </footer>
 
     <script>
-        // Mobile Navigation Toggle
-        const hamburger = document.querySelector('.hamburger');
-        const navLinks = document.querySelector('.nav-links');
-
-        hamburger.addEventListener('click', () => {
-            navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
-        });
-
-        // Smooth Scrolling for Navigation Links
+        // Smooth Scrolling
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
+            anchor.addEventListener('click', function(e) {
                 e.preventDefault();
                 document.querySelector(this.getAttribute('href')).scrollIntoView({
                     behavior: 'smooth'
@@ -527,29 +451,10 @@
         });
 
         // Form Submission
-        const contactForm = document.querySelector('.contact-form form');
-        contactForm.addEventListener('submit', (e) => {
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            alert('Thank you for your message! We will get back to you soon.');
-            contactForm.reset();
-        });
-
-        // Intersection Observer for Animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('animate-fadeInUp');
-                }
-            });
-        }, observerOptions);
-
-        document.querySelectorAll('.service-card, .certification-card, .case-study-card, .testimonial-card, .contact-form').forEach(el => {
-            observer.observe(el);
+            alert('Form submitted successfully!');
+            this.reset();
         });
     </script>
 </body>
