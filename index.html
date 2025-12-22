@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ITC - Testing Services & Certifications</title>
+    <title>Evoke AI - Futuristic Chatbot Services</title>
     <style>
         /* Base Styles */
         :root {
             --primary: #00ff9d;
-            --secondary: #00d4ff;
-            --dark: #0a0a0a;
+            --secondary: #00a3ff;
+            --dark: #0a0a1a;
             --light: #f0f0f0;
-            --accent: #ff006e;
+            --accent: #ff00aa;
         }
 
         * {
@@ -25,6 +25,7 @@
             background-color: var(--dark);
             color: var(--light);
             overflow-x: hidden;
+            line-height: 1.6;
         }
 
         /* Header */
@@ -33,45 +34,39 @@
             top: 0;
             left: 0;
             width: 100%;
+            z-index: 1000;
             padding: 20px 5%;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            z-index: 1000;
-            background-color: rgba(10, 10, 10, 0.8);
+            background-color: rgba(10, 10, 26, 0.8);
             backdrop-filter: blur(10px);
         }
 
         .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .logo img {
-            height: 40px;
-        }
-
-        .logo h1 {
-            font-size: 1.5rem;
-            font-weight: 700;
+            font-size: 24px;
+            font-weight: bold;
             color: var(--primary);
+            text-decoration: none;
         }
 
         nav ul {
             display: flex;
-            gap: 30px;
             list-style: none;
         }
 
-        nav a {
+        nav ul li {
+            margin-left: 30px;
+        }
+
+        nav ul li a {
             color: var(--light);
             text-decoration: none;
             font-weight: 500;
-            transition: color 0.3s;
+            transition: color 0.3s ease;
         }
 
-        nav a:hover {
+        nav ul li a:hover {
             color: var(--primary);
         }
 
@@ -82,22 +77,48 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding: 0 5%;
-            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://vectorseek.com/wp-content/uploads/2022/02/ITC-Limited-Logo-Vector.jpg');
+            background: linear-gradient(rgba(10, 10, 26, 0.7), rgba(10, 10, 26, 0.7)), url('https://thumbs.dreamstime.com/b/futuristic-cityscape-featuring-tall-skyscrapers-flying-vehicles-digital-holographic-displays-scene-set-sunset-376389804.jpg');
             background-size: cover;
             background-position: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(0, 255, 157, 0.1), rgba(0, 163, 255, 0.1));
+            animation: glow 5s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            0% {
+                opacity: 0.7;
+            }
+            100% {
+                opacity: 1;
+            }
         }
 
         .hero-content {
+            position: relative;
+            z-index: 2;
             max-width: 800px;
+            padding: 0 20px;
         }
 
-        .hero h2 {
-            font-size: 3.5rem;
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 800;
             margin-bottom: 20px;
-            background: linear-gradient(to right, var(--primary), var(--secondary));
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .hero p {
@@ -106,18 +127,18 @@
             color: #ccc;
         }
 
-        .btn {
+        .cta-button {
             display: inline-block;
             padding: 12px 30px;
-            background-color: var(--primary);
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
             color: var(--dark);
             text-decoration: none;
-            font-weight: 600;
+            font-weight: bold;
             border-radius: 50px;
-            transition: all 0.3s;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        .btn:hover {
+        .cta-button:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 20px rgba(0, 255, 157, 0.3);
         }
@@ -125,240 +146,378 @@
         /* About Section */
         .about {
             padding: 100px 5%;
-            display: flex;
-            align-items: center;
-            gap: 50px;
+            background-color: var(--dark);
+            position: relative;
         }
 
-        .about-image {
-            flex: 1;
-        }
-
-        .about-image img {
+        .about::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
-            border-radius: 20px;
+            height: 100%;
+            background: url('https://img.freepik.com/premium-photo/futuristic-technology-abstract-background-with-glowing-lights-circuits-digital-data-flow-concept-cybersecurity-programming-big-data-artificial-intelligence_143569-1465.jpg');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.1;
         }
 
         .about-content {
-            flex: 1;
+            position: relative;
+            z-index: 2;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
         }
 
-        .about-content h2 {
-            font-size: 2.5rem;
+        .about-text h2 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
             margin-bottom: 20px;
             color: var(--primary);
         }
 
-        .about-content p {
+        .about-text p {
             margin-bottom: 20px;
-            line-height: 1.6;
+            color: #ccc;
+        }
+
+        .about-image {
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .about-image img {
+            width: 100%;
+            height: auto;
+            display: block;
         }
 
         /* Services Section */
         .services {
             padding: 100px 5%;
-            text-align: center;
+            background-color: #111;
         }
 
         .services h2 {
-            font-size: 2.5rem;
+            text-align: center;
+            font-size: clamp(2.5rem, 6vw, 4rem);
             margin-bottom: 50px;
-            color: var(--secondary);
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .services-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
         .service-card {
-            background-color: rgba(255, 255, 255, 0.1);
-            padding: 30px;
+            background-color: rgba(20, 20, 40, 0.8);
             border-radius: 20px;
-            transition: transform 0.3s;
+            padding: 30px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(0, 255, 157, 0.2);
         }
 
         .service-card:hover {
             transform: translateY(-10px);
-        }
-
-        .service-card img {
-            width: 80px;
-            height: 80px;
-            margin-bottom: 20px;
+            box-shadow: 0 15px 30px rgba(0, 255, 157, 0.2);
         }
 
         .service-card h3 {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             margin-bottom: 15px;
             color: var(--primary);
         }
 
-        /* Form Section */
-        .form-section {
+        .service-card p {
+            color: #ccc;
+        }
+
+        /* Highlights Section */
+        .highlights {
             padding: 100px 5%;
-            background-color: rgba(0, 0, 0, 0.5);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            position: relative;
         }
 
-        .form-container {
-            max-width: 600px;
-            margin: 0 auto;
-            background-color: rgba(255, 255, 255, 0.1);
-            padding: 40px;
-            border-radius: 20px;
-        }
-
-        .form-container h2 {
-            font-size: 2rem;
-            margin-bottom: 30px;
-            text-align: center;
-            color: var(--secondary);
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 500;
-        }
-
-        .form-group input,
-        .form-group textarea,
-        .form-group select {
+        .highlights::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
-            padding: 12px;
-            border: none;
-            border-radius: 10px;
-            background-color: rgba(255, 255, 255, 0.2);
+            height: 100%;
+            background: url('https://thumbs.dreamstime.com/b/futuristic-home-office-featuring-holographic-display-sleek-ai-driven-workspace-designed-modern-productivity-creativity-371301521.jpg');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.1;
+        }
+
+        .highlights-content {
+            position: relative;
+            z-index: 2;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .highlight-card {
+            background-color: rgba(10, 10, 26, 0.8);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .highlight-card h3 {
+            font-size: 3rem;
+            margin-bottom: 10px;
             color: var(--light);
         }
 
-        .form-group input:focus,
-        .form-group textarea:focus,
-        .form-group select:focus {
-            outline: 2px solid var(--primary);
+        .highlight-card p {
+            color: #ccc;
+        }
+
+        /* Process Section */
+        .process {
+            padding: 100px 5%;
+            background-color: var(--dark);
+        }
+
+        .process h2 {
+            text-align: center;
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            margin-bottom: 50px;
+            background: linear-gradient(90deg, var(--secondary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .process-steps {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .process-step {
+            background-color: rgba(20, 20, 40, 0.8);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            border: 1px solid rgba(0, 163, 255, 0.2);
+        }
+
+        .process-step h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--secondary);
+        }
+
+        .process-step p {
+            color: #ccc;
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 100px 5%;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            text-align: center;
+        }
+
+        .cta h2 {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            margin-bottom: 30px;
+            color: var(--dark);
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 15px 40px;
+            background-color: var(--dark);
+            color: var(--light);
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 50px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
         }
 
         /* Footer */
         footer {
             padding: 50px 5%;
+            background-color: var(--dark);
             text-align: center;
-            background-color: rgba(0, 0, 0, 0.8);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .footer-logo {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .footer-logo img {
-            height: 40px;
-        }
-
-        .footer-logo h3 {
-            font-size: 1.5rem;
+            font-size: 24px;
+            font-weight: bold;
             color: var(--primary);
+            margin-bottom: 20px;
         }
 
         .footer-links {
             display: flex;
             justify-content: center;
-            gap: 20px;
+            list-style: none;
             margin-bottom: 20px;
         }
 
-        .footer-links a {
-            color: var(--light);
-            text-decoration: none;
-            transition: color 0.3s;
+        .footer-links li {
+            margin: 0 15px;
         }
 
-        .footer-links a:hover {
+        .footer-links li a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links li a:hover {
             color: var(--primary);
         }
 
-        .social-icons {
+        .footer-social {
             display: flex;
             justify-content: center;
-            gap: 15px;
+            list-style: none;
         }
 
-        .social-icons a {
-            width: 40px;
-            height: 40px;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--light);
-            text-decoration: none;
-            transition: background-color 0.3s;
+        .footer-social li {
+            margin: 0 10px;
         }
 
-        .social-icons a:hover {
-            background-color: var(--primary);
-            color: var(--dark);
+        .footer-social li a {
+            color: #ccc;
+            font-size: 20px;
+            transition: color 0.3s ease;
+        }
+
+        .footer-social li a:hover {
+            color: var(--primary);
+        }
+
+        .footer-copyright {
+            margin-top: 20px;
+            color: #888;
+            font-size: 14px;
         }
 
         /* Responsive */
         @media (max-width: 768px) {
-            .hero h2 {
-                font-size: 2.5rem;
+            header {
+                padding: 15px 5%;
             }
 
-            .about {
-                flex-direction: column;
+            nav ul {
+                display: none;
             }
 
-            .services-grid {
+            .about-content {
                 grid-template-columns: 1fr;
             }
+
+            .hero h1 {
+                font-size: clamp(2.5rem, 10vw, 4rem);
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+        }
+
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .slide-in-left {
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .slide-in-left.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .slide-in-right {
+            opacity: 0;
+            transform: translateX(50px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .slide-in-right.visible {
+            opacity: 1;
+            transform: translateX(0);
         }
     </style>
 </head>
 <body>
     <!-- Header -->
     <header>
-        <div class="logo">
-            <img src="https://cdn.freebiesupply.com/logos/large/2x/itc-limited-logo-png-transparent.png" alt="ITC Logo">
-            <h1>ITC</h1>
-        </div>
+        <a href="#" class="logo">Evoke AI</a>
         <nav>
             <ul>
-                <li><a href="#home">Home</a></li>
                 <li><a href="#about">About</a></li>
                 <li><a href="#services">Services</a></li>
+                <li><a href="#highlights">Highlights</a></li>
+                <li><a href="#process">Process</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
         </nav>
     </header>
 
     <!-- Hero Section -->
-    <section class="hero" id="home">
-        <div class="hero-content">
-            <h2>Testing Services & Certifications</h2>
-            <p>Ensuring quality and compliance with industry standards.</p>
-            <a href="#contact" class="btn">Get Started</a>
+    <section class="hero">
+        <div class="hero-content fade-in">
+            <h1>Evoke AI: The Future of Chatbot Services</h1>
+            <p>Transform your customer interactions with our cutting-edge AI-driven chatbot solutions.</p>
+            <a href="#contact" class="cta-button">Get Started</a>
         </div>
     </section>
 
     <!-- About Section -->
     <section class="about" id="about">
-        <div class="about-image">
-            <img src="https://cdn.freebiesupply.com/logos/large/2x/itc-limited-logo-black-and-white.png" alt="About ITC">
-        </div>
         <div class="about-content">
-            <h2>About ITC</h2>
-            <p>ITC is a leading provider of testing services and certifications, dedicated to ensuring the highest standards of quality and compliance across various industries. Our team of experts is committed to delivering accurate and reliable results.</p>
-            <p>With state-of-the-art facilities and a customer-centric approach, we strive to exceed expectations and drive innovation in testing and certification.</p>
+            <div class="about-text slide-in-left">
+                <h2>About Evoke AI</h2>
+                <p>At Evoke AI, we are pioneers in creating intelligent, futuristic chatbot solutions that redefine customer engagement. Our mission is to bridge the gap between human-like interactions and artificial intelligence, delivering seamless experiences that drive business growth.</p>
+                <p>With a team of expert engineers and designers, we craft chatbots that are not only functional but also visually stunning and intuitive.</p>
+            </div>
+            <div class="about-image slide-in-right">
+                <img src="https://i.etsystatic.com/55378519/r/il/e31a16/6451286701/il_570xN.6451286701_9346.jpg" alt="Futuristic AI Interface">
+            </div>
         </div>
     </section>
 
@@ -366,95 +525,146 @@
     <section class="services" id="services">
         <h2>Our Services</h2>
         <div class="services-grid">
-            <div class="service-card">
-                <img src="https://cdn.freebiesupply.com/logos/thumbs/2x/itc-limited-logo.png" alt="Service 1">
-                <h3>Product Testing</h3>
-                <p>Comprehensive testing solutions to ensure your products meet industry standards and regulations.</p>
+            <div class="service-card fade-in">
+                <h3>AI Chatbots</h3>
+                <p>Develop intelligent chatbots that understand and respond to customer queries with human-like precision.</p>
             </div>
-            <div class="service-card">
-                <img src="https://cdn.freebiesupply.com/logos/large/2x/itc-3-logo-black-and-white.png" alt="Service 2">
-                <h3>Certification</h3>
-                <p>Obtain certifications that validate the quality and safety of your products.</p>
+            <div class="service-card fade-in">
+                <h3>Customer Support Automation</h3>
+                <p>Automate your customer support with AI-driven solutions that provide instant responses and resolutions.</p>
             </div>
-            <div class="service-card">
-                <img src="https://vectorseek.com/wp-content/uploads/2022/02/ITC-Limited-Logo-Vector.jpg" alt="Service 3">
-                <h3>Consulting</h3>
-                <p>Expert guidance to help you navigate complex regulatory landscapes.</p>
+            <div class="service-card fade-in">
+                <h3>Virtual Assistants</h3>
+                <p>Create virtual assistants that help streamline operations and enhance productivity.</p>
+            </div>
+            <div class="service-card fade-in">
+                <h3>AI Integration</h3>
+                <p>Seamlessly integrate AI into your existing systems to enhance functionality and user experience.</p>
             </div>
         </div>
     </section>
 
-    <!-- Form Section -->
-    <section class="form-section" id="contact">
-        <div class="form-container">
-            <h2>Contact Us</h2>
-            <form id="contactForm">
-                <div class="form-group">
-                    <label for="name">Name</label>
-                    <input type="text" id="name" name="name" required>
-                </div>
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
-                <div class="form-group">
-                    <label for="phone">Phone</label>
-                    <input type="tel" id="phone" name="phone">
-                </div>
-                <div class="form-group">
-                    <label for="service">Service</label>
-                    <select id="service" name="service" required>
-                        <option value="">Select a Service</option>
-                        <option value="testing">Product Testing</option>
-                        <option value="certification">Certification</option>
-                        <option value="consulting">Consulting</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="message">Message</label>
-                    <textarea id="message" name="message" rows="5" required></textarea>
-                </div>
-                <button type="submit" class="btn">Submit</button>
-            </form>
+    <!-- Highlights Section -->
+    <section class="highlights" id="highlights">
+        <div class="highlights-content">
+            <div class="highlight-card fade-in">
+                <h3>99%</h3>
+                <p>Customer Satisfaction Rate</p>
+            </div>
+            <div class="highlight-card fade-in">
+                <h3>24/7</h3>
+                <p>Support Availability</p>
+            </div>
+            <div class="highlight-card fade-in">
+                <h3>100+</h3>
+                <p>Successful Projects</p>
+            </div>
+            <div class="highlight-card fade-in">
+                <h3>50+</h3>
+                <p>Industries Served</p>
+            </div>
         </div>
+    </section>
+
+    <!-- Process Section -->
+    <section class="process" id="process">
+        <h2>Our Process</h2>
+        <div class="process-steps">
+            <div class="process-step slide-in-left">
+                <h3>Discovery</h3>
+                <p>We start by understanding your business needs and goals to tailor the perfect AI solution.</p>
+            </div>
+            <div class="process-step slide-in-left">
+                <h3>Design</h3>
+                <p>Our team designs a chatbot that aligns with your brand and delivers a seamless user experience.</p>
+            </div>
+            <div class="process-step slide-in-right">
+                <h3>Development</h3>
+                <p>We develop the chatbot using the latest AI technologies to ensure it meets your requirements.</p>
+            </div>
+            <div class="process-step slide-in-right">
+                <h3>Deployment</h3>
+                <p>Finally, we deploy the chatbot and provide ongoing support to ensure its success.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta" id="contact">
+        <h2>Ready to Transform Your Business?</h2>
+        <a href="#" class="cta-button">Contact Us</a>
     </section>
 
     <!-- Footer -->
     <footer>
-        <div class="footer-logo">
-            <img src="https://cdn.freebiesupply.com/logos/large/2x/itc-limited-logo-png-transparent.png" alt="ITC Logo">
-            <h3>ITC</h3>
-        </div>
-        <div class="footer-links">
-            <a href="#home">Home</a>
-            <a href="#about">About</a>
-            <a href="#services">Services</a>
-            <a href="#contact">Contact</a>
-        </div>
-        <div class="social-icons">
-            <a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/></svg></a>
-            <a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.174-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.402.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.357-.629-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24.009 12.017 24.009c6.624 0 11.99-5.367 11.99-11.988C24.007 5.367 18.641.001.012.001z"/></svg></a>
-            <a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
-        </div>
-        <p>&copy; 2023 ITC. All rights reserved.</p>
+        <div class="footer-logo">Evoke AI</div>
+        <ul class="footer-links">
+            <li><a href="#about">About</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#highlights">Highlights</a></li>
+            <li><a href="#process">Process</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+        <ul class="footer-social">
+            <li><a href="#">Twitter</a></li>
+            <li><a href="#">LinkedIn</a></li>
+            <li><a href="#">Instagram</a></li>
+            <li><a href="#">Facebook</a></li>
+        </ul>
+        <p class="footer-copyright">&copy; 2023 Evoke AI. All rights reserved.</p>
     </footer>
 
+    <!-- JavaScript -->
     <script>
-        // Smooth Scrolling
+        // Intersection Observer for Animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        const fadeInElements = document.querySelectorAll('.fade-in');
+        const slideInLeftElements = document.querySelectorAll('.slide-in-left');
+        const slideInRightElements = document.querySelectorAll('.slide-in-right');
+
+        fadeInElements.forEach(el => observer.observe(el));
+        slideInLeftElements.forEach(el => observer.observe(el));
+        slideInRightElements.forEach(el => observer.observe(el));
+
+        // Smooth Scrolling for Navigation Links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
                 e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
             });
         });
 
-        // Form Submission
-        document.getElementById('contactForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            alert('Form submitted successfully!');
-            this.reset();
+        // Button Hover Effects
+        const buttons = document.querySelectorAll('.cta-button');
+        buttons.forEach(button => {
+            button.addEventListener('mouseenter', () => {
+                button.style.transform = 'translateY(-5px)';
+            });
+
+            button.addEventListener('mouseleave', () => {
+                button.style.transform = 'translateY(0)';
+            });
         });
     </script>
 </body>
